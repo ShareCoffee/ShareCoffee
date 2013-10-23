@@ -11,3 +11,9 @@ root.ShareCoffee.Commons.getAppWebUrl = () ->
     ""
 root.ShareCoffee.Commons.getApiRootUrl = () ->
   "#{ShareCoffee.Commons.getAppWebUrl()}/_api/"
+
+root.ShareCoffee.Commons.buildGetRequest = (url) ->
+  url: "#{ShareCoffee.Commons.getApiRootUrl()}#{url}", 
+  type: "GET",
+  headers:
+    'Accepts' : 'application/json;odata=verbose'
