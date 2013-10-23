@@ -8,9 +8,11 @@ describe 'ShareCoffee.Commons', ->
   beforeEach () ->
     expected = webAbsoluteUrl : 'https://dotnetrocks.sharepoint.com'
     global._spPageContextInfo = expected
-  
+    global.document = { getElementById : ()-> } 
+
   afterEach () ->
     global._spPageContextInfo = undefined
+    global.document = undefined
 
   describe 'GetAppWebUrl', ->
   
@@ -34,9 +36,35 @@ describe 'ShareCoffee.Commons', ->
 
   describe 'buildGetRequest', ->
     
-    it 'should create a proper get request properties',->
+    it 'should create a proper get request property object',->
       expected = 
         url : "https://dotnetrocks.sharepoint.com/_api/web/lists/?$Select=Title",
         type: "GET",
         headers: { 'Accepts' : 'application/json;odata=verbose'}
       ShareCoffee.Commons.buildGetRequest("web/lists/?$Select=Title").should.be.deep.equal expected
+
+  describe 'getFormDigest', ->
+
+    it 'should return correct FormDigestValue', ->
+      expectedRequestDigest = '123456567'
+      stub = sinon.stub document, "getElementById"
+      stub.returns {value : expectedRequestDigest}
+
+      ShareCoffee.Commons.getFormDigest().should.equal expectedRequestDigest
+
+  describe 'buildDeleteRequest', ->
+
+    it 'should create a proper delete reuqest property object', ->
+      expectedRequestDigest = '123456567'
+      stub = sinon.stub document, "getElementById"
+      stub.returns {value : expectedRequestDigest}
+
+      expected = 
+        url : "https://dotnetrocks.sharepoint.com/_api/web/lists/GetByTitle('Documents')",
+        type: 'DELETE',
+        contentType: 'application/json;odata=verbose',
+        headers: 
+          'Accept' : 'application/json;odata=verbose',
+          'If-Match': '*',
+          'X-RequestDigest': expectedRequestDigest
+      ShareCoffee.Commons.buildDeleteRequest("web/lists/GetByTitle('Documents')").should.be.deep.equal expected
