@@ -8,13 +8,21 @@ describe 'ShareCoffee.Commons', ->
   beforeEach () ->
     expected = webAbsoluteUrl : 'https://dotnetrocks.sharepoint.com'
     global._spPageContextInfo = expected
-    global.document = { getElementById : ()-> } 
+    global.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
 
   afterEach () ->
     global._spPageContextInfo = undefined
     global.document = undefined
 
-  describe 'GetAppWebUrl', ->
+  describe 'getQueryStringParameter', ->
+    
+    it 'should return query string parameter value if present', ->
+      ShareCoffee.Commons.getQueryStringParameter('Foo').should.equal 'Bar'
+
+    it 'should reutrn an empty string if parameter is not in query-string', ->
+      ShareCoffee.Commons.getQueryStringParameter('bar').should.be.empty
+
+  describe 'getAppWebUrl', ->
   
     it 'should return proper AppWebUrl', ->
       ShareCoffee.Commons.getAppWebUrl().should.equal 'https://dotnetrocks.sharepoint.com'

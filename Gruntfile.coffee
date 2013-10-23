@@ -29,3 +29,4 @@ module.exports = (grunt)->
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.registerTask 'default', ['simplemocha', 'coffee','uglify']
+  grunt.registerTask 'test', ['simplemocha']

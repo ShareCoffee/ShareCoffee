@@ -3,6 +3,11 @@ root.ShareCoffee or = {}
 root.ShareCoffee.Commons or = {}
 root.ShareCoffee.Commons.applicationType = "application/json;odata=verbose"
 
+root.ShareCoffee.Commons.getQueryStringParameter = (parameterName) ->
+  params = document.URL.split("?")[1].split("&")
+  parameterValue = (p.split("=")[1] for p in params when p.split("=")[0] is parameterName)
+  parameterValue[0] ? ''
+
 root.ShareCoffee.Commons.getAppWebUrl = () ->
   if(_spPageContextInfo)
     _spPageContextInfo.webAbsoluteUrl
