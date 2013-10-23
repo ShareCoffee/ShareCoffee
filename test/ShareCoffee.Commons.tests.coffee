@@ -68,3 +68,23 @@ describe 'ShareCoffee.Commons', ->
           'If-Match': '*',
           'X-RequestDigest': expectedRequestDigest
       ShareCoffee.Commons.buildDeleteRequest("web/lists/GetByTitle('Documents')").should.be.deep.equal expected
+
+  describe 'buildUpdateRequest', ->
+
+    it 'should return a proper update request property object', ->
+      expectedRequestDigest = '123456567'
+      stub = sinon.stub document, "getElementById"
+      stub.returns {value : expectedRequestDigest}
+      etag = 'f88dd058fe004909615a64f01be66a7'
+      requestPayload = "{'foo':'bar'}"
+      expected = 
+        url : "https://dotnetrocks.sharepoint.com/_api/web/lists/GetByTitle('Documents')",
+        type: 'POST',
+        contentType: 'application/json;odata=verbose',
+        headers: 
+          'Accept' : 'application/json;odata=verbose',
+          'X-RequestDigest' : expectedRequestDigest,
+          'X-HTTP-Method': 'MERGE',
+          'If-Match' : etag
+        data: requestPayload
+      ShareCoffee.Commons.buildUpdateRequest("web/lists/GetByTitle('Documents')", etag, requestPayload).should.be.deep.equal expected

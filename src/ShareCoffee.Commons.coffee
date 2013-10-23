@@ -30,3 +30,14 @@ root.ShareCoffee.Commons.buildDeleteRequest = (url) ->
     'Accept': ShareCoffee.Commons.applicationType,
     'If-Match': '*',
     'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
+
+root.ShareCoffee.Commons.buildUpdateRequest = (url, eTag, requestPayload) ->
+  url: "#{ShareCoffee.Commons.getApiRootUrl()}#{url}",
+  type: 'POST',
+  contentType: ShareCoffee.Commons.applicationType,
+  headers:
+    'Accept' : ShareCoffee.Commons.applicationType,
+    'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
+    'X-HTTP-Method': 'MERGE',
+    'If-Match': eTag
+  data: requestPayload
