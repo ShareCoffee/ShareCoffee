@@ -1,0 +1,31 @@
+{
+  "name": "ShareCoffee",
+  "version": "0.0.0",
+  "description": "SharePoint Hosted App Helpers",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ThorstenHans/ShareCoffee.git"
+  },
+  "keywords": [
+    "SharePoint",
+    "Apps",
+    "CoffeeScript"
+  ],
+  "author": "Thorsten Hans <thorsten.hans@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ThorstenHans/ShareCoffee/issues"
+  },
+  "devDependencies": {
+    "mocha": "~1.13.0",
+    "chai": "~1.8.1",
+    "sinon": "~1.7.3"
+  }
+}
