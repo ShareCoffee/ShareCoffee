@@ -36,6 +36,7 @@ describe 'ShareCoffee.Commons', ->
       spy = sinon.spy console, "error"   
       ShareCoffee.Commons.getAppWebUrl()
       spy.calledWithExactly("_spPageContextInfo is not defined").should.be.ok
+      console.error.restore()
   
   describe 'GetApiRootUrl', ->
     
