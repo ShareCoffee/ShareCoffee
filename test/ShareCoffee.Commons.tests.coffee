@@ -88,3 +88,20 @@ describe 'ShareCoffee.Commons', ->
           'If-Match' : etag
         data: requestPayload
       ShareCoffee.Commons.buildUpdateRequest("web/lists/GetByTitle('Documents')", etag, requestPayload).should.be.deep.equal expected
+
+  describe 'buildCreateRequest', ->
+
+    it 'should return a propert create request property object', ->
+      expectedRequestDigest = '123456567'
+      stub = sinon.stub document, "getElementById"
+      stub.returns {value : expectedRequestDigest}
+      requestPayload = "{'foo':'bar'}"
+      expected = 
+        url : "https://dotnetrocks.sharepoint.com/_api/web/lists/GetByTitle('Documents')",
+        type: 'POST',
+        contentType: 'application/json;odata=verbose',
+        headers: 
+          'Accept' : 'application/json;odata=verbose',
+          'X-RequestDigest' : expectedRequestDigest
+        data: requestPayload
+      ShareCoffee.Commons.buildCreateRequest("web/lists/GetByTitle('Documents')", requestPayload).should.be.deep.equal expected

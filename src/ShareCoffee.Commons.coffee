@@ -41,3 +41,12 @@ root.ShareCoffee.Commons.buildUpdateRequest = (url, eTag, requestPayload) ->
     'X-HTTP-Method': 'MERGE',
     'If-Match': eTag
   data: requestPayload
+
+root.ShareCoffee.Commons.buildCreateRequest = (url, requestPayload) ->
+  url: "#{ShareCoffee.Commons.getApiRootUrl()}#{url}",
+  type: 'POST',
+  contentType: ShareCoffee.Commons.applicationType,
+  headers:
+    'Accept': ShareCoffee.Commons.applicationType,
+    'X-RequestDigest' : ShareCoffee.Commons.getFormDigest()
+  data: requestPayload
