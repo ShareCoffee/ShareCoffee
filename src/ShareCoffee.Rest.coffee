@@ -1,29 +1,29 @@
 root = window ? global
 root.ShareCoffee or = {}
-root.ShareCoffee.Rest = class 
+root.ShareCoffee.REST = class 
 
   @applicationType = "application/json;odata=verbose"
   @buildGetRequest = (url) ->
     url: "#{ShareCoffee.Commons.getApiRootUrl()}#{url}", 
     type: "GET",
     headers:
-      'Accepts' : ShareCoffee.Rest.applicationType
+      'Accepts' : ShareCoffee.REST.applicationType
 
   @buildDeleteRequest = (url) ->
     url :"#{ShareCoffee.Commons.getApiRootUrl()}#{url}",
     type: "DELETE",
-    contentType: ShareCoffee.Rest.applicationType,
+    contentType: ShareCoffee.REST.applicationType,
     headers:
-      'Accept': ShareCoffee.Rest.applicationType,
+      'Accept': ShareCoffee.REST.applicationType,
       'If-Match': '*',
       'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
 
   @buildUpdateRequest = (url, eTag, requestPayload) ->
     url: "#{ShareCoffee.Commons.getApiRootUrl()}#{url}",
     type: 'POST',
-    contentType: ShareCoffee.Rest.applicationType,
+    contentType: ShareCoffee.REST.applicationType,
     headers:
-      'Accept' : ShareCoffee.Rest.applicationType,
+      'Accept' : ShareCoffee.REST.applicationType,
       'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
       'X-HTTP-Method': 'MERGE',
       'If-Match': eTag
@@ -32,8 +32,8 @@ root.ShareCoffee.Rest = class
   @buildCreateRequest = (url, requestPayload) ->
     url: "#{ShareCoffee.Commons.getApiRootUrl()}#{url}",
     type: 'POST',
-    contentType: ShareCoffee.Rest.applicationType,
+    contentType: ShareCoffee.REST.applicationType,
     headers:
-      'Accept': ShareCoffee.Rest.applicationType,
+      'Accept': ShareCoffee.REST.applicationType,
       'X-RequestDigest' : ShareCoffee.Commons.getFormDigest()
     data: requestPayload

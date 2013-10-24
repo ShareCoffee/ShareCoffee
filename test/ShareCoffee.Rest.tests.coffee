@@ -2,8 +2,8 @@ chai = require 'chai'
 sinon = require 'sinon'
 chai.should()
 
-require '../src/ShareCoffee.Rest'
-describe 'ShareCoffee.Rest', ->
+require '../src/ShareCoffee.REST'
+describe 'ShareCoffee.REST', ->
 
   beforeEach () ->
     expected = webAbsoluteUrl : 'https://dotnetrocks.sharepoint.com'
@@ -21,7 +21,7 @@ describe 'ShareCoffee.Rest', ->
         url : "https://dotnetrocks.sharepoint.com/_api/web/lists/?$Select=Title",
         type: "GET",
         headers: { 'Accepts' : 'application/json;odata=verbose'}
-      ShareCoffee.Rest.buildGetRequest("web/lists/?$Select=Title").should.be.deep.equal expected
+      ShareCoffee.REST.buildGetRequest("web/lists/?$Select=Title").should.be.deep.equal expected
 
   describe 'buildDeleteRequest', ->
 
@@ -38,7 +38,7 @@ describe 'ShareCoffee.Rest', ->
           'Accept' : 'application/json;odata=verbose',
           'If-Match': '*',
           'X-RequestDigest': expectedRequestDigest
-      ShareCoffee.Rest.buildDeleteRequest("web/lists/GetByTitle('Documents')").should.be.deep.equal expected
+      ShareCoffee.REST.buildDeleteRequest("web/lists/GetByTitle('Documents')").should.be.deep.equal expected
 
   describe 'buildUpdateRequest', ->
 
@@ -58,7 +58,7 @@ describe 'ShareCoffee.Rest', ->
           'X-HTTP-Method': 'MERGE',
           'If-Match' : etag
         data: requestPayload
-      ShareCoffee.Rest.buildUpdateRequest("web/lists/GetByTitle('Documents')", etag, requestPayload).should.be.deep.equal expected
+      ShareCoffee.REST.buildUpdateRequest("web/lists/GetByTitle('Documents')", etag, requestPayload).should.be.deep.equal expected
 
   describe 'buildCreateRequest', ->
 
@@ -75,4 +75,4 @@ describe 'ShareCoffee.Rest', ->
           'Accept' : 'application/json;odata=verbose',
           'X-RequestDigest' : expectedRequestDigest
         data: requestPayload
-      ShareCoffee.Rest.buildCreateRequest("web/lists/GetByTitle('Documents')", requestPayload).should.be.deep.equal expected
+      ShareCoffee.REST.buildCreateRequest("web/lists/GetByTitle('Documents')", requestPayload).should.be.deep.equal expected
