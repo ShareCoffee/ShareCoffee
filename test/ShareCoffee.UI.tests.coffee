@@ -2,8 +2,8 @@ chai = require 'chai'
 sinon = require 'sinon'
 chai.should()
 
-require '../src/ShareCoffee.Commons.UI'
-describe 'ShareCoffee.Commons.UI', ->
+require '../src/ShareCoffee.UI'
+describe 'ShareCoffee.UI', ->
 
   beforeEach () ->
     expected = webAbsoluteUrl : 'https://dotnetrocks.sharepoint.com'
@@ -22,7 +22,7 @@ describe 'ShareCoffee.Commons.UI', ->
       message = 'foo'
       isSticky = true
       spy = sinon.spy console, "error"
-      ShareCoffee.Commons.UI.showNotification message, isSticky
+      ShareCoffee.UI.showNotification message, isSticky
       spy.calledWithExactly("SP.UI or SP.UI.Notify is not loaded").should.be.ok
       console.error.restore()
 
@@ -30,7 +30,7 @@ describe 'ShareCoffee.Commons.UI', ->
       message = 'foo'
       isSticky = true
       spy = sinon.spy SP.UI.Notify, "addNotification"
-      ShareCoffee.Commons.UI.showNotification message, isSticky
+      ShareCoffee.UI.showNotification message, isSticky
       spy.calledWithExactly(message, isSticky).should.be.ok
 
 
