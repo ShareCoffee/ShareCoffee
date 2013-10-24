@@ -11,8 +11,8 @@ describe 'ShareCoffee.REST', ->
     global.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
 
   afterEach () ->
-    global._spPageContextInfo = undefined
-    global.document = undefined
+    delete global._spPageContextInfo 
+    delete global.document 
 
   describe 'buildGetRequest', ->
     

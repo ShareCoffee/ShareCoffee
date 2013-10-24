@@ -12,8 +12,8 @@ describe 'ShareCoffee.UI', ->
     global.SP = { UI : { Notify:{ addNotification:()-> } } }
 
   afterEach () ->
-    global._spPageContextInfo = undefined
-    global.document = undefined
+    delete global._spPageContextInfo 
+    delete global.document
 
   describe 'displayNotification', ->
 

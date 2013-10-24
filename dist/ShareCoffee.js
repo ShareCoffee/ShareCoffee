@@ -5,6 +5,23 @@
 
   root.ShareCoffee || (root.ShareCoffee = {});
 
+  root.ShareCoffee.CSOM = (function() {
+    function _Class() {}
+
+    _Class.getHostWeb = function(appWebCtx, hostWebUrl) {
+      var hostWebCtx;
+      hostWebCtx = new SP.AppContextSite(appWebCtx, hostWebUrl);
+      return hostWebCtx.get_web();
+    };
+
+    return _Class;
+
+  })();
+
+  root = typeof window !== "undefined" && window !== null ? window : global;
+
+  root.ShareCoffee || (root.ShareCoffee = {});
+
   root.ShareCoffee.Commons = (function() {
     function _Class() {}
 
@@ -52,7 +69,7 @@
 
   root.ShareCoffee || (root.ShareCoffee = {});
 
-  root.ShareCoffee.Rest = (function() {
+  root.ShareCoffee.REST = (function() {
     function _Class() {}
 
     _Class.applicationType = "application/json;odata=verbose";
@@ -62,7 +79,7 @@
         url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
         type: "GET",
         headers: {
-          'Accepts': ShareCoffee.Rest.applicationType
+          'Accepts': ShareCoffee.REST.applicationType
         }
       };
     };
@@ -71,9 +88,9 @@
       return {
         url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
         type: "DELETE",
-        contentType: ShareCoffee.Rest.applicationType,
+        contentType: ShareCoffee.REST.applicationType,
         headers: {
-          'Accept': ShareCoffee.Rest.applicationType,
+          'Accept': ShareCoffee.REST.applicationType,
           'If-Match': '*',
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
         }
@@ -84,9 +101,9 @@
       return {
         url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
         type: 'POST',
-        contentType: ShareCoffee.Rest.applicationType,
+        contentType: ShareCoffee.REST.applicationType,
         headers: {
-          'Accept': ShareCoffee.Rest.applicationType,
+          'Accept': ShareCoffee.REST.applicationType,
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
           'X-HTTP-Method': 'MERGE',
           'If-Match': eTag
@@ -99,9 +116,9 @@
       return {
         url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
         type: 'POST',
-        contentType: ShareCoffee.Rest.applicationType,
+        contentType: ShareCoffee.REST.applicationType,
         headers: {
-          'Accept': ShareCoffee.Rest.applicationType,
+          'Accept': ShareCoffee.REST.applicationType,
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
         },
         data: requestPayload
