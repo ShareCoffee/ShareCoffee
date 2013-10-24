@@ -6,12 +6,7 @@ module.exports = (grunt)->
       options:
         sourceMap:true
       compile:
-        expand: true
-        flatten: true
-        cwd: 'src'
-        src: '*.coffee'
-        dest: 'dist'
-        ext: '.js'
+        files: 'dist/ShareCoffee.js' : ['src/**/*.coffee']
     simplemocha:
       options:
         compilers: 'coffee:coffee-script'
@@ -22,11 +17,12 @@ module.exports = (grunt)->
       dist:
         files:
           'dist/ShareCoffee.min.js': 'dist/ShareCoffee.js'
-
+    clean:
+      dist: ['dist/**/*.src.coffee']
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
-  grunt.registerTask 'default', ['simplemocha', 'coffee','uglify']
+  grunt.registerTask 'default', ['simplemocha', 'coffee','uglify','clean']
   grunt.registerTask 'test', ['simplemocha']
