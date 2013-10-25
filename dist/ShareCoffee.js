@@ -161,10 +161,43 @@
 
     _Class.showNotification = function(message, isSticky) {
       if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Notify == null)) {
-        console.error("SP.UI or SP.UI.Notify is not loaded");
+        console.error("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)");
       }
-      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Notify != null) && SP.UI.Notify.addNotification) {
+      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Notify != null) && (SP.UI.Notify.addNotification != null)) {
         return SP.UI.Notify.addNotification(message, isSticky);
+      }
+    };
+
+    _Class.showStatus = function(title, contentAsHtml, showOnTop, color) {
+      var statusId;
+      if (color == null) {
+        color = 'blue';
+      }
+      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Status == null)) {
+        console.error("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)");
+      }
+      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.addStatus != null) && (SP.UI.Status.setStatusPriColor != null)) {
+        statusId = SP.UI.Status.addStatus(title, contentAsHtml, showOnTop);
+        SP.UI.Status.setStatusPriColor(statusId, color);
+        return statusId;
+      }
+    };
+
+    _Class.removeStatus = function(statusId) {
+      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Status == null)) {
+        console.error("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)");
+      }
+      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.removeStatus != null) && (statusId != null)) {
+        return SP.UI.Status.removeStatus(statusId);
+      }
+    };
+
+    _Class.removeAllStatus = function() {
+      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Status == null)) {
+        console.error("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)");
+      }
+      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.removeAllStatus != null)) {
+        return SP.UI.Status.removeAllStatus();
       }
     };
 
