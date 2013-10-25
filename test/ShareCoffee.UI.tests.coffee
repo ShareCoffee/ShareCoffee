@@ -23,7 +23,7 @@ describe 'ShareCoffee.UI', ->
       isSticky = true
       spy = sinon.spy console, "error"
       ShareCoffee.UI.showNotification message, isSticky
-      spy.calledWithExactly("SP.UI or SP.UI.Notify is not loaded").should.be.ok
+      spy.calledWithExactly("SP.UI or SP.UI.Notify is not loaded (check if core.js is loaded)").should.be.ok
       console.error.restore()
 
     it 'should call addNotification on SP.UI.Notifiy with correpsonding parameters', ->
