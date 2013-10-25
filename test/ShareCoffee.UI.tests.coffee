@@ -13,6 +13,8 @@ describe 'ShareCoffee.UI', ->
       UI : 
         Notify:
           addNotification: ()->
+            return 666
+          removeNotification: ()->
         Status:
           addStatus: () -> 
             return 1
@@ -24,6 +26,7 @@ describe 'ShareCoffee.UI', ->
     delete global._spPageContextInfo 
     delete global.document
     delete global.SP
+
   describe 'showNotification', ->
 
     it 'should log an error if SP.UI or SP.UI.Notify is not defined', ->
@@ -42,6 +45,36 @@ describe 'ShareCoffee.UI', ->
       ShareCoffee.UI.showNotification message, isSticky
       spy.calledWithExactly(message, isSticky).should.be.ok
       SP.UI.Notify.addNotification.restore()
+
+    it 'should always return the notification id', ->
+      message = 'foo'
+      isSticky = true
+      notificationId = ShareCoffee.UI.showNotification message, isSticky
+      notificationId.should.equal 666
+
+  describe 'removeNotification', ->
+
+    it 'should log an error if SP, SP.UI or SP.UI.Notify is not defined', ->
+      delete global.SP.UI.Notify
+      [message, isSticky] = ['foo',false]
+      spy = sinon.spy console, 'error'
+      ShareCoffee.UI.removeNotification 1
+      spy.calledWithExactly("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)").should.be.ok
+      console.error.restore()
+
+    it 'should call removeNotification with corresponding parameters', ->
+      [message, isSticky] = ['foo', false]
+      spy = sinon.spy SP.UI.Notify, 'removeNotification'
+      ShareCoffee.UI.removeNotification 1
+      spy.calledWithExactly(1).should.be.ok
+      SP.UI.Notify.removeNotification.restore()
+
+    it 'should not call removeNotification when notificationId is not present', ->
+      [message, isSticky] = ['foo', false]
+      spy = sinon.spy SP.UI.Notify, 'removeNotification'
+      ShareCoffee.UI.removeNotification()
+      spy.called.should.be.false
+      SP.UI.Notify.removeNotification.restore()
 
   describe 'showStatus', ->
 

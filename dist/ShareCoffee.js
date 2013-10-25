@@ -168,6 +168,15 @@
       }
     };
 
+    _Class.removeNotification = function(notificationId) {
+      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Notify == null)) {
+        console.error("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)");
+      }
+      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Notify != null) && (SP.UI.Notify.removeNotification != null) && (notificationId != null)) {
+        return SP.UI.Notify.removeNotification(notificationId);
+      }
+    };
+
     _Class.showStatus = function(title, contentAsHtml, showOnTop, color) {
       var statusId;
       if (color == null) {
@@ -198,6 +207,18 @@
       }
       if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.removeAllStatus != null)) {
         return SP.UI.Status.removeAllStatus();
+      }
+    };
+
+    _Class.setColor = function(statusId, color) {
+      if (color == null) {
+        color = 'blue';
+      }
+      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Status == null)) {
+        console.error("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)");
+      }
+      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.setStatusPriColor != null) && (statusId != null)) {
+        return SP.UI.Status.setStatusPriColor(statusId, color);
       }
     };
 
