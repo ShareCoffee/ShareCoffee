@@ -8,6 +8,11 @@ root.ShareCoffee.UI = class
     if SP? and SP.UI? and SP.UI.Notify? and SP.UI.Notify.addNotification?
       SP.UI.Notify.addNotification message, isSticky
 
+  @removeNotification = (notificationId) ->
+    console.error "SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)" if not SP? or not SP.UI? or not SP.UI.Notify? 
+    if SP? and SP.UI? and SP.UI.Notify? and SP.UI.Notify.removeNotification? and notificationId?
+      SP.UI.Notify.removeNotification notificationId
+
   @showStatus = (title, contentAsHtml, showOnTop, color = 'blue') ->
     console.error "SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)" if not SP? or not SP.UI? or not SP.UI.Status?
     if SP? and SP.UI? and SP.UI.Status? and SP.UI.Status.addStatus? and SP.UI.Status.setStatusPriColor?
