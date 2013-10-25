@@ -28,11 +28,34 @@ describe 'ShareCoffee.Commons', ->
       ShareCoffee.Commons.getAppWebUrl().should.equal 'https://dotnetrocks.sharepoint.com'
   
     it 'should return an empty string if Context or webAbsoluteUrl arent present', ->
-      global._spPageContextInfo = undefined
+      delete global._spPageContextInfo
       ShareCoffee.Commons.getAppWebUrl().should.be.empty
-  
+ 
+    it 'should call injected method if _spPageContextInfo is not present', ->
+      delete global._spPageContextInfo
+      ShareCoffee.Commons.loadAppWebUrlFrom = ()->
+        "http://foo.sharepoint.com"
+      actual = ShareCoffee.Commons.getAppWebUrl()
+      actual.should.equal "http://foo.sharepoint.com"
+      delete ShareCoffee.Commons.loadAppWebUrlFrom
+
+    it 'should look for AppWebUrl also within the QueryString', ->
+      delete global._spPageContextInfo
+      global.document.URL = "#{global.document.URL}&SPAppWebUrl=https%3A%2F%2Ffoo.sharepoint.com"
+      expected = "https://foo.sharepoint.com"
+      actual = ShareCoffee.Commons.getAppWebUrl()
+      actual.should.equal expected
+    
+    it 'should priorize custom load method if present', ->
+      global.document.URL = "#{global.document.URL}&SPAppWebUrl=https%3A%2F%2Ffoo.sharepoint.com"
+      ShareCoffee.Commons.loadAppWebUrlFrom = ()->
+        "http://foo.sharepoint.com"
+      actual = ShareCoffee.Commons.getAppWebUrl()
+      actual.should.equal 'http://foo.sharepoint.com'
+      delete ShareCoffee.Commons.loadAppWebUrlFrom
+
     it "should print the error to the console if _spPageContextInfo isn't present", ->
-      global._spPageContextInfo = undefined
+      delete global._spPageContextInfo
       spy = sinon.spy console, "error"   
       ShareCoffee.Commons.getAppWebUrl()
       spy.calledWithExactly("_spPageContextInfo is not defined").should.be.ok

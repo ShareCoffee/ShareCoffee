@@ -8,8 +8,14 @@ root.ShareCoffee.Commons = class
     parameterValue[0] ? ''
 
   @getAppWebUrl = () ->
-    if(_spPageContextInfo)
-      _spPageContextInfo.webAbsoluteUrl
+    if ShareCoffee.Commons.loadAppWebUrlFrom?
+      return ShareCoffee.Commons.loadAppWebUrlFrom()
+    else if _spPageContextInfo? && _spPageContextInfo.webAbsoluteUrl?
+      return _spPageContextInfo.webAbsoluteUrl
+
+    appWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter "SPAppWebUrl"
+    if appWebUrlFromQueryString
+      return decodeURIComponent appWebUrlFromQueryString
     else
       console.error "_spPageContextInfo is not defined" if console and console.error
       ""

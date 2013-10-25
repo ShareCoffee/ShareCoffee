@@ -43,8 +43,15 @@
     };
 
     _Class.getAppWebUrl = function() {
-      if (_spPageContextInfo) {
+      var appWebUrlFromQueryString;
+      if (ShareCoffee.Commons.loadAppWebUrlFrom != null) {
+        return ShareCoffee.Commons.loadAppWebUrlFrom();
+      } else if ((typeof _spPageContextInfo !== "undefined" && _spPageContextInfo !== null) && (_spPageContextInfo.webAbsoluteUrl != null)) {
         return _spPageContextInfo.webAbsoluteUrl;
+      }
+      appWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter("SPAppWebUrl");
+      if (appWebUrlFromQueryString) {
+        return decodeURIComponent(appWebUrlFromQueryString);
       } else {
         if (console && console.error) {
           console.error("_spPageContextInfo is not defined");
