@@ -31,7 +31,7 @@ describe 'ShareCoffee.Commons', ->
       delete global._spPageContextInfo
       ShareCoffee.Commons.getAppWebUrl().should.be.empty
  
-    it 'should call injected method if _spPageContextInfo is not present', ->
+    it 'should call injected load method present', ->
       delete global._spPageContextInfo
       ShareCoffee.Commons.loadAppWebUrlFrom = ()->
         "http://foo.sharepoint.com"
@@ -74,3 +74,34 @@ describe 'ShareCoffee.Commons', ->
       stub.returns {value : expectedRequestDigest}
 
       ShareCoffee.Commons.getFormDigest().should.equal expectedRequestDigest
+
+  describe 'getHostWebUrl', ->
+
+    it 'should return given SPHostUrl from the QueryString', ->
+      document.URL = "#{document.URL}&SPHostUrl=https%3A%2F%2Ffoo.sharepoint.com%2Fsites%2Fsample"
+      expected = "https://foo.sharepoint.com/sites/sample"
+
+      actual = ShareCoffee.Commons.getHostWebUrl()
+      actual.should.equal expected
+   
+    it 'should inject custom load method if present', ->
+      ShareCoffee.Commons.loadHostWebUrlFrom = () ->
+        return "https://foo.sharepoint.com/sites/second-sample"
+      actual = ShareCoffee.Commons.getHostWebUrl()
+      actual.should.equal "https://foo.sharepoint.com/sites/second-sample"
+      delete ShareCoffee.Commons.loadHostWebUrlFrom
+
+    it "should print the error to the console if SPHostUrl isn't present", ->
+      spy = sinon.spy console, "error"   
+      ShareCoffee.Commons.getHostWebUrl()
+      spy.calledWithExactly("SPHostUrl is not defined in the QueryString").should.be.ok
+      console.error.restore()
+    
+    it 'should priorize custom load method if present', ->
+      global.document.URL = "#{global.document.URL}&SPHostUrl=https%3A%2F%2Ffoo.sharepoint.com"
+      ShareCoffee.Commons.loadHostWebUrlFrom = ()->
+        "http://foo.sharepoint.com"
+      actual = ShareCoffee.Commons.getHostWebUrl()
+      actual.should.equal 'http://foo.sharepoint.com'
+      delete ShareCoffee.Commons.loadHostWebUrlFrom
+

@@ -18,7 +18,17 @@ root.ShareCoffee.Commons = class
       return decodeURIComponent appWebUrlFromQueryString
     else
       console.error "_spPageContextInfo is not defined" if console and console.error
-      ""
+      return ""
+
+  @getHostWebUrl = () ->
+    hostWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter "SPHostUrl"
+    if ShareCoffee.Commons.loadHostWebUrlFrom?
+      return ShareCoffee.Commons.loadHostWebUrlFrom()
+    if hostWebUrlFromQueryString
+      return decodeURIComponent hostWebUrlFromQueryString
+    else
+      console.error "SPHostUrl is not defined in the QueryString" if console and console.error
+      return ""
 
   @getApiRootUrl = () ->
     "#{ShareCoffee.Commons.getAppWebUrl()}/_api/"

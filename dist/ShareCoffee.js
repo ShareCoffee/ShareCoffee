@@ -60,6 +60,22 @@
       }
     };
 
+    _Class.getHostWebUrl = function() {
+      var hostWebUrlFromQueryString;
+      hostWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter("SPHostUrl");
+      if (ShareCoffee.Commons.loadHostWebUrlFrom != null) {
+        return ShareCoffee.Commons.loadHostWebUrlFrom();
+      }
+      if (hostWebUrlFromQueryString) {
+        return decodeURIComponent(hostWebUrlFromQueryString);
+      } else {
+        if (console && console.error) {
+          console.error("SPHostUrl is not defined in the QueryString");
+        }
+        return "";
+      }
+    };
+
     _Class.getApiRootUrl = function() {
       return "" + (ShareCoffee.Commons.getAppWebUrl()) + "/_api/";
     };
