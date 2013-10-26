@@ -5,6 +5,16 @@ chai.should()
 require '../src/ShareCoffee.Core'
 describe 'ShareCoffee.Core', ->
 
+  describe 'checkConditions', ->
+    it 'should not throw an error if all values are defined or not null',->
+      (->ShareCoffee.Core.checkConditions('e',1,2,3,4,5,6,7,'','asd',{},[])).should.not.throw 'e'
+    it 'should throw an error if any of the passed objects is undefined or null', ->
+      (->ShareCoffee.Core.checkConditions('e', [], {}, [], {}, undefined)).should.throw 'e'
+      (->ShareCoffee.Core.checkConditions('e', {},[],{},null,{})).should.throw 'e'
+      (->ShareCoffee.Core.checkConditions('e', null)).should.throw 'e'
+      (->ShareCoffee.Core.checkConditions('e', undefined)).should.throw 'e'
+      (->ShareCoffee.Core.checkConditions('e', {},null,[],undefined, {})).should.throw 'e'
+
   describe 'loadScript', ->
 
     it 'should load documents head tag, call createElement on document instance and call appendChild on head', ->

@@ -100,6 +100,25 @@
   root.ShareCoffee.Core = (function() {
     function _Class() {}
 
+    _Class.checkConditions = function() {
+      var errorMessage, found, v, values;
+      errorMessage = arguments[0], values = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      found = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = values.length; _i < _len; _i++) {
+          v = values[_i];
+          if (v == null) {
+            _results.push(true);
+          }
+        }
+        return _results;
+      })();
+      if (found === true || (found.length > 0 && found[0] === true)) {
+        throw errorMessage;
+      }
+    };
+
     _Class.getRequestInstance = function() {
       if (typeof XMLHttpRequest !== "undefined" && XMLHttpRequest !== null) {
         return new XMLHttpRequest();

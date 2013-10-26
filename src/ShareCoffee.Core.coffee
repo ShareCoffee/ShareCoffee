@@ -3,6 +3,11 @@ root = global ? window
 root.ShareCoffee or = {}
 
 root.ShareCoffee.Core = class
+  
+  @checkConditions = (errorMessage, values...) ->
+    found = (true for v in values when not v?)
+    throw errorMessage if found is true or (found.length>0 and found[0] is true)
+
   @getRequestInstance = () ->
     if XMLHttpRequest?
       new XMLHttpRequest()
