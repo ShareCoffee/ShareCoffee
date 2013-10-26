@@ -3,6 +3,11 @@ root.ShareCoffee or = {}
 root.ShareCoffee.REST = class 
 
   @applicationType = "application/json;odata=verbose"
+
+  @loadCrossDomainLibrary = (onSuccess, onError) ->
+    scriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.RequestExecutor.js"
+    ShareCoffee.Core.loadScript scriptUrl, onSuccess, onError
+
   @buildGetRequest = (url) ->
     url: "#{ShareCoffee.Commons.getApiRootUrl()}#{url}", 
     type: "GET",

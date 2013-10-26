@@ -167,6 +167,12 @@
 
     _Class.applicationType = "application/json;odata=verbose";
 
+    _Class.loadCrossDomainLibrary = function(onSuccess, onError) {
+      var scriptUrl;
+      scriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.RequestExecutor.js";
+      return ShareCoffee.Core.loadScript(scriptUrl, onSuccess, onError);
+    };
+
     _Class.buildGetRequest = function(url) {
       return {
         url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
