@@ -4,9 +4,10 @@ root.ShareCoffee or = {}
 
 root.ShareCoffee.Core = class
   
-  @checkConditions = (errorMessage, values...) ->
-    found = (true for v in values when not v?)
-    throw errorMessage if found is true or (found.length>0 and found[0] is true)
+  @checkConditions = (errorMessage, condition) ->
+    if condition() is false
+      console.error errorMessage if console and console.error
+      throw errorMessage
 
   @getRequestInstance = () ->
     if XMLHttpRequest?

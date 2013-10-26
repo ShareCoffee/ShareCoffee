@@ -13,7 +13,9 @@ describe 'ShareCoffee.UI', ->
     root._spPageContextInfo = expected
     root.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
     root.FakeNavigation = 
-      setVisible: ()->
+      setVisible: ()-> 
+    root.ShareCoffee.Core =
+      checkConditions :()->
     root.SP = 
       UI : 
         Controls:
@@ -37,15 +39,6 @@ describe 'ShareCoffee.UI', ->
 
   describe 'showNotification', ->
 
-    it 'should log an error if SP.UI or SP.UI.Notify is not defined', ->
-      delete root.SP
-      message = 'foo'
-      isSticky = true
-      spy = sinon.spy console, "error"
-      ShareCoffee.UI.showNotification message, isSticky
-      spy.calledWithExactly("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)").should.be.ok
-      console.error.restore()
-
     it 'should call addNotification on SP.UI.Notifiy with correpsonding parameters', ->
       message = 'foo'
       isSticky = true
@@ -62,14 +55,6 @@ describe 'ShareCoffee.UI', ->
 
   describe 'removeNotification', ->
 
-    it 'should log an error if SP, SP.UI or SP.UI.Notify is not defined', ->
-      delete root.SP.UI.Notify
-      [message, isSticky] = ['foo',false]
-      spy = sinon.spy console, 'error'
-      ShareCoffee.UI.removeNotification 1
-      spy.calledWithExactly("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)").should.be.ok
-      console.error.restore()
-
     it 'should call removeNotification with corresponding parameters', ->
       [message, isSticky] = ['foo', false]
       spy = sinon.spy SP.UI.Notify, 'removeNotification'
@@ -85,13 +70,6 @@ describe 'ShareCoffee.UI', ->
       SP.UI.Notify.removeNotification.restore()
 
   describe 'showStatus', ->
-
-    it 'should log an error if SP SP.UI or SP.UI.Status is not defined', ->
-      delete root.SP
-      spy = sinon.spy console, 'error'
-      ShareCoffee.UI.showStatus 'Foo','Bar', false
-      spy.calledWithExactly("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)").should.be.ok
-      console.error.restore()
 
     it 'shoud call addStatus and setStatusPriColor with corresponding parameters', ->
       title = 'foo'
@@ -132,13 +110,6 @@ describe 'ShareCoffee.UI', ->
 
   describe 'removeStatus', ->
     
-    it 'should log an error if SP, SP.UI or SP.UI.Status are not present', ->
-      delete root.SP
-      spy = sinon.spy console, 'error'
-      ShareCoffee.UI.removeStatus 1
-      spy.calledWithExactly("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)").should.be.ok
-      console.error.restore()
-
     it 'should call removeStatus with corresponding parameter', ->
       spy = sinon.spy SP.UI.Status, 'removeStatus'
       ShareCoffee.UI.removeStatus 1
@@ -153,13 +124,6 @@ describe 'ShareCoffee.UI', ->
 
   describe 'removeAllStatus', ->
 
-    it 'should log an error if SP, SP.UI or SP.UI.Status are not present', ->
-      delete root.SP
-      spy = sinon.spy console, 'error'
-      ShareCoffee.UI.removeAllStatus()
-      spy.calledWithExactly("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)").should.be.ok
-      console.error.restore()
-
     it 'should call removeAllStatus on SP.UI.Status if present', ->
       spy = sinon.spy SP.UI.Status, 'removeAllStatus'
       ShareCoffee.UI.removeAllStatus()
@@ -167,14 +131,6 @@ describe 'ShareCoffee.UI', ->
       SP.UI.Status.removeAllStatus.restore()
 
   describe 'setStatusColor', ->
-
-    it 'should log an error if SP, SP.UI or SP.UI.Status are not present', ->
-      statusId = 2
-      delete root.SP.UI.Status
-      spy = sinon.spy console, 'error'
-      ShareCoffee.UI.setColor statusId, 'red'
-      spy.calledWithExactly("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)").should.be.ok
-      console.error.restore()
 
     it 'should call setStatusPriColor with corresponding parameters', ->
       statusId = 999

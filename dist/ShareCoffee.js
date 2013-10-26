@@ -100,21 +100,11 @@
   root.ShareCoffee.Core = (function() {
     function _Class() {}
 
-    _Class.checkConditions = function() {
-      var errorMessage, found, v, values;
-      errorMessage = arguments[0], values = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      found = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = values.length; _i < _len; _i++) {
-          v = values[_i];
-          if (v == null) {
-            _results.push(true);
-          }
+    _Class.checkConditions = function(errorMessage, condition) {
+      if (condition() === false) {
+        if (console && console.error) {
+          console.error(errorMessage);
         }
-        return _results;
-      })();
-      if (found === true || (found.length > 0 && found[0] === true)) {
         throw errorMessage;
       }
     };
@@ -257,64 +247,69 @@
     function _Class() {}
 
     _Class.showNotification = function(message, isSticky) {
-      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Notify == null)) {
-        console.error("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)");
-      }
-      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Notify != null) && (SP.UI.Notify.addNotification != null)) {
-        return SP.UI.Notify.addNotification(message, isSticky);
-      }
+      var condition;
+      condition = function() {
+        return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Notify != null) && (SP.UI.Notify.addNotification != null);
+      };
+      ShareCoffee.Core.checkConditions("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)", condition);
+      return SP.UI.Notify.addNotification(message, isSticky);
     };
 
     _Class.removeNotification = function(notificationId) {
-      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Notify == null)) {
-        console.error("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)");
-      }
-      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Notify != null) && (SP.UI.Notify.removeNotification != null) && (notificationId != null)) {
+      var condition;
+      condition = function() {
+        return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Notify != null) && (SP.UI.Notify.removeNotification != null);
+      };
+      ShareCoffee.Core.checkConditions("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)", condition);
+      if (notificationId != null) {
         return SP.UI.Notify.removeNotification(notificationId);
       }
     };
 
     _Class.showStatus = function(title, contentAsHtml, showOnTop, color) {
-      var statusId;
+      var condition, statusId;
       if (color == null) {
         color = 'blue';
       }
-      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Status == null)) {
-        console.error("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)");
-      }
-      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.addStatus != null) && (SP.UI.Status.setStatusPriColor != null)) {
-        statusId = SP.UI.Status.addStatus(title, contentAsHtml, showOnTop);
-        SP.UI.Status.setStatusPriColor(statusId, color);
-        return statusId;
-      }
+      condition = function() {
+        return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.addStatus != null) && (SP.UI.Status.setStatusPriColor != null);
+      };
+      ShareCoffee.Core.checkConditions("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)", condition);
+      statusId = SP.UI.Status.addStatus(title, contentAsHtml, showOnTop);
+      SP.UI.Status.setStatusPriColor(statusId, color);
+      return statusId;
     };
 
     _Class.removeStatus = function(statusId) {
-      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Status == null)) {
-        console.error("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)");
-      }
-      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.removeStatus != null) && (statusId != null)) {
+      var condition;
+      condition = function() {
+        return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.removeStatus != null);
+      };
+      ShareCoffee.Core.checkConditions("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)", condition);
+      if (statusId != null) {
         return SP.UI.Status.removeStatus(statusId);
       }
     };
 
     _Class.removeAllStatus = function() {
-      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Status == null)) {
-        console.error("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)");
-      }
-      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.removeAllStatus != null)) {
-        return SP.UI.Status.removeAllStatus();
-      }
+      var condition;
+      condition = function() {
+        return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.removeAllStatus != null);
+      };
+      ShareCoffee.Core.checkConditions("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)", condition);
+      return SP.UI.Status.removeAllStatus();
     };
 
     _Class.setColor = function(statusId, color) {
+      var condition;
       if (color == null) {
         color = 'blue';
       }
-      if ((typeof SP === "undefined" || SP === null) || (SP.UI == null) || (SP.UI.Status == null)) {
-        console.error("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)");
-      }
-      if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.setStatusPriColor != null) && (statusId != null)) {
+      condition = function() {
+        return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.setStatusPriColor != null);
+      };
+      ShareCoffee.Core.checkConditions("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)", condition);
+      if (statusId != null) {
         return SP.UI.Status.setStatusPriColor(statusId, color);
       }
     };
