@@ -3,15 +3,18 @@ sinon = require 'sinon'
 chai.should()
 
 require '../src/ShareCoffee.UI'
+
+root = global ? window
+
 describe 'ShareCoffee.UI', ->
 
   beforeEach () ->
     expected = webAbsoluteUrl : 'https://dotnetrocks.sharepoint.com'
-    global._spPageContextInfo = expected
-    global.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
-    global.FakeNavigation = 
+    root._spPageContextInfo = expected
+    root.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
+    root.FakeNavigation = 
       setVisible: ()->
-    global.SP = 
+    root.SP = 
       UI : 
         Controls:
           Navigation: ()->
@@ -28,14 +31,14 @@ describe 'ShareCoffee.UI', ->
           removeAllStatus: ()->
 
   afterEach () ->
-    delete global._spPageContextInfo 
-    delete global.document
-    delete global.SP
+    delete root._spPageContextInfo 
+    delete root.document
+    delete root.SP
 
   describe 'showNotification', ->
 
     it 'should log an error if SP.UI or SP.UI.Notify is not defined', ->
-      delete global.SP
+      delete root.SP
       message = 'foo'
       isSticky = true
       spy = sinon.spy console, "error"
@@ -60,7 +63,7 @@ describe 'ShareCoffee.UI', ->
   describe 'removeNotification', ->
 
     it 'should log an error if SP, SP.UI or SP.UI.Notify is not defined', ->
-      delete global.SP.UI.Notify
+      delete root.SP.UI.Notify
       [message, isSticky] = ['foo',false]
       spy = sinon.spy console, 'error'
       ShareCoffee.UI.removeNotification 1
@@ -84,7 +87,7 @@ describe 'ShareCoffee.UI', ->
   describe 'showStatus', ->
 
     it 'should log an error if SP SP.UI or SP.UI.Status is not defined', ->
-      delete global.SP
+      delete root.SP
       spy = sinon.spy console, 'error'
       ShareCoffee.UI.showStatus 'Foo','Bar', false
       spy.calledWithExactly("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)").should.be.ok
@@ -130,7 +133,7 @@ describe 'ShareCoffee.UI', ->
   describe 'removeStatus', ->
     
     it 'should log an error if SP, SP.UI or SP.UI.Status are not present', ->
-      delete global.SP
+      delete root.SP
       spy = sinon.spy console, 'error'
       ShareCoffee.UI.removeStatus 1
       spy.calledWithExactly("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)").should.be.ok
@@ -151,7 +154,7 @@ describe 'ShareCoffee.UI', ->
   describe 'removeAllStatus', ->
 
     it 'should log an error if SP, SP.UI or SP.UI.Status are not present', ->
-      delete global.SP
+      delete root.SP
       spy = sinon.spy console, 'error'
       ShareCoffee.UI.removeAllStatus()
       spy.calledWithExactly("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)").should.be.ok
@@ -167,7 +170,7 @@ describe 'ShareCoffee.UI', ->
 
     it 'should log an error if SP, SP.UI or SP.UI.Status are not present', ->
       statusId = 2
-      delete global.SP.UI.Status
+      delete root.SP.UI.Status
       spy = sinon.spy console, 'error'
       ShareCoffee.UI.setColor statusId, 'red'
       spy.calledWithExactly("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)").should.be.ok
@@ -202,7 +205,7 @@ describe 'ShareCoffee.UI', ->
     afterEach () ->
       delete ShareCoffee.Core
 
-    it 'should store the callback within global callback store', ->
+    it 'should store the callback within root callback store', ->
       callback = () ->
        1
       options = {}
@@ -211,7 +214,7 @@ describe 'ShareCoffee.UI', ->
       fakeResult = ShareCoffee.UI.onChromeLoadedCallback()
       fakeResult.should.equal 1
       
-    it 'should store the global-callback within the options object', ->
+    it 'should store the root-callback within the options object', ->
       callback = () ->
         1
       options = {}
