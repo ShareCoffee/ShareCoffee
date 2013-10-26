@@ -3,16 +3,18 @@ sinon = require 'sinon'
 chai.should()
 
 require '../src/ShareCoffee.Commons'
+
+root = global ? window
 describe 'ShareCoffee.Commons', ->
 
   beforeEach () ->
     expected = webAbsoluteUrl : 'https://dotnetrocks.sharepoint.com'
-    global._spPageContextInfo = expected
-    global.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
+    root._spPageContextInfo = expected
+    root.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
 
   afterEach () ->
-    delete global._spPageContextInfo
-    delete global.document
+    delete root._spPageContextInfo
+    delete root.document
 
   describe 'getQueryString', ->
     
@@ -33,11 +35,11 @@ describe 'ShareCoffee.Commons', ->
       ShareCoffee.Commons.getAppWebUrl().should.equal 'https://dotnetrocks.sharepoint.com'
   
     it 'should return an empty string if Context or webAbsoluteUrl arent present', ->
-      delete global._spPageContextInfo
+      delete root._spPageContextInfo
       ShareCoffee.Commons.getAppWebUrl().should.be.empty
  
     it 'should call injected load method present', ->
-      delete global._spPageContextInfo
+      delete root._spPageContextInfo
       ShareCoffee.Commons.loadAppWebUrlFrom = ()->
         "http://foo.sharepoint.com"
       actual = ShareCoffee.Commons.getAppWebUrl()
@@ -45,14 +47,14 @@ describe 'ShareCoffee.Commons', ->
       delete ShareCoffee.Commons.loadAppWebUrlFrom
 
     it 'should look for AppWebUrl also within the QueryString', ->
-      delete global._spPageContextInfo
-      global.document.URL = "#{global.document.URL}&SPAppWebUrl=https%3A%2F%2Ffoo.sharepoint.com"
+      delete root._spPageContextInfo
+      root.document.URL = "#{root.document.URL}&SPAppWebUrl=https%3A%2F%2Ffoo.sharepoint.com"
       expected = "https://foo.sharepoint.com"
       actual = ShareCoffee.Commons.getAppWebUrl()
       actual.should.equal expected
     
     it 'should priorize custom load method if present', ->
-      global.document.URL = "#{global.document.URL}&SPAppWebUrl=https%3A%2F%2Ffoo.sharepoint.com"
+      root.document.URL = "#{root.document.URL}&SPAppWebUrl=https%3A%2F%2Ffoo.sharepoint.com"
       ShareCoffee.Commons.loadAppWebUrlFrom = ()->
         "http://foo.sharepoint.com"
       actual = ShareCoffee.Commons.getAppWebUrl()
@@ -60,7 +62,7 @@ describe 'ShareCoffee.Commons', ->
       delete ShareCoffee.Commons.loadAppWebUrlFrom
 
     it "should print the error to the console if _spPageContextInfo isn't present", ->
-      delete global._spPageContextInfo
+      delete root._spPageContextInfo
       spy = sinon.spy console, "error"   
       ShareCoffee.Commons.getAppWebUrl()
       spy.calledWithExactly("_spPageContextInfo is not defined").should.be.ok
@@ -103,7 +105,7 @@ describe 'ShareCoffee.Commons', ->
       console.error.restore()
     
     it 'should priorize custom load method if present', ->
-      global.document.URL = "#{global.document.URL}&SPHostUrl=https%3A%2F%2Ffoo.sharepoint.com"
+      root.document.URL = "#{root.document.URL}&SPHostUrl=https%3A%2F%2Ffoo.sharepoint.com"
       ShareCoffee.Commons.loadHostWebUrlFrom = ()->
         "http://foo.sharepoint.com"
       actual = ShareCoffee.Commons.getHostWebUrl()
