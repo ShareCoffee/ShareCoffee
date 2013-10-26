@@ -14,6 +14,11 @@ describe 'ShareCoffee.Commons', ->
     delete global._spPageContextInfo
     delete global.document
 
+  describe 'getQueryString', ->
+    
+    it 'should return the entire querystring if present', ->
+      ShareCoffee.Commons.getQueryString().should.equal 'Foo=Bar'
+
   describe 'getQueryStringParameter', ->
     
     it 'should return query string parameter value if present', ->

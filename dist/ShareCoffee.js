@@ -1,5 +1,6 @@
 (function() {
-  var root;
+  var root,
+    __slice = [].slice;
 
   root = typeof window !== "undefined" && window !== null ? window : global;
 
@@ -24,6 +25,10 @@
 
   root.ShareCoffee.Commons = (function() {
     function _Class() {}
+
+    _Class.getQueryString = function() {
+      return document.URL.split("?")[1];
+    };
 
     _Class.getQueryStringParameter = function(parameterName) {
       var p, parameterValue, params, _ref;
@@ -82,6 +87,52 @@
 
     _Class.getFormDigest = function() {
       return document.getElementById('__REQUESTDIGEST').value;
+    };
+
+    return _Class;
+
+  })();
+
+  root = typeof global !== "undefined" && global !== null ? global : window;
+
+  root.ShareCoffee || (root.ShareCoffee = {});
+
+  root.ShareCoffee.Core = (function() {
+    function _Class() {}
+
+    _Class.getRequestInstance = function() {
+      if (typeof XMLHttpRequest !== "undefined" && XMLHttpRequest !== null) {
+        return new XMLHttpRequest();
+      } else if (typeof ActiveXObject !== "undefined" && ActiveXObject !== null) {
+        return new ActiveXObject('MsXml2.XmlHttp');
+      }
+    };
+
+    _Class.loadScript = function(scriptUrl, onLoaded, onError) {
+      var r,
+        _this = this;
+      r = ShareCoffee.Core.getRequestInstance();
+      return r.onReadyStateChange = function() {
+        var head, script;
+        if (r.readyState === 4) {
+          if (r.status === 200 || r.status === 304) {
+            head = document.getElementsByTagName('head').item(0);
+            script = document.createElement('script');
+            script.language = 'javascript';
+            script.type = 'text/javascript';
+            script.defer = true;
+            script.text = r.responseText;
+            head.appendChild(script);
+            if (onLoaded != null) {
+              return onLoaded();
+            }
+          } else {
+            if (onError != null) {
+              return onError();
+            }
+          }
+        }
+      };
     };
 
     return _Class;
@@ -156,6 +207,27 @@
 
   root.ShareCoffee || (root.ShareCoffee = {});
 
+  root.ShareCoffee.SettingsLink = function(url, title, appendQueryStringToUrl) {
+    if (appendQueryStringToUrl == null) {
+      appendQueryStringToUrl = false;
+    }
+    return {
+      linkUrl: appendQueryStringToUrl ? "" + url + "?" + (ShareCoffee.Commons.getQueryString()) : url,
+      displayName: title
+    };
+  };
+
+  root.ShareCoffee.ChromeSettings = function() {
+    var helpPageUrl, iconUrl, settingsLinkSplat, tite;
+    iconUrl = arguments[0], tite = arguments[1], helpPageUrl = arguments[2], settingsLinkSplat = 4 <= arguments.length ? __slice.call(arguments, 3) : [];
+    return {
+      appIconUrl: iconUrl,
+      appTitle: title,
+      appHelpPageUrl: helpPageUrl,
+      settingsLinks: settingsLinkSplat
+    };
+  };
+
   root.ShareCoffee.UI = (function() {
     function _Class() {}
 
@@ -220,6 +292,29 @@
       if ((typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.setStatusPriColor != null) && (statusId != null)) {
         return SP.UI.Status.setStatusPriColor(statusId, color);
       }
+    };
+
+    _Class.onChromeLoadedCallback = null;
+
+    _Class.loadAppChrome = function(placeHolderId, chromeSettings, onAppChromeLoaded) {
+      var onScriptLoaded, scriptUrl,
+        _this = this;
+      if (onAppChromeLoaded == null) {
+        onAppChromeLoaded = void 0;
+      }
+      if (onAppChromeLoaded != null) {
+        ShareCoffee.UI.onChromeLoadedCallback = onAppChromeLoaded;
+        chromeSettings.onCssLoaded = "ShareCoffee.UI.onChromeLoadedCallback()";
+      }
+      onScriptLoaded = function() {
+        var chrome;
+        chrome = new SP.UI.Controls.Navigation(placeHolderId, chromeSettings);
+        return chrome.setVisible(true);
+      };
+      scriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.UI.Controls.js";
+      return ShareCoffee.Core.loadScript(scriptUrl, onScriptLoaded, function() {
+        throw "Error loading SP.UI.Controls.js";
+      });
     };
 
     return _Class;

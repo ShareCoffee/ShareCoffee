@@ -1,6 +1,14 @@
 root = window ? global
 
 root.ShareCoffee or = {}
+root.ShareCoffee.SettingsLink = (url, title, appendQueryStringToUrl = false) ->
+  linkUrl: if appendQueryStringToUrl then "#{url}?#{ShareCoffee.Commons.getQueryString()}" else url
+  displayName: title 
+root.ShareCoffee.ChromeSettings = (iconUrl, tite,helpPageUrl, settingsLinkSplat...) ->
+  appIconUrl: iconUrl
+  appTitle: title
+  appHelpPageUrl: helpPageUrl
+  settingsLinks: settingsLinkSplat
 root.ShareCoffee.UI = class
   
   @showNotification = (message, isSticky) ->
@@ -35,4 +43,20 @@ root.ShareCoffee.UI = class
     if SP? and SP.UI? and SP.UI.Status? and SP.UI.Status.setStatusPriColor? and statusId?
       SP.UI.Status.setStatusPriColor statusId, color
 
+  @onChromeLoadedCallback = null
+
+  @loadAppChrome = (placeHolderId, chromeSettings, onAppChromeLoaded = undefined) ->
+    if onAppChromeLoaded?
+      ShareCoffee.UI.onChromeLoadedCallback = onAppChromeLoaded
+      chromeSettings.onCssLoaded = "ShareCoffee.UI.onChromeLoadedCallback()"
+
+    onScriptLoaded = () =>
+      chrome = new SP.UI.Controls.Navigation placeHolderId, chromeSettings
+      chrome.setVisible true
+
+    scriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.UI.Controls.js"
+
+    ShareCoffee.Core.loadScript scriptUrl, onScriptLoaded, ()->
+      throw "Error loading SP.UI.Controls.js"
     
+

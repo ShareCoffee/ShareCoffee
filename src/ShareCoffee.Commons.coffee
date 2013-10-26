@@ -2,6 +2,9 @@ root = window ? global
 root.ShareCoffee or = {}
 root.ShareCoffee.Commons = class 
 
+  @getQueryString = () ->
+    document.URL.split("?")[1]
+
   @getQueryStringParameter = (parameterName) ->
     params = document.URL.split("?")[1].split("&")
     parameterValue = (p.split("=")[1] for p in params when p.split("=")[0] is parameterName)

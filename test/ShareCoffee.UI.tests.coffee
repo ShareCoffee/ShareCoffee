@@ -9,8 +9,13 @@ describe 'ShareCoffee.UI', ->
     expected = webAbsoluteUrl : 'https://dotnetrocks.sharepoint.com'
     global._spPageContextInfo = expected
     global.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
+    global.FakeNavigation = 
+      setVisible: ()->
     global.SP = 
       UI : 
+        Controls:
+          Navigation: ()->
+            FakeNavigation
         Notify:
           addNotification: ()->
             return 666
@@ -187,3 +192,61 @@ describe 'ShareCoffee.UI', ->
       spy = sinon.spy SP.UI.Status, 'setStatusPriColor'
       ShareCoffee.UI.setColor()
       spy.called.should.be.false
+
+  describe 'loadAppChrome', ->
+    beforeEach () ->
+      ShareCoffee.Core = 
+        loadScript: (url, onLoaded,onError) ->
+          onLoaded() if onLoaded
+
+    afterEach () ->
+      delete ShareCoffee.Core
+
+    it 'should store the callback within global callback store', ->
+      callback = () ->
+       1
+      options = {}
+
+      ShareCoffee.UI.loadAppChrome '', options, callback
+      fakeResult = ShareCoffee.UI.onChromeLoadedCallback()
+      fakeResult.should.equal 1
+      
+    it 'should store the global-callback within the options object', ->
+      callback = () ->
+        1
+      options = {}
+      ShareCoffee.UI.loadAppChrome '', options, callback
+      options.onCssLoaded.should.equal 'ShareCoffee.UI.onChromeLoadedCallback()'
+
+    it 'should not define a onCssLoaded property on the options object when no callback has been passed', ->
+      options = {}
+      ShareCoffee.UI.loadAppChrome '', options
+      options.should.not.have.property 'onCssLoaded'
+
+    it 'should call SP.UI.Controls.Navigation constructor with target id when script has been loaded sucessfully', ->
+      placeHolderId = 'divChromeControlPlaceHolder'
+      options = {}
+      spy = sinon.spy SP.UI.Controls, 'Navigation'
+      ShareCoffee.UI.loadAppChrome placeHolderId, options
+      spy.calledWithExactly(placeHolderId, options).should.be.ok
+      SP.UI.Controls.Navigation.restore()
+
+    it 'should call setVisible on Controls.Navigation instance', ->
+      placeHolderId = 'divChromControlPlaceHolder'
+      options = {}
+      spy = sinon.spy FakeNavigation, 'setVisible'
+      ShareCoffee.UI.loadAppChrome placeHolderId, options
+      spy.calledWithExactly(true).should.be.ok
+      FakeNavigation.setVisible.restore()
+
+    it 'should provide correct script url to loadScript method', ->
+      stub = sinon.stub ShareCoffee.Commons, 'getHostWebUrl'
+      stub.returns "https://foo.sharepoint.com/sites/dev"
+
+      placeHolderId = 'divChromControlPlaceHolder'
+      options = {}
+      spy = sinon.spy ShareCoffee.Core, 'loadScript'
+      ShareCoffee.UI.loadAppChrome placeHolderId, options
+      spy.calledWith('https://foo.sharepoint.com/sites/dev/_layouts/15/SP.UI.Controls.js').should.be.ok
+      ShareCoffee.Core.loadScript.restore()
+      ShareCoffee.Commons.getHostWebUrl.restore()
