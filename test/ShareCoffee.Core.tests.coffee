@@ -3,6 +3,9 @@ sinon = require 'sinon'
 chai.should()
 
 require '../src/ShareCoffee.Core'
+
+root = global ? window
+
 describe 'ShareCoffee.Core', ->
 
   describe 'checkConditions', ->
@@ -18,7 +21,6 @@ describe 'ShareCoffee.Core', ->
   describe 'loadScript', ->
 
     it 'should load documents head tag, call createElement on document instance and call appendChild on head', ->
-      root = global ? window
       root.FakeTag =
         appendChild: (el) ->
       root.document = 
@@ -88,7 +90,6 @@ describe 'ShareCoffee.Core', ->
   describe 'getRequestInstance', ->
     
     it 'should return a XmlHttRequest instance if XMLHttpRequest is present',->
-      root = global ? window
       root.XMLHttpRequest = ()->
       if XMLHttpRequest?
         instance = ShareCoffee.Core.getRequestInstance()
@@ -98,7 +99,6 @@ describe 'ShareCoffee.Core', ->
       delete root.XMLHttpRequest
 
     it 'should return a ActiveXObject instance if ActiveXObject is present', ->
-      root = global ? window
       root.ActiveXObject = () ->
       if ActiveXObject?
         instance = ShareCoffee.Core.getRequestInstance()
