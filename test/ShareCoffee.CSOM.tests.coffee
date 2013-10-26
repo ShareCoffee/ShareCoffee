@@ -3,13 +3,16 @@ sinon = require 'sinon'
 chai.should()
 
 require '../src/ShareCoffee.CSOM'
+
+root = global ? window
+
 describe 'ShareCoffee.CSOM', ->
 
   beforeEach () ->
     expected = webAbsoluteUrl : 'https://dotnetrocks.sharepoint.com'
-    global._spPageContextInfo = expected
-    global.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
-    global.SP = 
+    root._spPageContextInfo = expected
+    root.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar', getElementById : ()-> } 
+    root.SP = 
       Web: ()-> {}
       Context:
         get_web: ()-> 
@@ -18,8 +21,8 @@ describe 'ShareCoffee.CSOM', ->
         SP.Context
 
   afterEach () ->
-    delete global._spPageContextInfo
-    delete global.document
+    delete root._spPageContextInfo
+    delete root.document
 
   describe 'getHostWeb', ->
 
