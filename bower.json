@@ -1,0 +1,24 @@
+{
+  "name": "ShareCoffee",
+  "version": "0.0.2",
+  "homepage": "https://github.com/ThorstenHans/ShareCoffee",
+  "authors": [
+    "Thorsten Hans <thorsten.hans@gmail.com>"
+  ],
+  "description": "SharePoint App Developers Toolset",
+  "main": "dist/ShareCoffee.min.js",
+  "keywords": [
+    "SharePoint",
+    "Apps",
+    "CoffeeScript",
+    "ShareCoffee"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
