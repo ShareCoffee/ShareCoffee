@@ -77,12 +77,12 @@ root.ShareCoffee.RESTFactory = class
     delete result.data unless @method is 'POST'
     result
   
-  reqwest: (url, payload = null, eTag=  null)=>
+  reqwest: (url, hostWebUrl = null, payload = null, eTag=  null)=>
     eTag = '*' if @method is 'DELETE'
     result = null
     try
       result=
-        url: url
+        url: if hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppSiteContext(@target)/#{url}?@target='#{hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{url}"
         method: @method.toLowerCase()
         contentType: ShareCoffee.REST.applicationType
         headers: 

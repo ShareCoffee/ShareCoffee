@@ -218,12 +218,19 @@ describe 'ShareCoffee.REST', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       sut.reqwest().should.be.an 'object'
 
-    it 'should contain passed url as url property of type string', ->
+    it 'should contain passed url combined with AppWeb API endpoint as url property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'
-      actual = sut.reqwest 'foo'
+      actual = sut.reqwest 'web/title'
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
-      actual.url.should.equal 'foo'
+      actual.url.should.equal 'https://dotnetrocks.sharepoint.com/_api/web/title'
+
+    it 'should contain correct url for HostWeb access if hostWebUrl is given', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      actual = sut.reqwest 'web/title', ShareCoffee.Commons.getHostWebUrl()
+      actual.should.have.property 'url'
+      actual.url.should.be.an 'string'
+      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppSiteContext(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
 
     it 'should provide HttpMethod as method property of type string containing the method in lowered case', ->
       sut = new ShareCoffee.RESTFactory 'GET'
@@ -273,7 +280,7 @@ describe 'ShareCoffee.REST', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       payload = 
         a:'b'
-      actual = sut.reqwest 'foo', payload
+      actual = sut.reqwest 'foo',null, payload
       actual.should.have.property 'data'
       actual.data.should.be.an 'object'
       actual.data.should.equal payload
@@ -282,19 +289,19 @@ describe 'ShareCoffee.REST', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
       payload = 
         a: 'b'
-      actual = sut.reqwest 'foo', payload
+      actual = sut.reqwest 'foo', null, payload
       actual.should.not.have.property 'data'
 
     it 'should parse the payload to an object if it is a string', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       payload = '{"name":"foo"}'
-      actual = sut.reqwest 'foo', payload
+      actual = sut.reqwest 'foo', null, payload
       JSON.stringify(actual.data).should.equal payload
 
     it 'should throw an error when neither an object nor an valid json string is passed as payload', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       payload = 'Hello SharePoint'
-      (-> sut.reqwest('foo',payload)).should.throw 'please provide either a json string or an object as payload'
+      (-> sut.reqwest('foo', null, payload)).should.throw 'please provide either a json string or an object as payload'
 
     it 'should provide a If-Match property with value * if mathod is DELETE', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
@@ -309,17 +316,17 @@ describe 'ShareCoffee.REST', ->
       actual.headers.should.not.have.property 'If-Match'
 
       sut2 = new ShareCoffee.RESTFactory 'POST'
-      actual2 = sut2.reqwest 'foo', '{"data":"foo"}','etag'
+      actual2 = sut2.reqwest 'foo', null, '{"data":"foo"}','etag'
       actual2.headers.should.have.property 'If-Match'
       actual2.headers['If-Match'].should.equal 'etag'
 
       sut3 = new ShareCoffee.RESTFactory 'POST'
-      actual3 = sut3.reqwest 'foo','{"d":"data"}'
+      actual3 = sut3.reqwest 'foo', null, '{"d":"data"}'
       actual3.headers.should.not.have.property 'If-Match'
 
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'
-      actual = sut.reqwest 'foo','{"d":"data"}','etag'
+      actual = sut.reqwest 'foo', null, '{"d":"data"}','etag'
       actual.headers.should.have.property 'X-HTTP-Method'
       actual.headers['X-HTTP-Method'].should.be.an 'string'
       actual.headers['X-HTTP-Method'].should.equal 'MERGE'
