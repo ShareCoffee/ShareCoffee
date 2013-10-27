@@ -178,7 +178,44 @@
       this.jQuery = __bind(this.jQuery, this);
     }
 
-    _Class.prototype.jQuery = function(url, options) {};
+    _Class.prototype.jQuery = function(url, payload, eTag) {
+      var result;
+      if (payload == null) {
+        payload = null;
+      }
+      if (eTag == null) {
+        eTag = null;
+      }
+      if (this.method === 'DELETE') {
+        eTag = '*';
+      }
+      result = {
+        url: url,
+        type: this.method,
+        contentType: ShareCoffee.REST.applicationType,
+        headers: {
+          'Accepts': ShareCoffee.REST.applicationType,
+          'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
+          'X-HTTP-Method': 'MERGE',
+          'If-Match': eTag
+        },
+        data: typeof payload === 'string' ? payload : JSON.stringify(payload)
+      };
+      if (this.method === 'GET') {
+        delete result.contentType;
+        delete result.headers['X-RequestDigest'];
+      }
+      if (!(this.method === 'POST' && (eTag != null))) {
+        delete result.headers['X-HTTP-Method'];
+      }
+      if (!(this.method === 'DELETE' || (this.method === 'POST' && (eTag != null)))) {
+        delete result.headers['If-Match'];
+      }
+      if (this.method !== 'POST') {
+        delete result.data;
+      }
+      return result;
+    };
 
     _Class.prototype.angularJS = function(url, options) {};
 

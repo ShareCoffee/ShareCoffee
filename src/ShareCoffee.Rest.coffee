@@ -4,7 +4,29 @@ root.ShareCoffee or = {}
 root.ShareCoffee.RESTFactory = class
   constructor: (@method) ->
   
-  jQuery: (url, options) =>
+  jQuery: (url, payload = null, eTag = null) =>
+    eTag = '*' if @method is 'DELETE'
+
+    result = 
+      url: url
+      type: @method
+      contentType: ShareCoffee.REST.applicationType
+      headers: 
+        'Accepts' : ShareCoffee.REST.applicationType
+        'X-RequestDigest' : ShareCoffee.Commons.getFormDigest()
+        'X-HTTP-Method' : 'MERGE'
+        'If-Match' : eTag
+      data: if typeof payload is 'string' then payload else JSON.stringify(payload)
+
+    if @method is 'GET'
+      delete result.contentType
+      delete result.headers['X-RequestDigest']
+    
+    delete result.headers['X-HTTP-Method'] unless @method is 'POST' and eTag?
+    delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and eTag?)
+    delete result.data unless @method is 'POST'
+    result
+
   angularJS: (url, options) =>
   reqwest: (url, options)=>
 
