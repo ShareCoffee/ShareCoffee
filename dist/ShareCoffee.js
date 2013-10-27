@@ -391,57 +391,6 @@
       }
     };
 
-    _Class.buildGetRequest = function(url) {
-      return {
-        url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
-        type: "GET",
-        headers: {
-          'Accept': ShareCoffee.REST.applicationType
-        }
-      };
-    };
-
-    _Class.buildDeleteRequest = function(url) {
-      return {
-        url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
-        type: "DELETE",
-        contentType: ShareCoffee.REST.applicationType,
-        headers: {
-          'Accept': ShareCoffee.REST.applicationType,
-          'If-Match': '*',
-          'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
-        }
-      };
-    };
-
-    _Class.buildUpdateRequest = function(url, eTag, requestPayload) {
-      return {
-        url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
-        type: 'POST',
-        contentType: ShareCoffee.REST.applicationType,
-        headers: {
-          'Accept': ShareCoffee.REST.applicationType,
-          'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
-          'X-HTTP-Method': 'MERGE',
-          'If-Match': eTag
-        },
-        data: requestPayload
-      };
-    };
-
-    _Class.buildCreateRequest = function(url, requestPayload) {
-      return {
-        url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
-        type: 'POST',
-        contentType: ShareCoffee.REST.applicationType,
-        headers: {
-          'Accept': ShareCoffee.REST.applicationType,
-          'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
-        },
-        data: requestPayload
-      };
-    };
-
     return _Class;
 
   })();
