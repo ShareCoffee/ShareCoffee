@@ -179,16 +179,16 @@
       this.SPCrossDomainLib = __bind(this.SPCrossDomainLib, this);
     }
 
-    _Class.prototype.SPCrossDomainLib = function(url, onSuccess, onError, hostWebUrl, payload, eTag) {
+    _Class.prototype.SPCrossDomainLib = function(url, hostWebUrl, onSuccess, onError, payload, eTag) {
       var result;
+      if (hostWebUrl == null) {
+        hostWebUrl = null;
+      }
       if (onSuccess == null) {
         onSuccess = null;
       }
       if (onError == null) {
         onError = null;
-      }
-      if (hostWebUrl == null) {
-        hostWebUrl = null;
       }
       if (payload == null) {
         payload = null;
@@ -196,14 +196,11 @@
       if (eTag == null) {
         eTag = null;
       }
-      if (hostWebUrl == null) {
-        hostWebUrl = ShareCoffee.Commons.getHostWebUrl();
-      }
       if (this.method === 'DELETE') {
         eTag = '*';
       }
       result = {
-        url: "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppContextSite(@target)/" + url + "?@target='" + hostWebUrl + "'",
+        url: hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppContextSite(@target)/" + url + "?@target='" + hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
         method: this.method,
         success: onSuccess,
         error: onError,

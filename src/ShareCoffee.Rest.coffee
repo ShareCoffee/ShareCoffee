@@ -3,12 +3,11 @@ root.ShareCoffee or = {}
 
 root.ShareCoffee.RESTFactory = class
   constructor: (@method) ->
-  SPCrossDomainLib: (url, onSuccess = null, onError = null, hostWebUrl = null, payload = null, eTag = null) =>
-    hostWebUrl = ShareCoffee.Commons.getHostWebUrl() unless hostWebUrl?
+  SPCrossDomainLib: (url, hostWebUrl = null, onSuccess = null, onError = null, payload = null, eTag = null) =>
     eTag = '*' if @method is 'DELETE'
 
     result = 
-      url: "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{url}?@target='#{hostWebUrl}'" 
+      url: if hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{url}?@target='#{hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{url}"
       method: @method
       success: onSuccess
       error: onError

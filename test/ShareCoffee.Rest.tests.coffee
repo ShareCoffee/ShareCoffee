@@ -69,17 +69,17 @@ describe 'ShareCoffee.REST', ->
     
     it 'should contain the required URL in RequestExecutors format as url property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'web/title',null,null, ShareCoffee.Commons.getHostWebUrl()
+      actual = sut.SPCrossDomainLib 'web/title', ShareCoffee.Commons.getHostWebUrl()
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
       actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
 
-    it 'should use SPHostUrl if hostWebUrl is not passed for building the URL', ->
+    it 'should build an valid url for querying the AppWeb from Cloud-Hosted Apps', ->
       sut = new ShareCoffee.RESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'web/title'
+      actual = sut.SPCrossDomainLib 'web/title', null
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
-      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
+      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/web/title"
 
     it 'should provide HttpMethod as method property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'
@@ -91,7 +91,7 @@ describe 'ShareCoffee.REST', ->
     it 'should set success handler if present', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       onSuccess = ()->
-      actual = sut.SPCrossDomainLib 'web/title', onSuccess
+      actual = sut.SPCrossDomainLib 'web/title', null, onSuccess
       actual.should.have.property 'success'
       actual.success.should.be.an 'function'
       actual.success.should.equal onSuccess
@@ -104,7 +104,7 @@ describe 'ShareCoffee.REST', ->
     it 'should set error handler if present', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       onError = ()->
-      actual = sut.SPCrossDomainLib 'web/title', null, onError
+      actual = sut.SPCrossDomainLib 'web/title', null, null, onError
       actual.should.have.property 'error'
       actual.error.should.be.an 'function'
       actual.error.should.equal onError
@@ -164,17 +164,17 @@ describe 'ShareCoffee.REST', ->
       actual.headers.should.not.have.property 'If-Match'
 
       sut2 = new ShareCoffee.RESTFactory 'POST'
-      actual2 = sut2.SPCrossDomainLib 'foo', null,null,null, '{"data":"foo"}','etag'
+      actual2 = sut2.SPCrossDomainLib 'foo', null,null,null, '{"data":"foo"}', 'etag'
       actual2.headers.should.have.property 'If-Match'
       actual2.headers['If-Match'].should.equal 'etag'
 
       sut3 = new ShareCoffee.RESTFactory 'POST'
-      actual3 = sut3.SPCrossDomainLib 'foo','{"d":"data"}'
+      actual3 = sut3.SPCrossDomainLib 'foo',null, null, null, '{"d":"data"}'
       actual3.headers.should.not.have.property 'If-Match'
 
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'
-      actual = sut.SPCrossDomainLib 'foo', null,null,null,'{"d":"data"}','etag'
+      actual = sut.SPCrossDomainLib 'foo', null, null, null, '{"d":"data"}', 'etag'
       actual.headers.should.have.property 'X-HTTP-Method'
       actual.headers['X-HTTP-Method'].should.be.an 'string'
       actual.headers['X-HTTP-Method'].should.equal 'MERGE'
@@ -193,14 +193,14 @@ describe 'ShareCoffee.REST', ->
     it 'should provide payload as body property if method is POST', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       payload = "{'a': 'b'}"
-      actual = sut.SPCrossDomainLib 'foo', null,null,null,payload
+      actual = sut.SPCrossDomainLib 'foo', null, null, null, payload
       actual.should.have.property 'body'
       actual.body.should.equal payload
 
     it 'should not provide a body property if method is not POST', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
       payload = "{'a': 'b'}"
-      actual = sut.SPCrossDomainLib 'foo',null,null,null, payload
+      actual = sut.SPCrossDomainLib 'foo', null, null, null, payload
       actual.should.not.have.property 'body'
 
     it 'should stringify the payload if it is not given as string', ->
@@ -208,7 +208,7 @@ describe 'ShareCoffee.REST', ->
       payload = 
         name: 'foo'
       expected = JSON.stringify payload
-      actual = sut.SPCrossDomainLib 'foo', null,null,null, payload
+      actual = sut.SPCrossDomainLib 'foo', null, null, null, payload
       actual.body.should.equal expected
 
 
