@@ -176,7 +176,67 @@
       this.reqwest = __bind(this.reqwest, this);
       this.angularJS = __bind(this.angularJS, this);
       this.jQuery = __bind(this.jQuery, this);
+      this.SPCrossDomainLib = __bind(this.SPCrossDomainLib, this);
     }
+
+    _Class.prototype.SPCrossDomainLib = function(url, onSuccess, onError, hostWebUrl, payload, eTag) {
+      var result;
+      if (onSuccess == null) {
+        onSuccess = null;
+      }
+      if (onError == null) {
+        onError = null;
+      }
+      if (hostWebUrl == null) {
+        hostWebUrl = null;
+      }
+      if (payload == null) {
+        payload = null;
+      }
+      if (eTag == null) {
+        eTag = null;
+      }
+      if (hostWebUrl == null) {
+        hostWebUrl = ShareCoffee.Commons.getHostWebUrl();
+      }
+      if (this.method === 'DELETE') {
+        eTag = '*';
+      }
+      result = {
+        url: "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppContextSite(@target)/" + url + "?@target='" + hostWebUrl + "'",
+        method: this.method,
+        success: onSuccess,
+        error: onError,
+        headers: {
+          'Accept': ShareCoffee.REST.applicationType,
+          'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
+          'Content-Type': ShareCoffee.REST.applicationType,
+          'X-HTTP-Method': 'MERGE',
+          'If-Match': eTag
+        },
+        body: typeof payload === 'string' ? payload : JSON.stringify(payload)
+      };
+      if (this.method === 'GET') {
+        delete result.headers['X-RequestDigest'];
+        delete result.headers['Content-Type'];
+      }
+      if (!(this.method === 'POST' && (eTag != null))) {
+        delete result.headers['X-HTTP-Method'];
+      }
+      if (!(this.method === 'DELETE' || (this.method === 'POST' && (eTag != null)))) {
+        delete result.headers['If-Match'];
+      }
+      if (onSuccess == null) {
+        delete result.success;
+      }
+      if (onError == null) {
+        delete result.error;
+      }
+      if (this.method !== 'POST') {
+        delete result.body;
+      }
+      return result;
+    };
 
     _Class.prototype.jQuery = function(url, payload, eTag) {
       var result;
@@ -194,7 +254,7 @@
         type: this.method,
         contentType: ShareCoffee.REST.applicationType,
         headers: {
-          'Accepts': ShareCoffee.REST.applicationType,
+          'Accept': ShareCoffee.REST.applicationType,
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
           'X-HTTP-Method': 'MERGE',
           'If-Match': eTag
@@ -232,7 +292,7 @@
         url: url,
         method: this.method,
         headers: {
-          'Accepts': ShareCoffee.REST.applicationType,
+          'Accept': ShareCoffee.REST.applicationType,
           'Content-Type': ShareCoffee.REST.applicationType,
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
           'X-HTTP-Method': 'MERGE',
@@ -274,7 +334,7 @@
           method: this.method.toLowerCase(),
           contentType: ShareCoffee.REST.applicationType,
           headers: {
-            'Accepts': ShareCoffee.REST.applicationType,
+            'Accept': ShareCoffee.REST.applicationType,
             'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
             'If-Match': eTag,
             'X-HTTP-Method': 'MERGE'
@@ -330,7 +390,7 @@
         url: "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
         type: "GET",
         headers: {
-          'Accepts': ShareCoffee.REST.applicationType
+          'Accept': ShareCoffee.REST.applicationType
         }
       };
     };

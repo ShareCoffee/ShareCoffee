@@ -3,7 +3,34 @@ root.ShareCoffee or = {}
 
 root.ShareCoffee.RESTFactory = class
   constructor: (@method) ->
-  
+  SPCrossDomainLib: (url, onSuccess = null, onError = null, hostWebUrl = null, payload = null, eTag = null) =>
+    hostWebUrl = ShareCoffee.Commons.getHostWebUrl() unless hostWebUrl?
+    eTag = '*' if @method is 'DELETE'
+
+    result = 
+      url: "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{url}?@target='#{hostWebUrl}'" 
+      method: @method
+      success: onSuccess
+      error: onError
+      headers: 
+        'Accept': ShareCoffee.REST.applicationType
+        'X-RequestDigest' : ShareCoffee.Commons.getFormDigest()
+        'Content-Type': ShareCoffee.REST.applicationType
+        'X-HTTP-Method' : 'MERGE'
+        'If-Match' : eTag
+      body: if typeof payload is 'string' then payload else JSON.stringify(payload)
+
+    if @method is 'GET'
+      delete result.headers['X-RequestDigest']
+      delete result.headers['Content-Type']
+    
+    delete result.headers['X-HTTP-Method'] unless @method is 'POST' and eTag?
+    delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and eTag?)
+    delete result.success unless onSuccess?
+    delete result.error unless onError?
+    delete result.body unless @method is 'POST'
+    result
+
   jQuery: (url, payload = null, eTag = null) =>
     eTag = '*' if @method is 'DELETE'
 
@@ -12,7 +39,7 @@ root.ShareCoffee.RESTFactory = class
       type: @method
       contentType: ShareCoffee.REST.applicationType
       headers: 
-        'Accepts' : ShareCoffee.REST.applicationType
+        'Accept' : ShareCoffee.REST.applicationType
         'X-RequestDigest' : ShareCoffee.Commons.getFormDigest()
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : eTag
@@ -34,7 +61,7 @@ root.ShareCoffee.RESTFactory = class
       url : url
       method: @method
       headers:
-        'Accepts' : ShareCoffee.REST.applicationType
+        'Accept' : ShareCoffee.REST.applicationType
         'Content-Type': ShareCoffee.REST.applicationType
         'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
         'X-HTTP-Method' : 'MERGE'
@@ -59,7 +86,7 @@ root.ShareCoffee.RESTFactory = class
         method: @method.toLowerCase()
         contentType: ShareCoffee.REST.applicationType
         headers: 
-          'Accepts' : ShareCoffee.REST.applicationType
+          'Accept' : ShareCoffee.REST.applicationType
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
           'If-Match' : eTag
           'X-HTTP-Method' : 'MERGE'
@@ -94,7 +121,7 @@ root.ShareCoffee.REST = class
     url: "#{ShareCoffee.Commons.getApiRootUrl()}#{url}", 
     type: "GET",
     headers:
-      'Accepts' : ShareCoffee.REST.applicationType
+      'Accept' : ShareCoffee.REST.applicationType
 
   @buildDeleteRequest = (url) ->
     url :"#{ShareCoffee.Commons.getApiRootUrl()}#{url}",
