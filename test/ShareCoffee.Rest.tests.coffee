@@ -22,36 +22,43 @@ describe 'ShareCoffee.REST', ->
     delete root._spPageContextInfo 
     delete root.document 
 
-  describe 'loadCrossDomainLibrary', ->
+  describe 'API', ->
+    
+    #ShareCoffee.REST.build.create.for.jQuery()
+    
+    it 'should provide build as an object',->
+      ShareCoffee.REST.build.should.be.an 'object'
 
-    beforeEach () ->
-      root.ShareCoffee.Core = 
-        loadScript: (url, onSuccess,onError) ->
+    it 'should provide build.read, build.update, build.delete, build.create as objects', ->
+      ShareCoffee.REST.build.create.should.be.an 'object'
+      ShareCoffee.REST.build.read.should.be.an 'object'
+      ShareCoffee.REST.build.update.should.be.an 'object'
+      ShareCoffee.REST.build.delete.should.be.an 'object'
 
-    afterEach () ->
-      delete root.ShareCoffee.Core
+    it 'should provide a for object all CRUD ops as object', ->
+      forCreate = ShareCoffee.REST.build.create.for
+      forRead = ShareCoffee.REST.build.read.for
+      forUpdate = ShareCoffee.REST.build.update.for
+      forDelete = ShareCoffee.REST.build.delete.for
 
-    it 'should call loadScript on ShareCoffee.Core with correct parameters', ->
-      spy = sinon.spy ShareCoffee.Core, 'loadScript'
-      ShareCoffee.REST.loadCrossDomainLibrary null, null
-      spy.calledWithExactly('https://foo.sharepoint.com/sites/dev/_layouts/15/SP.RequestExecutor.js', null, null).should.be.ok
-      spy.restore()
+      forCreate.should.be.an 'object'
+      forRead.should.be.an 'object'
+      forUpdate.should.be.an 'object'
+      forDelete.should.be.an 'object'
 
-    it 'should fire onSuccess when loadScript succeeded', ->
-      loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
-        s() if s
-      onSuccess = sinon.spy()
-      ShareCoffee.REST.loadCrossDomainLibrary onSuccess, null
-      onSuccess.calledOnce.should.be.true
-      loadScriptStub.restore()
+      forCreate.should.have.property('method')
+      forCreate.method.should.equal 'POST'
+      forRead.should.have.property('method')
+      forRead.method.should.equal 'GET'
+      forUpdate.should.have.property('method')
+      forUpdate.method.should.equal 'POST'
+      forDelete.should.have.property('method')
+      forDelete.method.should.equal 'DELETE'
 
-    it 'should fire onError when loadScript failes', ->
-      loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
-        e() if e
-      onError = sinon.spy()
-      ShareCoffee.REST.loadCrossDomainLibrary null, onError
-      onError.calledOnce.should.be.true
-      loadScriptStub.restore()
+    it 'should provide various options in order to create request property objects for different frameworks', ->
+      ShareCoffee.REST.build.create.for.jQuery.should.be.an 'function'
+      ShareCoffee.REST.build.create.for.angularJS.should.be.an 'function'
+      ShareCoffee.REST.build.create.for.reqwest.should.be.an 'function'
 
   describe 'buildGetRequest', ->
     

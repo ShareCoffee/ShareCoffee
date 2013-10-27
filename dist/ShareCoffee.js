@@ -1,5 +1,6 @@
 (function() {
   var root,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __slice = [].slice;
 
   root = typeof window !== "undefined" && window !== null ? window : global;
@@ -152,15 +153,59 @@
 
   root.ShareCoffee || (root.ShareCoffee = {});
 
-  root.ShareCoffee.REST = (function() {
+  root.ShareCoffee.CrossDomain = (function() {
     function _Class() {}
-
-    _Class.applicationType = "application/json;odata=verbose";
 
     _Class.loadCrossDomainLibrary = function(onSuccess, onError) {
       var scriptUrl;
       scriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.RequestExecutor.js";
       return ShareCoffee.Core.loadScript(scriptUrl, onSuccess, onError);
+    };
+
+    return _Class;
+
+  })();
+
+  root = typeof window !== "undefined" && window !== null ? window : global;
+
+  root.ShareCoffee || (root.ShareCoffee = {});
+
+  root.ShareCoffee.RESTFactory = (function() {
+    function _Class(method) {
+      this.method = method;
+      this.reqwest = __bind(this.reqwest, this);
+      this.angularJS = __bind(this.angularJS, this);
+      this.jQuery = __bind(this.jQuery, this);
+    }
+
+    _Class.prototype.jQuery = function(url, options) {};
+
+    _Class.prototype.angularJS = function(url, options) {};
+
+    _Class.prototype.reqwest = function(url, options) {};
+
+    return _Class;
+
+  })();
+
+  root.ShareCoffee.REST = (function() {
+    function _Class() {}
+
+    _Class.applicationType = "application/json;odata=verbose";
+
+    _Class.build = {
+      create: {
+        "for": new ShareCoffee.RESTFactory('POST')
+      },
+      read: {
+        "for": new ShareCoffee.RESTFactory('GET')
+      },
+      update: {
+        "for": new ShareCoffee.RESTFactory('POST')
+      },
+      "delete": {
+        "for": new ShareCoffee.RESTFactory('DELETE')
+      }
     };
 
     _Class.buildGetRequest = function(url) {
