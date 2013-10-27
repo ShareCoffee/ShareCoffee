@@ -27,7 +27,29 @@ root.ShareCoffee.RESTFactory = class
     delete result.data unless @method is 'POST'
     result
 
-  angularJS: (url, options) =>
+  angularJS: (url, payload = null, eTag = null) =>
+    eTag = '*' if @method is 'DELETE'
+
+    result = 
+      url : url
+      method: @method
+      headers:
+        'Accepts' : ShareCoffee.REST.applicationType
+        'Content-Type': ShareCoffee.REST.applicationType
+        'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
+        'X-HTTP-Method' : 'MERGE'
+        'If-Match' : eTag
+      data: if typeof payload is 'string' then payload else JSON.stringify(payload)
+
+    if @method is 'GET'    
+      delete result.headers['Content-Type']
+      delete result.headers['X-RequestDigest']
+    
+    delete result.headers['X-HTTP-Method'] unless @method is 'POST' and eTag?
+    delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and eTag?)
+    delete result.data unless @method is 'POST'
+    result
+  
   reqwest: (url, options)=>
 
 root.ShareCoffee.REST = class 

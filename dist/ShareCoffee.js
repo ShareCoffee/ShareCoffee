@@ -217,7 +217,44 @@
       return result;
     };
 
-    _Class.prototype.angularJS = function(url, options) {};
+    _Class.prototype.angularJS = function(url, payload, eTag) {
+      var result;
+      if (payload == null) {
+        payload = null;
+      }
+      if (eTag == null) {
+        eTag = null;
+      }
+      if (this.method === 'DELETE') {
+        eTag = '*';
+      }
+      result = {
+        url: url,
+        method: this.method,
+        headers: {
+          'Accepts': ShareCoffee.REST.applicationType,
+          'Content-Type': ShareCoffee.REST.applicationType,
+          'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
+          'X-HTTP-Method': 'MERGE',
+          'If-Match': eTag
+        },
+        data: typeof payload === 'string' ? payload : JSON.stringify(payload)
+      };
+      if (this.method === 'GET') {
+        delete result.headers['Content-Type'];
+        delete result.headers['X-RequestDigest'];
+      }
+      if (!(this.method === 'POST' && (eTag != null))) {
+        delete result.headers['X-HTTP-Method'];
+      }
+      if (!(this.method === 'DELETE' || (this.method === 'POST' && (eTag != null)))) {
+        delete result.headers['If-Match'];
+      }
+      if (this.method !== 'POST') {
+        delete result.data;
+      }
+      return result;
+    };
 
     _Class.prototype.reqwest = function(url, options) {};
 
