@@ -14,7 +14,7 @@ root.ShareCoffee.ChromeSettings = (iconUrl, tite,helpPageUrl, settingsLinkSplat.
 
 root.ShareCoffee.UI = class
   
-  @showNotification = (message, isSticky) ->
+  @showNotification = (message, isSticky = false) ->
     condition = () ->
       SP? and SP.UI? and SP.UI.Notify? and SP.UI.Notify.addNotification?
     
@@ -22,13 +22,14 @@ root.ShareCoffee.UI = class
     SP.UI.Notify.addNotification message, isSticky
 
   @removeNotification = (notificationId) ->
+    return unless notificationId?
     condition = () ->
       SP? and SP.UI? and SP.UI.Notify? and SP.UI.Notify.removeNotification?
 
     ShareCoffee.Core.checkConditions "SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)", condition
-    SP.UI.Notify.removeNotification notificationId if notificationId?
+    SP.UI.Notify.removeNotification notificationId
 
-  @showStatus = (title, contentAsHtml, showOnTop, color = 'blue') ->
+  @showStatus = (title, contentAsHtml, showOnTop = false, color = 'blue') ->
     condition = () ->
       SP? and SP.UI? and SP.UI.Status? and SP.UI.Status.addStatus? and SP.UI.Status.setStatusPriColor?
     
@@ -38,11 +39,12 @@ root.ShareCoffee.UI = class
     statusId
 
   @removeStatus = (statusId) ->
+    return unless statusId?
     condition = () ->
       SP? and SP.UI? and SP.UI.Status? and SP.UI.Status.removeStatus? 
     
     ShareCoffee.Core.checkConditions "SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)", condition
-    SP.UI.Status.removeStatus statusId if statusId?
+    SP.UI.Status.removeStatus statusId
 
   @removeAllStatus = () ->
     condition = () ->
@@ -51,12 +53,13 @@ root.ShareCoffee.UI = class
     ShareCoffee.Core.checkConditions "SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)", condition
     SP.UI.Status.removeAllStatus()
 
-  @setColor = (statusId, color='blue') ->
+  @setStatusColor = (statusId, color='blue') ->
+    return unless statusId?
     condition = () ->
       SP? and SP.UI? and SP.UI.Status? and SP.UI.Status.setStatusPriColor? 
 
     ShareCoffee.Core.checkConditions "SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)", condition
-    SP.UI.Status.setStatusPriColor statusId, color if statusId?
+    SP.UI.Status.setStatusPriColor statusId, color
 
   @onChromeLoadedCallback = null
 

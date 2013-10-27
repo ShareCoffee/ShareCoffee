@@ -136,20 +136,20 @@ describe 'ShareCoffee.UI', ->
       statusId = 999
       color = 'yellow'
       spy = sinon.spy SP.UI.Status, 'setStatusPriColor'
-      ShareCoffee.UI.setColor statusId, color
+      ShareCoffee.UI.setStatusColor statusId, color
       spy.calledWithExactly(statusId, color).should.be.ok
       SP.UI.Status.setStatusPriColor.restore()
 
     it 'should call setStatusPriColor with blue if no color is present', ->
       statusId = 999
       spy = sinon.spy SP.UI.Status, 'setStatusPriColor'
-      ShareCoffee.UI.setColor statusId
+      ShareCoffee.UI.setStatusColor statusId
       spy.calledWithExactly(statusId, 'blue').should.be.ok
       SP.UI.Status.setStatusPriColor.restore()
 
     it 'should not call setStatusPriColor if statusId is not present', ->
       spy = sinon.spy SP.UI.Status, 'setStatusPriColor'
-      ShareCoffee.UI.setColor()
+      ShareCoffee.UI.setStatusColor()
       spy.called.should.be.false
 
   describe 'loadAppChrome', ->

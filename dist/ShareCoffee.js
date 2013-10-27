@@ -256,7 +256,50 @@
       return result;
     };
 
-    _Class.prototype.reqwest = function(url, options) {};
+    _Class.prototype.reqwest = function(url, payload, eTag) {
+      var Error, result;
+      if (payload == null) {
+        payload = null;
+      }
+      if (eTag == null) {
+        eTag = null;
+      }
+      if (this.method === 'DELETE') {
+        eTag = '*';
+      }
+      result = null;
+      try {
+        result = {
+          url: url,
+          method: this.method.toLowerCase(),
+          contentType: ShareCoffee.REST.applicationType,
+          headers: {
+            'Accepts': ShareCoffee.REST.applicationType,
+            'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
+            'If-Match': eTag,
+            'X-HTTP-Method': 'MERGE'
+          },
+          data: (payload != null) && typeof payload === 'object' ? payload : JSON.parse(payload)
+        };
+        if (this.method === 'GET') {
+          delete result.contentType;
+          delete result.headers['X-RequestDigest'];
+        }
+        if (!(this.method === 'POST' && (eTag != null))) {
+          delete result.headers['X-HTTP-Method'];
+        }
+        if (!(this.method === 'DELETE' || (this.method === 'POST' && (eTag != null)))) {
+          delete result.headers['If-Match'];
+        }
+        if (this.method !== 'POST') {
+          delete result.data;
+        }
+      } catch (_error) {
+        Error = _error;
+        throw 'please provide either a json string or an object as payload';
+      }
+      return result;
+    };
 
     return _Class;
 
@@ -367,6 +410,9 @@
 
     _Class.showNotification = function(message, isSticky) {
       var condition;
+      if (isSticky == null) {
+        isSticky = false;
+      }
       condition = function() {
         return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Notify != null) && (SP.UI.Notify.addNotification != null);
       };
@@ -376,17 +422,21 @@
 
     _Class.removeNotification = function(notificationId) {
       var condition;
+      if (notificationId == null) {
+        return;
+      }
       condition = function() {
         return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Notify != null) && (SP.UI.Notify.removeNotification != null);
       };
       ShareCoffee.Core.checkConditions("SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)", condition);
-      if (notificationId != null) {
-        return SP.UI.Notify.removeNotification(notificationId);
-      }
+      return SP.UI.Notify.removeNotification(notificationId);
     };
 
     _Class.showStatus = function(title, contentAsHtml, showOnTop, color) {
       var condition, statusId;
+      if (showOnTop == null) {
+        showOnTop = false;
+      }
       if (color == null) {
         color = 'blue';
       }
@@ -401,13 +451,14 @@
 
     _Class.removeStatus = function(statusId) {
       var condition;
+      if (statusId == null) {
+        return;
+      }
       condition = function() {
         return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.removeStatus != null);
       };
       ShareCoffee.Core.checkConditions("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)", condition);
-      if (statusId != null) {
-        return SP.UI.Status.removeStatus(statusId);
-      }
+      return SP.UI.Status.removeStatus(statusId);
     };
 
     _Class.removeAllStatus = function() {
@@ -419,18 +470,19 @@
       return SP.UI.Status.removeAllStatus();
     };
 
-    _Class.setColor = function(statusId, color) {
+    _Class.setStatusColor = function(statusId, color) {
       var condition;
       if (color == null) {
         color = 'blue';
+      }
+      if (statusId == null) {
+        return;
       }
       condition = function() {
         return (typeof SP !== "undefined" && SP !== null) && (SP.UI != null) && (SP.UI.Status != null) && (SP.UI.Status.setStatusPriColor != null);
       };
       ShareCoffee.Core.checkConditions("SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)", condition);
-      if (statusId != null) {
-        return SP.UI.Status.setStatusPriColor(statusId, color);
-      }
+      return SP.UI.Status.setStatusPriColor(statusId, color);
     };
 
     _Class.onChromeLoadedCallback = null;

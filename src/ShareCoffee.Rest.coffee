@@ -50,7 +50,31 @@ root.ShareCoffee.RESTFactory = class
     delete result.data unless @method is 'POST'
     result
   
-  reqwest: (url, options)=>
+  reqwest: (url, payload = null, eTag=  null)=>
+    eTag = '*' if @method is 'DELETE'
+    result = null
+    try
+      result=
+        url: url
+        method: @method.toLowerCase()
+        contentType: ShareCoffee.REST.applicationType
+        headers: 
+          'Accepts' : ShareCoffee.REST.applicationType
+          'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
+          'If-Match' : eTag
+          'X-HTTP-Method' : 'MERGE'
+        data: if payload? and typeof payload is 'object' then payload else JSON.parse(payload)
+
+      if @method is 'GET'
+        delete result.contentType
+        delete result.headers['X-RequestDigest']
+
+      delete result.headers['X-HTTP-Method'] unless @method is 'POST' and eTag?
+      delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and eTag?)
+      delete result.data unless @method is 'POST'
+    catch Error
+      throw 'please provide either a json string or an object as payload'
+    result
 
 root.ShareCoffee.REST = class 
 
