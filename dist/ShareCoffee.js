@@ -238,8 +238,11 @@
       return result;
     };
 
-    _Class.prototype.jQuery = function(url, payload, eTag) {
+    _Class.prototype.jQuery = function(url, hostWebUrl, payload, eTag) {
       var result;
+      if (hostWebUrl == null) {
+        hostWebUrl = null;
+      }
       if (payload == null) {
         payload = null;
       }
@@ -250,7 +253,7 @@
         eTag = '*';
       }
       result = {
-        url: url,
+        url: hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + url + "?@target='" + hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
         type: this.method,
         contentType: ShareCoffee.REST.applicationType,
         headers: {
@@ -277,8 +280,11 @@
       return result;
     };
 
-    _Class.prototype.angularJS = function(url, payload, eTag) {
+    _Class.prototype.angularJS = function(url, hostWebUrl, payload, eTag) {
       var result;
+      if (hostWebUrl == null) {
+        hostWebUrl = null;
+      }
       if (payload == null) {
         payload = null;
       }
@@ -289,7 +295,7 @@
         eTag = '*';
       }
       result = {
-        url: url,
+        url: hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + url + "?@target='" + hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
         method: this.method,
         headers: {
           'Accept': ShareCoffee.REST.applicationType,
@@ -316,8 +322,11 @@
       return result;
     };
 
-    _Class.prototype.reqwest = function(url, payload, eTag) {
+    _Class.prototype.reqwest = function(url, hostWebUrl, payload, eTag) {
       var Error, result;
+      if (hostWebUrl == null) {
+        hostWebUrl = null;
+      }
       if (payload == null) {
         payload = null;
       }
@@ -330,7 +339,7 @@
       result = null;
       try {
         result = {
-          url: url,
+          url: hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + url + "?@target='" + hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
           method: this.method.toLowerCase(),
           contentType: ShareCoffee.REST.applicationType,
           headers: {

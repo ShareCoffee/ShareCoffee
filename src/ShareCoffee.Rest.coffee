@@ -31,11 +31,11 @@ root.ShareCoffee.RESTFactory = class
     delete result.body unless @method is 'POST'
     result
 
-  jQuery: (url, payload = null, eTag = null) =>
+  jQuery: (url, hostWebUrl = null, payload = null, eTag = null) =>
     eTag = '*' if @method is 'DELETE'
 
     result = 
-      url: url
+      url: if hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppSiteContext(@target)/#{url}?@target='#{hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{url}"
       type: @method
       contentType: ShareCoffee.REST.applicationType
       headers: 
