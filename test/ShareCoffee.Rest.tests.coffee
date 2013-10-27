@@ -348,12 +348,19 @@ describe 'ShareCoffee.REST', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       sut.angularJS().should.be.an 'object'
 
-    it 'should contain passed url as url property of type string', ->
+    it 'should contain passed url combined with AppWeb API endpoint as url property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'
-      actual = sut.angularJS 'foo'
+      actual = sut.angularJS 'web/title'
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
-      actual.url.should.equal 'foo'
+      actual.url.should.equal 'https://dotnetrocks.sharepoint.com/_api/web/title'
+
+    it 'should contain correct url for HostWeb access if hostWebUrl is given', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      actual = sut.angularJS 'web/title', ShareCoffee.Commons.getHostWebUrl()
+      actual.should.have.property 'url'
+      actual.url.should.be.an 'string'
+      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppSiteContext(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
 
     it 'should provide HttpMethod as method property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'
@@ -402,14 +409,14 @@ describe 'ShareCoffee.REST', ->
     it 'should provide payload as data property if method is POST', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       payload = "{'a': 'b'}"
-      actual = sut.angularJS 'foo', payload
+      actual = sut.angularJS 'foo', null, payload
       actual.should.have.property 'data'
       actual.data.should.equal payload
 
     it 'should not provide a data property if method is not POST', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
       payload = "{'a': 'b'}"
-      actual = sut.angularJS 'foo', payload
+      actual = sut.angularJS 'foo', null, payload
       actual.should.not.have.property 'data'
 
     it 'should stringify the payload if it is not given as string', ->
@@ -417,7 +424,7 @@ describe 'ShareCoffee.REST', ->
       payload = 
         name: 'foo'
       expected = JSON.stringify payload
-      actual = sut.angularJS 'foo', payload
+      actual = sut.angularJS 'foo', null, payload
       actual.data.should.equal expected
 
     it 'should provide a If-Match property with value * if mathod is DELETE', ->
@@ -433,17 +440,17 @@ describe 'ShareCoffee.REST', ->
       actual.headers.should.not.have.property 'If-Match'
 
       sut2 = new ShareCoffee.RESTFactory 'POST'
-      actual2 = sut2.angularJS 'foo', 'data','etag'
+      actual2 = sut2.angularJS 'foo', null, 'data','etag'
       actual2.headers.should.have.property 'If-Match'
       actual2.headers['If-Match'].should.equal 'etag'
 
       sut3 = new ShareCoffee.RESTFactory 'POST'
-      actual3 = sut3.angularJS 'foo','data'
+      actual3 = sut3.angularJS 'foo',null, 'data'
       actual3.headers.should.not.have.property 'If-Match'
 
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'
-      actual = sut.angularJS 'foo','data','etag'
+      actual = sut.angularJS 'foo', null, 'data', 'etag'
       actual.headers.should.have.property 'X-HTTP-Method'
       actual.headers['X-HTTP-Method'].should.be.an 'string'
       actual.headers['X-HTTP-Method'].should.equal 'MERGE'

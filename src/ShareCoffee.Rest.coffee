@@ -54,11 +54,11 @@ root.ShareCoffee.RESTFactory = class
     delete result.data unless @method is 'POST'
     result
 
-  angularJS: (url, payload = null, eTag = null) =>
+  angularJS: (url, hostWebUrl = null, payload = null, eTag = null) =>
     eTag = '*' if @method is 'DELETE'
 
     result = 
-      url : url
+      url: if hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppSiteContext(@target)/#{url}?@target='#{hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{url}"
       method: @method
       headers:
         'Accept' : ShareCoffee.REST.applicationType
