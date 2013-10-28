@@ -153,29 +153,9 @@
 
   root.ShareCoffee || (root.ShareCoffee = {});
 
-  root.ShareCoffee.CrossDomain = (function() {
-    function _Class() {}
-
-    _Class.loadCrossDomainLibrary = function(onSuccess, onError) {
-      var scriptUrl;
-      scriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.RequestExecutor.js";
-      return ShareCoffee.Core.loadScript(scriptUrl, onSuccess, onError);
-    };
-
-    return _Class;
-
-  })();
-
-  root = typeof window !== "undefined" && window !== null ? window : global;
-
-  root.ShareCoffee || (root.ShareCoffee = {});
-
-  root.ShareCoffee.RESTFactory = (function() {
+  root.ShareCoffee.CrossDomainRESTFactory = (function() {
     function _Class(method) {
       this.method = method;
-      this.reqwest = __bind(this.reqwest, this);
-      this.angularJS = __bind(this.angularJS, this);
-      this.jQuery = __bind(this.jQuery, this);
       this.SPCrossDomainLib = __bind(this.SPCrossDomainLib, this);
     }
 
@@ -195,6 +175,9 @@
       }
       if (eTag == null) {
         eTag = null;
+      }
+      if (ShareCoffee.CrossDomain.crossDomainLibrariesLoaded === false) {
+        throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the CrossDomain REST libraries';
       }
       if (this.method === 'DELETE') {
         eTag = '*';
@@ -234,6 +217,97 @@
       }
       return result;
     };
+
+    return _Class;
+
+  })();
+
+  root.ShareCoffee.CrossDomain = (function() {
+    function _Class() {}
+
+    _Class.crossDomainLibrariesLoaded = false;
+
+    _Class.loadCrossDomainLibrary = function(onSuccess, onError) {
+      var onAnyError, requestExecutorScriptUrl, runtimeScriptUrl, spScriptUrl,
+        _this = this;
+      onAnyError = function() {
+        ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false;
+        if (onError) {
+          return onError();
+        }
+      };
+      runtimeScriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.Runtime.js";
+      spScriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.js";
+      requestExecutorScriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.RequestExecutor.js";
+      return ShareCoffee.Core.loadScript(runtimeScriptUrl, function() {
+        return ShareCoffee.Core.loadScript(spScriptUrl, function() {
+          return ShareCoffee.Core.loadScript(requestExecutorScriptUrl, function() {
+            ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true;
+            if (onSuccess) {
+              return onSuccess();
+            }
+          }, onAnyError);
+        }, onAnyError);
+      }, onAnyError);
+    };
+
+    _Class.build = {
+      create: {
+        "for": new ShareCoffee.CrossDomainRESTFactory('POST')
+      },
+      read: {
+        "for": new ShareCoffee.CrossDomainRESTFactory('GET')
+      },
+      update: {
+        "for": new ShareCoffee.CrossDomainRESTFactory('POST')
+      },
+      "delete": {
+        "for": new ShareCoffee.CrossDomainRESTFactory('DELETE')
+      }
+    };
+
+    _Class.getClientContext = function() {
+      var appWebUrl, ctx, factory;
+      if (ShareCoffee.CrossDomain.crossDomainLibrariesLoaded === false) {
+        throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext';
+      }
+      appWebUrl = ShareCoffee.Commons.getAppWebUrl();
+      ctx = new SP.ClientContext(appWebUrl);
+      factory = new SP.ProxyWebRequestExecutorFactory(appWebUrl);
+      ctx.set_webRequestExecutorFactory(factory);
+      return ctx;
+    };
+
+    _Class.getHostWeb = function(ctx, hostWebUrl) {
+      var appContextSite;
+      if (hostWebUrl == null) {
+        hostWebUrl = ShareCoffee.Commons.getHostWebUrl();
+      }
+      if (ShareCoffee.CrossDomain.crossDomainLibrariesLoaded === false) {
+        throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext';
+      }
+      if (ctx == null) {
+        throw 'ClientContext cant be null, call ShareCoffee.CrossDomain.getClientContext() first';
+      }
+      appContextSite = new SP.AppContextSite(ctx, hostWebUrl);
+      return appContextSite.get_web();
+    };
+
+    return _Class;
+
+  })();
+
+  root = typeof window !== "undefined" && window !== null ? window : global;
+
+  root.ShareCoffee || (root.ShareCoffee = {});
+
+  root.ShareCoffee.RESTFactory = (function() {
+    function _Class(method) {
+      this.method = method;
+      this.reqwest = __bind(this.reqwest, this);
+      this.angularJS = __bind(this.angularJS, this);
+      this.jQuery = __bind(this.jQuery, this);
+    }
 
     _Class.prototype.jQuery = function(url, hostWebUrl, payload, eTag) {
       var result;
