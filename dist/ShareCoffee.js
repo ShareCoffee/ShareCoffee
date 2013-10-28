@@ -404,7 +404,7 @@
             'If-Match': eTag,
             'X-HTTP-Method': 'MERGE'
           },
-          data: (payload != null) && typeof payload === 'object' ? payload : JSON.parse(payload),
+          data: (payload != null) && typeof payload === 'string' ? payload : JSON.stringify(payload),
           success: onSuccess,
           error: onError
         };

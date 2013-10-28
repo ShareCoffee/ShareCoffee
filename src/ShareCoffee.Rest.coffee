@@ -65,7 +65,7 @@ root.ShareCoffee.RESTFactory = class
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
           'If-Match' : eTag
           'X-HTTP-Method' : 'MERGE'
-        data: if payload? and typeof payload is 'object' then payload else JSON.parse(payload)
+        data: if payload? and typeof payload is 'string' then payload else JSON.stringify(payload)
         success: onSuccess
         error: onError
 

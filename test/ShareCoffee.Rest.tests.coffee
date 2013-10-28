@@ -161,8 +161,8 @@ describe 'ShareCoffee.REST', ->
         a:'b'
       actual = sut.reqwest 'foo', null, null, null, payload
       actual.should.have.property 'data'
-      actual.data.should.be.an 'object'
-      actual.data.should.equal payload
+      actual.data.should.be.an 'string'
+      actual.data.should.equal JSON.stringify(payload)
 
     it 'should not provide a data property if method is not POST', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
@@ -171,16 +171,11 @@ describe 'ShareCoffee.REST', ->
       actual = sut.reqwest 'foo', null, null, null, payload
       actual.should.not.have.property 'data'
 
-    it 'should parse the payload to an object if it is a string', ->
+    it 'should parse the payload to an string if it is a object', ->
       sut = new ShareCoffee.RESTFactory 'POST'
-      payload = '{"name":"foo"}'
+      payload = name:"foo"
       actual = sut.reqwest 'foo', null, null, null, payload
-      JSON.stringify(actual.data).should.equal payload
-
-    it 'should throw an error when neither an object nor an valid json string is passed as payload', ->
-      sut = new ShareCoffee.RESTFactory 'POST'
-      payload = 'Hello SharePoint'
-      (-> sut.reqwest('foo', null, null, null, payload)).should.throw 'please provide either a json string or an object as payload'
+      actual.data.should.equal JSON.stringify(payload)
 
     it 'should provide a If-Match property with value * if mathod is DELETE', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
