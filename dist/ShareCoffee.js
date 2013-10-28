@@ -395,6 +395,7 @@
       try {
         result = {
           url: hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + url + "?@target='" + hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
+          type: 'json',
           method: this.method.toLowerCase(),
           contentType: ShareCoffee.REST.applicationType,
           headers: {

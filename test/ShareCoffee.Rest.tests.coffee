@@ -66,6 +66,12 @@ describe 'ShareCoffee.REST', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       sut.reqwest().should.be.an 'object'
 
+    it 'should explicitly set reqwest type to json', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      actual = sut.reqwest 'foo'
+      actual.should.have.property 'type'
+      actual.type.should.equal 'json'
+
     it 'should contain passed url combined with AppWeb API endpoint as url property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       actual = sut.reqwest 'web/title'

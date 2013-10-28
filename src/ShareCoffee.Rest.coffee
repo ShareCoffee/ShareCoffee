@@ -57,6 +57,7 @@ root.ShareCoffee.RESTFactory = class
     try
       result=
         url: if hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppSiteContext(@target)/#{url}?@target='#{hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{url}"
+        type: 'json'
         method: @method.toLowerCase()
         contentType: ShareCoffee.REST.applicationType
         headers: 
