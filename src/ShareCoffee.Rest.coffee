@@ -2,10 +2,11 @@ root = window ? global
 root.ShareCoffee or = {}
 
 root.ShareCoffee.RESTFactory = class
-  constructor: (@method) ->
+  constructor: (@method, @updateQuery = false) ->
 
   jQuery: (url, hostWebUrl = null, payload = null, eTag = null) =>
-    eTag = '*' if @method is 'DELETE'
+    eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not eTag?)
+    
 
     result = 
       url: if hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppSiteContext(@target)/#{url}?@target='#{hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{url}"
@@ -28,7 +29,7 @@ root.ShareCoffee.RESTFactory = class
     result
 
   angularJS: (url, hostWebUrl = null, payload = null, eTag = null) =>
-    eTag = '*' if @method is 'DELETE'
+    eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not eTag?)
 
     result = 
       url: if hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppSiteContext(@target)/#{url}?@target='#{hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{url}"
@@ -51,7 +52,7 @@ root.ShareCoffee.RESTFactory = class
     result
   
   reqwest: (url, hostWebUrl = null, payload = null, eTag=  null)=>
-    eTag = '*' if @method is 'DELETE'
+    eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not eTag?)
     result = null
     try
       result=
@@ -86,6 +87,6 @@ root.ShareCoffee.REST = class
     read: 
       for: new ShareCoffee.RESTFactory 'GET'
     update : 
-      for: new ShareCoffee.RESTFactory 'POST'
+      for: new ShareCoffee.RESTFactory('POST', true)
     delete: 
       for: new ShareCoffee.RESTFactory 'DELETE'

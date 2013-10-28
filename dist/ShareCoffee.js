@@ -279,8 +279,9 @@
   root.ShareCoffee || (root.ShareCoffee = {});
 
   root.ShareCoffee.RESTFactory = (function() {
-    function _Class(method) {
+    function _Class(method, updateQuery) {
       this.method = method;
+      this.updateQuery = updateQuery != null ? updateQuery : false;
       this.reqwest = __bind(this.reqwest, this);
       this.angularJS = __bind(this.angularJS, this);
       this.jQuery = __bind(this.jQuery, this);
@@ -297,7 +298,7 @@
       if (eTag == null) {
         eTag = null;
       }
-      if (this.method === 'DELETE') {
+      if (this.method === 'DELETE' || (this.updateQuery === true && (eTag == null))) {
         eTag = '*';
       }
       result = {
@@ -339,7 +340,7 @@
       if (eTag == null) {
         eTag = null;
       }
-      if (this.method === 'DELETE') {
+      if (this.method === 'DELETE' || (this.updateQuery === true && (eTag == null))) {
         eTag = '*';
       }
       result = {
@@ -381,7 +382,7 @@
       if (eTag == null) {
         eTag = null;
       }
-      if (this.method === 'DELETE') {
+      if (this.method === 'DELETE' || (this.updateQuery === true && (eTag == null))) {
         eTag = '*';
       }
       result = null;
@@ -435,7 +436,7 @@
         "for": new ShareCoffee.RESTFactory('GET')
       },
       update: {
-        "for": new ShareCoffee.RESTFactory('POST')
+        "for": new ShareCoffee.RESTFactory('POST', true)
       },
       "delete": {
         "for": new ShareCoffee.RESTFactory('DELETE')

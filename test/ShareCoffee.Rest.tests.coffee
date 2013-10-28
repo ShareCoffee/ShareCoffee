@@ -172,6 +172,11 @@ describe 'ShareCoffee.REST', ->
       actual3 = sut3.reqwest 'foo', null, '{"d":"data"}'
       actual3.headers.should.not.have.property 'If-Match'
 
+    it 'should set eTag to * if update query is created and no eTag passed', ->
+      sut = new ShareCoffee.RESTFactory('POST',true)
+      actual = sut.reqwest 'foo'
+      actual.headers['If-Match'].should.equal '*' 
+
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       actual = sut.reqwest 'foo', null, '{"d":"data"}','etag'
@@ -296,6 +301,11 @@ describe 'ShareCoffee.REST', ->
       actual3 = sut3.angularJS 'foo',null, 'data'
       actual3.headers.should.not.have.property 'If-Match'
 
+    it 'should set eTag to * if update query is created and no eTag passed', ->
+      sut = new ShareCoffee.RESTFactory('POST',true)
+      actual = sut.angularJS 'foo'
+      actual.headers['If-Match'].should.equal '*' 
+
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       actual = sut.angularJS 'foo', null, 'data', 'etag'
@@ -419,6 +429,11 @@ describe 'ShareCoffee.REST', ->
       sut3 = new ShareCoffee.RESTFactory 'POST'
       actual3 = sut3.jQuery 'foo', null, 'data'
       actual3.headers.should.not.have.property 'If-Match'
+
+    it 'should set eTag to * if update query is created and no eTag passed', ->
+      sut = new ShareCoffee.RESTFactory('POST',true)
+      actual = sut.jQuery 'foo'
+      actual.headers['If-Match'].should.equal '*' 
 
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'
