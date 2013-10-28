@@ -30,3 +30,5 @@ root.ShareCoffee.Core = class
           onLoaded() if onLoaded?
         else
           onError() if onError?
+    r.open 'GET', scriptUrl, true
+    r.send()

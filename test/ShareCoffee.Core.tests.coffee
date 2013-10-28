@@ -39,7 +39,14 @@ describe 'ShareCoffee.Core', ->
       spyCreateElement = sinon.spy document, 'createElement'
       spyAppendChild = sinon.spy FakeTag, 'appendChild'
 
-      actual = { readyState: 4, status:  200, onReadyStateChange: null, responseText: 'foobar'}
+      actual = 
+        readyState: 4
+        status:  200
+        onReadyStateChange: null
+        responseText: 'foobar'
+        open: ()->
+        send: ()->
+
       expected = {language: 'javascript', type: 'text/javascript', defer: true, text: 'foobar'}
       stub = sinon.stub ShareCoffee.Core, 'getRequestInstance'
       stub.returns actual
@@ -56,7 +63,13 @@ describe 'ShareCoffee.Core', ->
       ShareCoffee.Core.getRequestInstance.restore()
 
     it 'should call onError when ReadyState 6 and HttpStatusCode not 200 or not 304', ->
-      actual = { readyState: 4, status:  400, onReadyStateChange: null }
+      actual = 
+        readyState: 4
+        status:  400
+        onReadyStateChange: null
+        responseText: 'foobar'
+        open: ()->
+        send: ()->
       stub = sinon.stub ShareCoffee.Core, 'getRequestInstance'
       stub.returns actual
       spySuccess = sinon.spy()
@@ -71,7 +84,13 @@ describe 'ShareCoffee.Core', ->
       ShareCoffee.Core.getRequestInstance.restore()
       
     it 'should register onReadyStateChange callback on RequestObject', ->
-      actual = { onReadyStateChange : null }
+      actual = 
+        readyState: 4
+        status:  200
+        onReadyStateChange: null
+        responseText: 'foobar'
+        open: ()->
+        send: ()->
       stub = sinon.stub ShareCoffee.Core, 'getRequestInstance'
       stub.returns actual
       
@@ -81,7 +100,13 @@ describe 'ShareCoffee.Core', ->
       ShareCoffee.Core.getRequestInstance.restore()
     
     it 'should neither call onLoaded nor onError when not in readyState 4', ->
-      actual = { readyState: 3, onReadyStateChange: null }
+      actual = 
+        readyState: 3
+        status:  200
+        onReadyStateChange: null
+        responseText: 'foobar'
+        open: ()->
+        send: ()->
       stub = sinon.stub ShareCoffee.Core, 'getRequestInstance'
       stub.returns actual
       spySuccess = sinon.spy()

@@ -122,7 +122,7 @@
       var r,
         _this = this;
       r = ShareCoffee.Core.getRequestInstance();
-      return r.onReadyStateChange = function() {
+      r.onReadyStateChange = function() {
         var head, script;
         if (r.readyState === 4) {
           if (r.status === 200 || r.status === 304) {
@@ -143,6 +143,8 @@
           }
         }
       };
+      r.open('GET', scriptUrl, true);
+      return r.send();
     };
 
     return _Class;
