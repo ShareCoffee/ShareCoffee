@@ -51,7 +51,7 @@ root.ShareCoffee.RESTFactory = class
     delete result.data unless @method is 'POST'
     result
   
-  reqwest: (url, hostWebUrl = null, payload = null, eTag=  null)=>
+  reqwest: (url, onSuccess = null, onError = null, hostWebUrl = null, payload = null, eTag=  null)=>
     eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not eTag?)
     result = null
     try
@@ -65,6 +65,9 @@ root.ShareCoffee.RESTFactory = class
           'If-Match' : eTag
           'X-HTTP-Method' : 'MERGE'
         data: if payload? and typeof payload is 'object' then payload else JSON.parse(payload)
+        success: onSuccess
+        error: onError
+
 
       if @method is 'GET'
         delete result.contentType
@@ -73,6 +76,9 @@ root.ShareCoffee.RESTFactory = class
       delete result.headers['X-HTTP-Method'] unless @method is 'POST' and eTag?
       delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and eTag?)
       delete result.data unless @method is 'POST'
+      delete result.success unless onSuccess?
+      delete result.error unless onError?
+
     catch Error
       throw 'please provide either a json string or an object as payload'
     result

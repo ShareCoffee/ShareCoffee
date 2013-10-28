@@ -371,8 +371,14 @@
       return result;
     };
 
-    _Class.prototype.reqwest = function(url, hostWebUrl, payload, eTag) {
+    _Class.prototype.reqwest = function(url, onSuccess, onError, hostWebUrl, payload, eTag) {
       var Error, result;
+      if (onSuccess == null) {
+        onSuccess = null;
+      }
+      if (onError == null) {
+        onError = null;
+      }
       if (hostWebUrl == null) {
         hostWebUrl = null;
       }
@@ -397,7 +403,9 @@
             'If-Match': eTag,
             'X-HTTP-Method': 'MERGE'
           },
-          data: (payload != null) && typeof payload === 'object' ? payload : JSON.parse(payload)
+          data: (payload != null) && typeof payload === 'object' ? payload : JSON.parse(payload),
+          success: onSuccess,
+          error: onError
         };
         if (this.method === 'GET') {
           delete result.contentType;
@@ -411,6 +419,12 @@
         }
         if (this.method !== 'POST') {
           delete result.data;
+        }
+        if (onSuccess == null) {
+          delete result.success;
+        }
+        if (onError == null) {
+          delete result.error;
         }
       } catch (_error) {
         Error = _error;

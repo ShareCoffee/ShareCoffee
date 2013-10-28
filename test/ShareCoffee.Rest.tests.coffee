@@ -75,7 +75,7 @@ describe 'ShareCoffee.REST', ->
 
     it 'should contain correct url for HostWeb access if hostWebUrl is given', ->
       sut = new ShareCoffee.RESTFactory 'GET'
-      actual = sut.reqwest 'web/title', ShareCoffee.Commons.getHostWebUrl()
+      actual = sut.reqwest 'web/title', null, null, ShareCoffee.Commons.getHostWebUrl()
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
       actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppSiteContext(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
@@ -100,6 +100,31 @@ describe 'ShareCoffee.REST', ->
       actual.headers.Accept.should.be.an 'string'
       actual.headers.Accept.should.equal ShareCoffee.REST.applicationType
 
+    it 'should store onSuccess handler in success property if given',->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      onSuccess = ()->
+      actual = sut.reqwest 'foo', onSuccess
+      actual.should.have.property 'success'
+      actual.success.should.be.an 'function'
+
+    it 'should not provide an success property if no handler present', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      actual = sut.reqwest 'foo'
+      actual.should.not.have.property 'success'
+
+    it 'should store onError handler in error property if given',->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      onError = ()->
+      actual = sut.reqwest 'foo', null, onError
+      actual.should.have.property 'error'
+      actual.error.should.be.an 'function'
+
+    it 'should not provide an error property if no handler present', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      actual = sut.reqwest 'foo'
+      actual.should.not.have.property 'error'
+
+    
     it 'should provide a contentType property if method is not GET', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
       actual = sut.reqwest 'foo'
@@ -128,7 +153,7 @@ describe 'ShareCoffee.REST', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       payload = 
         a:'b'
-      actual = sut.reqwest 'foo',null, payload
+      actual = sut.reqwest 'foo', null, null, null, payload
       actual.should.have.property 'data'
       actual.data.should.be.an 'object'
       actual.data.should.equal payload
@@ -137,19 +162,19 @@ describe 'ShareCoffee.REST', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
       payload = 
         a: 'b'
-      actual = sut.reqwest 'foo', null, payload
+      actual = sut.reqwest 'foo', null, null, null, payload
       actual.should.not.have.property 'data'
 
     it 'should parse the payload to an object if it is a string', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       payload = '{"name":"foo"}'
-      actual = sut.reqwest 'foo', null, payload
+      actual = sut.reqwest 'foo', null, null, null, payload
       JSON.stringify(actual.data).should.equal payload
 
     it 'should throw an error when neither an object nor an valid json string is passed as payload', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       payload = 'Hello SharePoint'
-      (-> sut.reqwest('foo', null, payload)).should.throw 'please provide either a json string or an object as payload'
+      (-> sut.reqwest('foo', null, null, null, payload)).should.throw 'please provide either a json string or an object as payload'
 
     it 'should provide a If-Match property with value * if mathod is DELETE', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
@@ -164,12 +189,12 @@ describe 'ShareCoffee.REST', ->
       actual.headers.should.not.have.property 'If-Match'
 
       sut2 = new ShareCoffee.RESTFactory 'POST'
-      actual2 = sut2.reqwest 'foo', null, '{"data":"foo"}','etag'
+      actual2 = sut2.reqwest 'foo', null, null, null, '{"data":"foo"}','etag'
       actual2.headers.should.have.property 'If-Match'
       actual2.headers['If-Match'].should.equal 'etag'
 
       sut3 = new ShareCoffee.RESTFactory 'POST'
-      actual3 = sut3.reqwest 'foo', null, '{"d":"data"}'
+      actual3 = sut3.reqwest 'foo', null, null, null, '{"d":"data"}'
       actual3.headers.should.not.have.property 'If-Match'
 
     it 'should set eTag to * if update query is created and no eTag passed', ->
@@ -179,7 +204,7 @@ describe 'ShareCoffee.REST', ->
 
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'
-      actual = sut.reqwest 'foo', null, '{"d":"data"}','etag'
+      actual = sut.reqwest 'foo', null, null, null, '{"d":"data"}','etag'
       actual.headers.should.have.property 'X-HTTP-Method'
       actual.headers['X-HTTP-Method'].should.be.an 'string'
       actual.headers['X-HTTP-Method'].should.equal 'MERGE'
