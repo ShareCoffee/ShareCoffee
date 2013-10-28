@@ -1,20 +1,45 @@
-ShareCoffee
-===========
+# ShareCoffee
 
-ShareCoffee is a small library containing useful helpers for SharePoint App Development. The library is written in CoffeeScript using TDD (Mocha, ChaiJS and SinonJS).
+ShareCoffee is a lightweight library for creating SharePoint Apps. It’s fully written in CoffeeScript by using Mocha, Chai and SinonJS.
 
-You can consume ShareCoffee by using
+### Installation
 
-  * a git submodule
-  * the nuget package
-  * the bower package
+You can install ShareCoffee by 
+  * copying the files from dist folder to your project :) (dirty one)
+  * install it by using bower.io using `bower install ShareCoffee`
+  * install it by using nuget using `Install-Package ShareCoffee`
+  * install it by including ShareCoffee as git submodule
 
+#### Integration
+ShareCoffee integrates perfectly with 
+  * [jQuery](https://github.com/jquery/jquery)
+  * [AngularJS](https://github.com/angular/angular.js)
+  * [Reqwest](https://github.com/ded/reqwest)
+
+#### Samples
+
+Check out the [sample repository here on github](https://github.com/ThorstenHans/ShareCoffee.Samples/)
+#### ShareCoffee API 
+ShareCoffee allows you to easily solve common requirements in SharePoint Apps such as
+  * [SharePoint UI Notifications](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.UI)
+  * [SharePoint UI Status-Messages](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.UI#sharecoffeeuishowstatus)
+  * [SharePoint UI Chrome-Control](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.UI#sharecoffeeuiloadappchrome)
+  * [Gathering contextual information](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.Commons)
+  * [SharePoint JSOM (JavaScript Client Object Model) helpers](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.CSOM)
+  * [SharePoint REST abstraction](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.REST) (SharePoint-Hosted) 
+    * [ShareCoffee.REST for jQuery](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.REST.jQuery)
+    * [ShareCoffee.REST for AngularJS](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.REST.angularJS)
+    * [ShareCoffee.REST for reqwest](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.REST.reqwest)
+  * [SharePoint CrossDomain-Query](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.CrossDomain) Support (Auto-Hosted/Provider-Hosted)
+    * [CrossDomain Support for JSOM](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.CrossDomain.CSOM)
+    * [CrossDomain Support for REST](https://github.com/ThorstenHans/ShareCoffee/wiki/ShareCoffee.CrossDomain.REST)
+
+
+#### Wiki
+
+See all documentation within the [ShareCoffee Wiki](https://github.com/ThorstenHans/ShareCoffee/wiki/_pages)
   
-
-### License (MIT)
-
-
-The MIT License (MIT)
+###The MIT License (MIT)
 
 Copyright (c) 2013 Thorsten Hans 
 
