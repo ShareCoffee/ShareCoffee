@@ -484,8 +484,8 @@
   };
 
   root.ShareCoffee.ChromeSettings = function() {
-    var helpPageUrl, iconUrl, settingsLinkSplat, tite;
-    iconUrl = arguments[0], tite = arguments[1], helpPageUrl = arguments[2], settingsLinkSplat = 4 <= arguments.length ? __slice.call(arguments, 3) : [];
+    var helpPageUrl, iconUrl, settingsLinkSplat, title;
+    iconUrl = arguments[0], title = arguments[1], helpPageUrl = arguments[2], settingsLinkSplat = 4 <= arguments.length ? __slice.call(arguments, 3) : [];
     return {
       appIconUrl: iconUrl,
       appTitle: title,

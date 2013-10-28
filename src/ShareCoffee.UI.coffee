@@ -6,7 +6,7 @@ root.ShareCoffee.SettingsLink = (url, title, appendQueryStringToUrl = false) ->
   linkUrl: if appendQueryStringToUrl then "#{url}?#{ShareCoffee.Commons.getQueryString()}" else url
   displayName: title 
 
-root.ShareCoffee.ChromeSettings = (iconUrl, tite,helpPageUrl, settingsLinkSplat...) ->
+root.ShareCoffee.ChromeSettings = (iconUrl, title,helpPageUrl, settingsLinkSplat...) ->
   appIconUrl: iconUrl
   appTitle: title
   appHelpPageUrl: helpPageUrl
