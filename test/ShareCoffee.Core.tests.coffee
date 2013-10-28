@@ -24,8 +24,7 @@ describe 'ShareCoffee.Core', ->
       spy.restore()
 
   describe 'loadScript', ->
-
-    it 'should load documents head tag, call createElement on document instance and call appendChild on head', ->
+    beforeEach () ->
       root.FakeTag =
         appendChild: (el) ->
       root.document = 
@@ -35,104 +34,20 @@ describe 'ShareCoffee.Core', ->
           item : (index) ->
             root.FakeTag
 
+    afterEach () ->
+      delete root.FakeTag
+      delete root.document
+
+    it 'should load documents head tag, call createElement on document instance and call appendChild on head', ->
+  
       spyGetElementsByTagName = sinon.spy document, 'getElementsByTagName'
       spyCreateElement = sinon.spy document, 'createElement'
       spyAppendChild = sinon.spy FakeTag, 'appendChild'
-
-      actual = 
-        readyState: 4
-        status:  200
-        onReadyStateChange: null
-        responseText: 'foobar'
-        open: ()->
-        send: ()->
-
-      expected = {language: 'javascript', type: 'text/javascript', defer: true, text: 'foobar'}
-      stub = sinon.stub ShareCoffee.Core, 'getRequestInstance'
-      stub.returns actual
       ShareCoffee.Core.loadScript '' 
-    
-      actual.onReadyStateChange()
       spyGetElementsByTagName.calledWithExactly('head').should.be.ok
       spyCreateElement.calledWithExactly('script').should.be.ok
-      spyAppendChild.calledWithExactly(expected).should.be.ok
+      spyAppendChild.called.should.be.true
 
       spyGetElementsByTagName.restore()
       spyCreateElement.restore()
-
-      ShareCoffee.Core.getRequestInstance.restore()
-
-    it 'should call onError when ReadyState 6 and HttpStatusCode not 200 or not 304', ->
-      actual = 
-        readyState: 4
-        status:  400
-        onReadyStateChange: null
-        responseText: 'foobar'
-        open: ()->
-        send: ()->
-      stub = sinon.stub ShareCoffee.Core, 'getRequestInstance'
-      stub.returns actual
-      spySuccess = sinon.spy()
-      spyError = sinon.spy()
-      ShareCoffee.Core.loadScript '', spySuccess, spyError
-    
-      actual.onReadyStateChange()
-      actual.status = 501
-      actual.onReadyStateChange()
-      spySuccess.called.should.be.false
-      spyError.calledTwice.should.be.true
-      ShareCoffee.Core.getRequestInstance.restore()
-      
-    it 'should register onReadyStateChange callback on RequestObject', ->
-      actual = 
-        readyState: 4
-        status:  200
-        onReadyStateChange: null
-        responseText: 'foobar'
-        open: ()->
-        send: ()->
-      stub = sinon.stub ShareCoffee.Core, 'getRequestInstance'
-      stub.returns actual
-      
-      ShareCoffee.Core.loadScript '', null, null
-      actual.onReadyStateChange.should.not.be.null
-
-      ShareCoffee.Core.getRequestInstance.restore()
-    
-    it 'should neither call onLoaded nor onError when not in readyState 4', ->
-      actual = 
-        readyState: 3
-        status:  200
-        onReadyStateChange: null
-        responseText: 'foobar'
-        open: ()->
-        send: ()->
-      stub = sinon.stub ShareCoffee.Core, 'getRequestInstance'
-      stub.returns actual
-      spySuccess = sinon.spy()
-      spyError = sinon.spy()
-      ShareCoffee.Core.loadScript '', spySuccess, spyError
-      actual.onReadyStateChange()
-      spySuccess.called.should.be.false
-      spyError.called.should.be.false
-      ShareCoffee.Core.getRequestInstance.restore()
-
-  describe 'getRequestInstance', ->
-    
-    it 'should return a XmlHttRequest instance if XMLHttpRequest is present',->
-      root.XMLHttpRequest = ()->
-      if XMLHttpRequest?
-        instance = ShareCoffee.Core.getRequestInstance()
-        instance.should.be.instanceOf(XMLHttpRequest)
-      else
-        console.log "No XMLHttpRequest present"
-      delete root.XMLHttpRequest
-
-    it 'should return a ActiveXObject instance if ActiveXObject is present', ->
-      root.ActiveXObject = () ->
-      if ActiveXObject?
-        instance = ShareCoffee.Core.getRequestInstance()
-        instance.should.be.instanceOf(ActiveXObject)
-      else
-        console.log "No ActiveXObject present"
-      delete root.ActiveXObject
+      spyAppendChild.restore()

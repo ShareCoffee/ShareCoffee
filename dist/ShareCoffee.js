@@ -110,41 +110,16 @@
       }
     };
 
-    _Class.getRequestInstance = function() {
-      if (typeof XMLHttpRequest !== "undefined" && XMLHttpRequest !== null) {
-        return new XMLHttpRequest();
-      } else if (typeof ActiveXObject !== "undefined" && ActiveXObject !== null) {
-        return new ActiveXObject('MsXml2.XmlHttp');
-      }
-    };
-
     _Class.loadScript = function(scriptUrl, onLoaded, onError) {
-      var r,
-        _this = this;
-      r = ShareCoffee.Core.getRequestInstance();
-      r.onReadyStateChange = function() {
-        var head, script;
-        if (r.readyState === 4) {
-          if (r.status === 200 || r.status === 304) {
-            head = document.getElementsByTagName('head').item(0);
-            script = document.createElement('script');
-            script.language = 'javascript';
-            script.type = 'text/javascript';
-            script.defer = true;
-            script.text = r.responseText;
-            head.appendChild(script);
-            if (onLoaded != null) {
-              return onLoaded();
-            }
-          } else {
-            if (onError != null) {
-              return onError();
-            }
-          }
-        }
-      };
-      r.open('GET', scriptUrl, true);
-      return r.send();
+      var head, s;
+      s = document.createElement('script');
+      head = document.getElementsByTagName('head').item(0);
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = scriptUrl;
+      s.onload = onLoaded;
+      s.onerror = onError;
+      return head.appendChild(s);
     };
 
     return _Class;
