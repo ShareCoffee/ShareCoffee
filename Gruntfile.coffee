@@ -6,7 +6,7 @@ module.exports = (grunt)->
       options:
         sourceMap:true
       compile:
-        files: 'dist/ShareCoffee.js' : ['src/**/*.coffee']
+        files: 'dist/ShareCoffee.js' : ['license/*.coffee', 'src/**/*.coffee']
     simplemocha:
       options:
         compilers: 'coffee:coffee-script'
@@ -14,6 +14,8 @@ module.exports = (grunt)->
       all:
         src: ['test/**/*.coffee']
     uglify:
+      options:
+        banner: '/* ShareCoffee (c) 2013 Thorsten Hans | dotnet-rocks.com | https://github.com/ThorstenHans/ShareCoffee/ | under MIT License | */'
       dist:
         files:
           'dist/ShareCoffee.min.js': 'dist/ShareCoffee.js'

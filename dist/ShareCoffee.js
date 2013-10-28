@@ -1,3 +1,9 @@
+/*
+ShareCoffee (c) 2013 Thorsten Hans 
+| dotnet-rocks.com | https://github.com/ThorstenHans/ShareCoffee/ | under MIT License |
+*/
+
+
 (function() {
   var root,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
