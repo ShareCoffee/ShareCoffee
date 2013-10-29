@@ -199,6 +199,30 @@ ShareCoffee (c) 2013 Thorsten Hans
 
     _Class.crossDomainLibrariesLoaded = false;
 
+    _Class.loadCSOMCrossDomainLibraries = function(onSuccess, onError) {
+      var onAnyError, requestExecutorScriptUrl, runtimeScriptUrl, spScriptUrl,
+        _this = this;
+      onAnyError = function() {
+        ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false;
+        if (onError) {
+          return onError();
+        }
+      };
+      runtimeScriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.Runtime.js";
+      spScriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.js";
+      requestExecutorScriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.RequestExecutor.js";
+      return ShareCoffee.Core.loadScript(runtimeScriptUrl, function() {
+        return ShareCoffee.Core.loadScript(spScriptUrl, function() {
+          return ShareCoffee.Core.loadScript(requestExecutorScriptUrl, function() {
+            ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true;
+            if (onSuccess) {
+              return onSuccess();
+            }
+          }, onAnyError);
+        }, onAnyError);
+      }, onAnyError);
+    };
+
     _Class.loadCrossDomainLibrary = function(onSuccess, onError) {
       var onAnyError, requestExecutorScriptUrl,
         _this = this;

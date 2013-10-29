@@ -7,7 +7,7 @@ module.exports = (grunt)->
         src: 'ShareCoffee.nuspec',
         dest: 'nuget/'
         options:
-          version: '0.0.4'
+          version: '0.0.6'
     coffee:
       options:
         sourceMap:true

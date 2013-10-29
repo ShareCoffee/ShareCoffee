@@ -37,6 +37,22 @@ root.ShareCoffee.CrossDomainRESTFactory = class
 
 root.ShareCoffee.CrossDomain = class 
   @crossDomainLibrariesLoaded = false
+  @loadCSOMCrossDomainLibraries = (onSuccess, onError) ->
+    onAnyError = () =>
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
+      onError() if onError
+    runtimeScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.Runtime.js"
+    spScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.js"
+    requestExecutorScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.RequestExecutor.js"
+
+    ShareCoffee.Core.loadScript runtimeScriptUrl, ()=>
+      ShareCoffee.Core.loadScript spScriptUrl, ()=>
+        ShareCoffee.Core.loadScript requestExecutorScriptUrl, ()=>
+          ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+          onSuccess() if onSuccess
+        , onAnyError
+      , onAnyError
+    , onAnyError
 
   @loadCrossDomainLibrary = (onSuccess, onError) ->
     onAnyError = () =>
