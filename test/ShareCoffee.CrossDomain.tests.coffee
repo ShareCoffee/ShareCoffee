@@ -63,6 +63,7 @@ describe 'ShareCoffee.CrossDomain', ->
       forRead.method.should.equal 'GET'
       forUpdate.should.have.property('method')
       forUpdate.method.should.equal 'POST'
+      forUpdate.updateQuery.should.be.true
       forDelete.should.have.property('method')
       forDelete.method.should.equal 'DELETE'
 
@@ -91,25 +92,25 @@ describe 'ShareCoffee.CrossDomain', ->
     
     it 'should throw an error if CrossDomainLibs are not loaded', ->
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
-      (->ShareCoffee.CrossDomain.build.create.for.SPCrossDomainLib('web/title')).should.throw ''
+      (->ShareCoffee.CrossDomain.build.create.for.SPCrossDomainLib({url:'web/title'})).should.throw ''
       
     it 'should contain the required URL in RequestExecutors format as url property of type string', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'web/title', ShareCoffee.Commons.getHostWebUrl()
+      actual = sut.SPCrossDomainLib {url: 'web/title', hostWebUrl: ShareCoffee.Commons.getHostWebUrl()}
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
       actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
 
     it 'should build an valid url for querying the AppWeb from Cloud-Hosted Apps', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'web/title', null
+      actual = sut.SPCrossDomainLib {url: 'web/title'}
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
       actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/web/title"
 
     it 'should provide HttpMethod as method property of type string', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.should.have.property 'method'
       actual.method.should.be.an 'string'
       actual.method.should.equal 'GET'
@@ -117,116 +118,116 @@ describe 'ShareCoffee.CrossDomain', ->
     it 'should set success handler if present', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
       onSuccess = ()->
-      actual = sut.SPCrossDomainLib 'web/title', null, onSuccess
+      actual = sut.SPCrossDomainLib {url: 'web/title', onSuccess: onSuccess}
       actual.should.have.property 'success'
       actual.success.should.be.an 'function'
       actual.success.should.equal onSuccess
 
     it 'should not set success handler if present', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'web/title'
+      actual = sut.SPCrossDomainLib {url: 'web/title'}
       actual.should.not.have.property 'success'
 
     it 'should set error handler if present', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
       onError = ()->
-      actual = sut.SPCrossDomainLib 'web/title', null, null, onError
+      actual = sut.SPCrossDomainLib {url: 'web/title', onError: onError}
       actual.should.have.property 'error'
       actual.error.should.be.an 'function'
       actual.error.should.equal onError
 
     it 'should not set error handler if present', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'web/title'
+      actual = sut.SPCrossDomainLib {url: 'web/title'}
       actual.should.not.have.property 'error'
     
     it 'should provide a headers object', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.should.have.property 'headers'
       actual.headers.should.be.an 'object'
     
     it 'should provide a Accept property within headers object containing current applicationType as string value', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.have.property 'Accept'
       actual.headers.Accept.should.be.an 'string'
       actual.headers.Accept.should.equal ShareCoffee.REST.applicationType
 
     it 'should provide the X-RequestDigest property on headers if method is not GET', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'DELETE'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.have.property 'X-RequestDigest'
       actual.headers['X-RequestDigest'].should.be.an 'string'
       actual.headers['X-RequestDigest'].should.equal '1234567890'
 
     it 'should not provide a headers.X-RequestDigest proeprty if method is GET', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.not.have.property 'X-RequestDigest'
 
     it 'should provide a Content-Type property within headers object containing current applicationType if method is not GET', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'POST'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.have.property 'Content-Type'
       actual.headers['Content-Type'].should.be.an 'string'
       actual.headers['Content-Type'].should.equal ShareCoffee.REST.applicationType
 
     it 'should not provide a Content-Type property within headers if method is GET', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.not.have.property 'Content-Type'
 
     it 'should provide a If-Match property with value * if mathod is DELETE', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'DELETE'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url : 'foo'}
       actual.headers.should.have.property 'If-Match'
       actual.headers['If-Match'].should.be.an 'string'
       actual.headers['If-Match'].should.equal '*'
 
     it 'should not provide an If-Match property if method is not DELETE expecting etag is passed and method is POST', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.not.have.property 'If-Match'
 
       sut2 = new ShareCoffee.CrossDomainRESTFactory 'POST'
-      actual2 = sut2.SPCrossDomainLib 'foo', null,null,null, '{"data":"foo"}', 'etag'
+      actual2 = sut2.SPCrossDomainLib {url: 'foo', payload: '{"data":"foo"}', eTag: 'etag'}
       actual2.headers.should.have.property 'If-Match'
       actual2.headers['If-Match'].should.equal 'etag'
 
       sut3 = new ShareCoffee.CrossDomainRESTFactory 'POST'
-      actual3 = sut3.SPCrossDomainLib 'foo',null, null, null, '{"d":"data"}'
+      actual3 = sut3.SPCrossDomainLib {url: 'foo', payload: '{"d":"data"}'}
       actual3.headers.should.not.have.property 'If-Match'
 
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'POST'
-      actual = sut.SPCrossDomainLib 'foo', null, null, null, '{"d":"data"}', 'etag'
+      actual = sut.SPCrossDomainLib {url: 'foo', payload: '{"d":"data"}', eTag: 'etag'}
       actual.headers.should.have.property 'X-HTTP-Method'
       actual.headers['X-HTTP-Method'].should.be.an 'string'
       actual.headers['X-HTTP-Method'].should.equal 'MERGE'
 
     it 'should not have an X-HTTP-Method header property if method is not POST and etag is not given', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'DELETE'
-      actual = sut.SPCrossDomainLib 'foo'
+      actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.not.have.property 'X-HTTP-Method'
       sut2 = new ShareCoffee.CrossDomainRESTFactory 'POST'
-      actual2 = sut2.SPCrossDomainLib 'foo'
+      actual2 = sut2.SPCrossDomainLib {url: 'foo'}
       actual2.headers.should.not.have.property 'X-HTTP-Method'
       sut3 = new ShareCoffee.CrossDomainRESTFactory 'GET'
-      actual3 = sut3.SPCrossDomainLib 'foo'
+      actual3 = sut3.SPCrossDomainLib {url: 'foo'}
       actual3.headers.should.not.have.property 'X-HTTP-Method'
 
     it 'should provide payload as body property if method is POST', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'POST'
       payload = "{'a': 'b'}"
-      actual = sut.SPCrossDomainLib 'foo', null, null, null, payload
+      actual = sut.SPCrossDomainLib {url: 'foo', payload: payload }
       actual.should.have.property 'body'
       actual.body.should.equal payload
 
     it 'should not provide a body property if method is not POST', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'DELETE'
       payload = "{'a': 'b'}"
-      actual = sut.SPCrossDomainLib 'foo', null, null, null, payload
+      actual = sut.SPCrossDomainLib {url: 'foo', payload: payload }
       actual.should.not.have.property 'body'
 
     it 'should stringify the payload if it is not given as string', ->
@@ -234,7 +235,7 @@ describe 'ShareCoffee.CrossDomain', ->
       payload = 
         name: 'foo'
       expected = JSON.stringify payload
-      actual = sut.SPCrossDomainLib 'foo', null, null, null, payload
+      actual = sut.SPCrossDomainLib { url: 'foo', payload: payload}
       actual.body.should.equal expected
 
   describe 'loadCrossDomainLibrary', ->

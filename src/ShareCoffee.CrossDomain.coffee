@@ -2,33 +2,37 @@ root = window ? global
 root.ShareCoffee or = {}
 
 root.ShareCoffee.CrossDomainRESTFactory = class
-  constructor: (@method) ->
+  constructor: (@method, @updateQuery = false) ->
 
-  SPCrossDomainLib: (url, hostWebUrl = null, onSuccess = null, onError = null, payload = null, eTag = null) =>
+  SPCrossDomainLib: (sharePointRestProperties) =>
+    options = new ShareCoffee.CrossDomain.SharePointRestProperties()
+    options.extend sharePointRestProperties
+    
     throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the CrossDomain REST libraries' if ShareCoffee.CrossDomain.crossDomainLibrariesLoaded is false
-    eTag = '*' if @method is 'DELETE'
+
+    options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
 
     result = 
-      url: if hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{url}?@target='#{hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{url}"
+      url: if options.hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{options.url}?@target='#{options.hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{options.url}"
       method: @method
-      success: onSuccess
-      error: onError
+      success: options.onSuccess
+      error: options.onError
       headers: 
         'Accept': ShareCoffee.REST.applicationType
         'X-RequestDigest' : ShareCoffee.Commons.getFormDigest()
         'Content-Type': ShareCoffee.REST.applicationType
         'X-HTTP-Method' : 'MERGE'
-        'If-Match' : eTag
-      body: if typeof payload is 'string' then payload else JSON.stringify(payload)
+        'If-Match' : options.eTag
+      body: if typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
 
     if @method is 'GET'
       delete result.headers['X-RequestDigest']
       delete result.headers['Content-Type']
     
-    delete result.headers['X-HTTP-Method'] unless @method is 'POST' and eTag?
-    delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and eTag?)
-    delete result.success unless onSuccess?
-    delete result.error unless onError?
+    delete result.headers['X-HTTP-Method'] unless @method is 'POST' and options.eTag?
+    delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and options.eTag?)
+    delete result.success unless options.onSuccess?
+    delete result.error unless options.onError?
     delete result.body unless @method is 'POST'
     result
 
@@ -57,7 +61,7 @@ root.ShareCoffee.CrossDomain = class
     read:
       for: new ShareCoffee.CrossDomainRESTFactory 'GET'
     update:
-      for: new ShareCoffee.CrossDomainRESTFactory 'POST'
+      for: new ShareCoffee.CrossDomainRESTFactory('POST', true)
     delete:
       for: new ShareCoffee.CrossDomainRESTFactory 'DELETE'
  
@@ -75,3 +79,17 @@ root.ShareCoffee.CrossDomain = class
     appContextSite = new SP.AppContextSite ctx, hostWebUrl
     appContextSite.get_web()
 
+root.ShareCoffee.CrossDomain.SharePointRestProperties = class
+  constructor: (@url, @payload, @hostWebUrl, @eTag, @onSuccess, @onError) ->
+    @url = null unless @url?
+    @payload = null unless @payload?
+    @hostWebUrl = null unless @hostWebUrl?
+    @eTag = null unless @eTag?
+    @onSuccess = null unless @onSuccess?
+    @onError = null unless @onError?
+
+  extend:  (objects...) =>
+    for object in objects
+      for key, value of object
+        @[key] = value
+    return 

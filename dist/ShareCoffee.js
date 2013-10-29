@@ -5,9 +5,11 @@ ShareCoffee (c) 2013 Thorsten Hans
 
 
 (function() {
-  var root,
+  var root, _ref,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __slice = [].slice;
+    __slice = [].slice,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   root = typeof window !== "undefined" && window !== null ? window : global;
 
@@ -137,62 +139,50 @@ ShareCoffee (c) 2013 Thorsten Hans
   root.ShareCoffee || (root.ShareCoffee = {});
 
   root.ShareCoffee.CrossDomainRESTFactory = (function() {
-    function _Class(method) {
+    function _Class(method, updateQuery) {
       this.method = method;
+      this.updateQuery = updateQuery != null ? updateQuery : false;
       this.SPCrossDomainLib = __bind(this.SPCrossDomainLib, this);
     }
 
-    _Class.prototype.SPCrossDomainLib = function(url, hostWebUrl, onSuccess, onError, payload, eTag) {
-      var result;
-      if (hostWebUrl == null) {
-        hostWebUrl = null;
-      }
-      if (onSuccess == null) {
-        onSuccess = null;
-      }
-      if (onError == null) {
-        onError = null;
-      }
-      if (payload == null) {
-        payload = null;
-      }
-      if (eTag == null) {
-        eTag = null;
-      }
+    _Class.prototype.SPCrossDomainLib = function(sharePointRestProperties) {
+      var options, result;
+      options = new ShareCoffee.CrossDomain.SharePointRestProperties();
+      options.extend(sharePointRestProperties);
       if (ShareCoffee.CrossDomain.crossDomainLibrariesLoaded === false) {
         throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the CrossDomain REST libraries';
       }
-      if (this.method === 'DELETE') {
-        eTag = '*';
+      if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
+        options.eTag = '*';
       }
       result = {
-        url: hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppContextSite(@target)/" + url + "?@target='" + hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
+        url: options.hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppContextSite(@target)/" + options.url + "?@target='" + options.hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + options.url,
         method: this.method,
-        success: onSuccess,
-        error: onError,
+        success: options.onSuccess,
+        error: options.onError,
         headers: {
           'Accept': ShareCoffee.REST.applicationType,
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
           'Content-Type': ShareCoffee.REST.applicationType,
           'X-HTTP-Method': 'MERGE',
-          'If-Match': eTag
+          'If-Match': options.eTag
         },
-        body: typeof payload === 'string' ? payload : JSON.stringify(payload)
+        body: typeof options.payload === 'string' ? options.payload : JSON.stringify(options.payload)
       };
       if (this.method === 'GET') {
         delete result.headers['X-RequestDigest'];
         delete result.headers['Content-Type'];
       }
-      if (!(this.method === 'POST' && (eTag != null))) {
+      if (!(this.method === 'POST' && (options.eTag != null))) {
         delete result.headers['X-HTTP-Method'];
       }
-      if (!(this.method === 'DELETE' || (this.method === 'POST' && (eTag != null)))) {
+      if (!(this.method === 'DELETE' || (this.method === 'POST' && (options.eTag != null)))) {
         delete result.headers['If-Match'];
       }
-      if (onSuccess == null) {
+      if (options.onSuccess == null) {
         delete result.success;
       }
-      if (onError == null) {
+      if (options.onError == null) {
         delete result.error;
       }
       if (this.method !== 'POST') {
@@ -242,7 +232,7 @@ ShareCoffee (c) 2013 Thorsten Hans
         "for": new ShareCoffee.CrossDomainRESTFactory('GET')
       },
       update: {
-        "for": new ShareCoffee.CrossDomainRESTFactory('POST')
+        "for": new ShareCoffee.CrossDomainRESTFactory('POST', true)
       },
       "delete": {
         "for": new ShareCoffee.CrossDomainRESTFactory('DELETE')
@@ -280,6 +270,51 @@ ShareCoffee (c) 2013 Thorsten Hans
 
   })();
 
+  root.ShareCoffee.CrossDomain.SharePointRestProperties = (function() {
+    function _Class(url, payload, hostWebUrl, eTag, onSuccess, onError) {
+      this.url = url;
+      this.payload = payload;
+      this.hostWebUrl = hostWebUrl;
+      this.eTag = eTag;
+      this.onSuccess = onSuccess;
+      this.onError = onError;
+      this.extend = __bind(this.extend, this);
+      if (this.url == null) {
+        this.url = null;
+      }
+      if (this.payload == null) {
+        this.payload = null;
+      }
+      if (this.hostWebUrl == null) {
+        this.hostWebUrl = null;
+      }
+      if (this.eTag == null) {
+        this.eTag = null;
+      }
+      if (this.onSuccess == null) {
+        this.onSuccess = null;
+      }
+      if (this.onError == null) {
+        this.onError = null;
+      }
+    }
+
+    _Class.prototype.extend = function() {
+      var key, object, objects, value, _i, _len;
+      objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      for (_i = 0, _len = objects.length; _i < _len; _i++) {
+        object = objects[_i];
+        for (key in object) {
+          value = object[key];
+          this[key] = value;
+        }
+      }
+    };
+
+    return _Class;
+
+  })();
+
   root = typeof window !== "undefined" && window !== null ? window : global;
 
   root.ShareCoffee || (root.ShareCoffee = {});
@@ -293,40 +328,33 @@ ShareCoffee (c) 2013 Thorsten Hans
       this.jQuery = __bind(this.jQuery, this);
     }
 
-    _Class.prototype.jQuery = function(url, hostWebUrl, payload, eTag) {
-      var result;
-      if (hostWebUrl == null) {
-        hostWebUrl = null;
-      }
-      if (payload == null) {
-        payload = null;
-      }
-      if (eTag == null) {
-        eTag = null;
-      }
-      if (this.method === 'DELETE' || (this.updateQuery === true && (eTag == null))) {
-        eTag = '*';
+    _Class.prototype.jQuery = function(jQueryProperties) {
+      var options, result;
+      options = new ShareCoffee.REST.jQueryProperties();
+      options.extend(jQueryProperties);
+      if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
+        options.eTag = '*';
       }
       result = {
-        url: hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + url + "?@target='" + hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
+        url: options.hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + options.url + "?@target='" + options.hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + options.url,
         type: this.method,
         contentType: ShareCoffee.REST.applicationType,
         headers: {
           'Accept': ShareCoffee.REST.applicationType,
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
           'X-HTTP-Method': 'MERGE',
-          'If-Match': eTag
+          'If-Match': options.eTag
         },
-        data: typeof payload === 'string' ? payload : JSON.stringify(payload)
+        data: typeof options.payload === 'string' ? options.payload : JSON.stringify(options.payload)
       };
       if (this.method === 'GET') {
         delete result.contentType;
         delete result.headers['X-RequestDigest'];
       }
-      if (!(this.method === 'POST' && (eTag != null))) {
+      if (!(this.method === 'POST' && (options.eTag != null))) {
         delete result.headers['X-HTTP-Method'];
       }
-      if (!(this.method === 'DELETE' || (this.method === 'POST' && (eTag != null)))) {
+      if (!(this.method === 'DELETE' || (this.method === 'POST' && (options.eTag != null)))) {
         delete result.headers['If-Match'];
       }
       if (this.method !== 'POST') {
@@ -335,40 +363,33 @@ ShareCoffee (c) 2013 Thorsten Hans
       return result;
     };
 
-    _Class.prototype.angularJS = function(url, hostWebUrl, payload, eTag) {
-      var result;
-      if (hostWebUrl == null) {
-        hostWebUrl = null;
-      }
-      if (payload == null) {
-        payload = null;
-      }
-      if (eTag == null) {
-        eTag = null;
-      }
-      if (this.method === 'DELETE' || (this.updateQuery === true && (eTag == null))) {
-        eTag = '*';
+    _Class.prototype.angularJS = function(angularProperties) {
+      var options, result;
+      options = new ShareCoffee.REST.angularProperties();
+      options.extend(angularProperties);
+      if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
+        options.eTag = '*';
       }
       result = {
-        url: hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + url + "?@target='" + hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
+        url: options.hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + options.url + "?@target='" + options.hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + options.url,
         method: this.method,
         headers: {
           'Accept': ShareCoffee.REST.applicationType,
           'Content-Type': ShareCoffee.REST.applicationType,
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
           'X-HTTP-Method': 'MERGE',
-          'If-Match': eTag
+          'If-Match': options.eTag
         },
-        data: typeof payload === 'string' ? payload : JSON.stringify(payload)
+        data: typeof options.payload === 'string' ? options.payload : JSON.stringify(options.payload)
       };
       if (this.method === 'GET') {
         delete result.headers['Content-Type'];
         delete result.headers['X-RequestDigest'];
       }
-      if (!(this.method === 'POST' && (eTag != null))) {
+      if (!(this.method === 'POST' && (options.eTag != null))) {
         delete result.headers['X-HTTP-Method'];
       }
-      if (!(this.method === 'DELETE' || (this.method === 'POST' && (eTag != null)))) {
+      if (!(this.method === 'DELETE' || (this.method === 'POST' && (options.eTag != null)))) {
         delete result.headers['If-Match'];
       }
       if (this.method !== 'POST') {
@@ -377,60 +398,47 @@ ShareCoffee (c) 2013 Thorsten Hans
       return result;
     };
 
-    _Class.prototype.reqwest = function(url, onSuccess, onError, hostWebUrl, payload, eTag) {
-      var Error, result;
-      if (onSuccess == null) {
-        onSuccess = null;
-      }
-      if (onError == null) {
-        onError = null;
-      }
-      if (hostWebUrl == null) {
-        hostWebUrl = null;
-      }
-      if (payload == null) {
-        payload = null;
-      }
-      if (eTag == null) {
-        eTag = null;
-      }
-      if (this.method === 'DELETE' || (this.updateQuery === true && (eTag == null))) {
-        eTag = '*';
+    _Class.prototype.reqwest = function(reqwestProperties) {
+      var Error, options, result;
+      options = new ShareCoffee.REST.reqwestProperties();
+      options.extend(reqwestProperties);
+      if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
+        options.eTag = '*';
       }
       result = null;
       try {
         result = {
-          url: hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + url + "?@target='" + hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + url,
+          url: options.hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + options.url + "?@target='" + options.hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + options.url,
           type: 'json',
           method: this.method.toLowerCase(),
           contentType: ShareCoffee.REST.applicationType,
           headers: {
             'Accept': ShareCoffee.REST.applicationType,
             'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
-            'If-Match': eTag,
+            'If-Match': options.eTag,
             'X-HTTP-Method': 'MERGE'
           },
-          data: (payload != null) && typeof payload === 'string' ? payload : JSON.stringify(payload),
-          success: onSuccess,
-          error: onError
+          data: (options.payload != null) && typeof options.payload === 'string' ? options.payload : JSON.stringify(options.payload),
+          success: options.onSuccess,
+          error: options.onError
         };
         if (this.method === 'GET') {
           delete result.contentType;
           delete result.headers['X-RequestDigest'];
         }
-        if (!(this.method === 'POST' && (eTag != null))) {
+        if (!(this.method === 'POST' && (options.eTag != null))) {
           delete result.headers['X-HTTP-Method'];
         }
-        if (!(this.method === 'DELETE' || (this.method === 'POST' && (eTag != null)))) {
+        if (!(this.method === 'DELETE' || (this.method === 'POST' && (options.eTag != null)))) {
           delete result.headers['If-Match'];
         }
         if (this.method !== 'POST') {
           delete result.data;
         }
-        if (onSuccess == null) {
+        if (options.onSuccess == null) {
           delete result.success;
         }
-        if (onError == null) {
+        if (options.onError == null) {
           delete result.error;
         }
       } catch (_error) {
@@ -467,6 +475,78 @@ ShareCoffee (c) 2013 Thorsten Hans
     return _Class;
 
   })();
+
+  root.ShareCoffee.REST.angularProperties = (function() {
+    function _Class(url, payload, hostWebUrl, eTag) {
+      this.url = url;
+      this.payload = payload;
+      this.hostWebUrl = hostWebUrl;
+      this.eTag = eTag;
+      this.extend = __bind(this.extend, this);
+      if (this.url == null) {
+        this.url = null;
+      }
+      if (this.payload == null) {
+        this.payload = null;
+      }
+      if (this.hostWebUrl == null) {
+        this.hostWebUrl = null;
+      }
+      if (this.eTag == null) {
+        this.eTag = null;
+      }
+    }
+
+    _Class.prototype.extend = function() {
+      var key, object, objects, value, _i, _len;
+      objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      for (_i = 0, _len = objects.length; _i < _len; _i++) {
+        object = objects[_i];
+        for (key in object) {
+          value = object[key];
+          this[key] = value;
+        }
+      }
+    };
+
+    return _Class;
+
+  })();
+
+  root.ShareCoffee.REST.jQueryProperties = (function(_super) {
+    __extends(_Class, _super);
+
+    function _Class() {
+      _ref = _Class.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return _Class;
+
+  })(root.ShareCoffee.REST.angularProperties);
+
+  root.ShareCoffee.REST.reqwestProperties = (function(_super) {
+    __extends(_Class, _super);
+
+    function _Class(url, payload, hostWebUrl, eTag, onSuccess, onError) {
+      this.url = url;
+      this.payload = payload;
+      this.hostWebUrl = hostWebUrl;
+      this.eTag = eTag;
+      this.onSuccess = onSuccess;
+      this.onError = onError;
+      _Class.__super__.constructor.call(this, this.url, this.payload, this.hostWebUrl, this.eTag);
+      if (this.onSuccess == null) {
+        this.onSuccess = null;
+      }
+      if (this.onError == null) {
+        this.onError = null;
+      }
+    }
+
+    return _Class;
+
+  })(root.ShareCoffee.REST.angularProperties);
 
   root = typeof window !== "undefined" && window !== null ? window : global;
 
