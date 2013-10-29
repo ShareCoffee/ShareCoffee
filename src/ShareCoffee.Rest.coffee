@@ -11,7 +11,7 @@ root.ShareCoffee.RESTFactory = class
     options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
 
     result = 
-      url: if options.hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppSiteContext(@target)/#{options.url}?@target='#{options.hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{options.url}"
+      url: options.getUrl()
       type: @method
       contentType: ShareCoffee.REST.applicationType
       headers: 
@@ -36,7 +36,7 @@ root.ShareCoffee.RESTFactory = class
     options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
 
     result = 
-      url: if options.hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppSiteContext(@target)/#{options.url}?@target='#{options.hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{options.url}"
+      url: options.getUrl()
       method: @method
       headers:
         'Accept' : ShareCoffee.REST.applicationType
@@ -62,7 +62,7 @@ root.ShareCoffee.RESTFactory = class
     result = null
     try
       result=
-        url: if options.hostWebUrl? then "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppSiteContext(@target)/#{options.url}?@target='#{options.hostWebUrl}'" else "#{ShareCoffee.Commons.getApiRootUrl()}#{options.url}"
+        url: options.getUrl()
         type: 'json'
         method: @method.toLowerCase()
         contentType: ShareCoffee.REST.applicationType
@@ -110,6 +110,15 @@ root.ShareCoffee.REST.angularProperties = class
     @payload = null unless @payload?
     @hostWebUrl = null unless @hostWebUrl?
     @eTag = null unless @eTag?
+
+  getUrl: ()=>
+    if @hostWebUrl?
+      if @url.indexOf("?") is -1
+        return "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{@url}?@target='#{@hostWebUrl}'" 
+      else
+        return "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{@url}&@target='#{@hostWebUrl}'" 
+    else 
+      return "#{ShareCoffee.Commons.getApiRootUrl()}#{@url}"
 
   extend:  (objects...) =>
     for object in objects

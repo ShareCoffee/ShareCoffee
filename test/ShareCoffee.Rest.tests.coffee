@@ -85,7 +85,14 @@ describe 'ShareCoffee.REST', ->
       actual = sut.reqwest { url: 'web/title', hostWebUrl: ShareCoffee.Commons.getHostWebUrl()}
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
-      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppSiteContext(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
+      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
+    
+    it 'should contain correct url for HostWeb access if hostWebUrl is given and already a parameter in url exists', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      actual = sut.reqwest {url: 'web/?$Select=Title', hostWebUrl: ShareCoffee.Commons.getHostWebUrl()}
+      actual.should.have.property 'url'
+      actual.url.should.be.an 'string'
+      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/?$Select=Title&@target='https://foo.sharepoint.com/sites/dev'"
 
     it 'should provide HttpMethod as method property of type string containing the method in lowered case', ->
       sut = new ShareCoffee.RESTFactory 'GET'
@@ -241,7 +248,14 @@ describe 'ShareCoffee.REST', ->
       actual = sut.angularJS {url: 'web/title', hostWebUrl: ShareCoffee.Commons.getHostWebUrl()}
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
-      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppSiteContext(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
+      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
+    
+    it 'should contain correct url for HostWeb access if hostWebUrl is given and already a parameter in url exists', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      actual = sut.angularJS {url: 'web/?$Select=Title', hostWebUrl: ShareCoffee.Commons.getHostWebUrl()}
+      actual.should.have.property 'url'
+      actual.url.should.be.an 'string'
+      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/?$Select=Title&@target='https://foo.sharepoint.com/sites/dev'"
 
     it 'should provide HttpMethod as method property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'
@@ -370,7 +384,14 @@ describe 'ShareCoffee.REST', ->
       actual = sut.jQuery {url: 'web/title', hostWebUrl: ShareCoffee.Commons.getHostWebUrl()}
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
-      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppSiteContext(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
+      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
+
+    it 'should contain correct url for HostWeb access if hostWebUrl is given and already a parameter in url exists', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      actual = sut.jQuery {url: 'web/?$Select=Title', hostWebUrl: ShareCoffee.Commons.getHostWebUrl()}
+      actual.should.have.property 'url'
+      actual.url.should.be.an 'string'
+      actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/?$Select=Title&@target='https://foo.sharepoint.com/sites/dev'"
 
     it 'should provide HttpMethod as type property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'

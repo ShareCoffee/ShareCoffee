@@ -162,7 +162,6 @@ ShareCoffee (c) 2013 Thorsten Hans
         error: options.onError,
         headers: {
           'Accept': ShareCoffee.REST.applicationType,
-          'X-RequestDigest': ShareCoffee.Commons.getFormDigest(),
           'Content-Type': ShareCoffee.REST.applicationType,
           'X-HTTP-Method': 'MERGE',
           'If-Match': options.eTag
@@ -201,7 +200,7 @@ ShareCoffee (c) 2013 Thorsten Hans
     _Class.crossDomainLibrariesLoaded = false;
 
     _Class.loadCrossDomainLibrary = function(onSuccess, onError) {
-      var onAnyError, requestExecutorScriptUrl, runtimeScriptUrl, spScriptUrl,
+      var onAnyError, requestExecutorScriptUrl,
         _this = this;
       onAnyError = function() {
         ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false;
@@ -209,18 +208,12 @@ ShareCoffee (c) 2013 Thorsten Hans
           return onError();
         }
       };
-      runtimeScriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.Runtime.js";
-      spScriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.js";
       requestExecutorScriptUrl = "" + (ShareCoffee.Commons.getHostWebUrl()) + "/_layouts/15/SP.RequestExecutor.js";
-      return ShareCoffee.Core.loadScript(runtimeScriptUrl, function() {
-        return ShareCoffee.Core.loadScript(spScriptUrl, function() {
-          return ShareCoffee.Core.loadScript(requestExecutorScriptUrl, function() {
-            ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true;
-            if (onSuccess) {
-              return onSuccess();
-            }
-          }, onAnyError);
-        }, onAnyError);
+      return ShareCoffee.Core.loadScript(requestExecutorScriptUrl, function() {
+        ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true;
+        if (onSuccess) {
+          return onSuccess();
+        }
       }, onAnyError);
     };
 
@@ -336,7 +329,7 @@ ShareCoffee (c) 2013 Thorsten Hans
         options.eTag = '*';
       }
       result = {
-        url: options.hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + options.url + "?@target='" + options.hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + options.url,
+        url: options.getUrl(),
         type: this.method,
         contentType: ShareCoffee.REST.applicationType,
         headers: {
@@ -371,7 +364,7 @@ ShareCoffee (c) 2013 Thorsten Hans
         options.eTag = '*';
       }
       result = {
-        url: options.hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + options.url + "?@target='" + options.hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + options.url,
+        url: options.getUrl(),
         method: this.method,
         headers: {
           'Accept': ShareCoffee.REST.applicationType,
@@ -408,7 +401,7 @@ ShareCoffee (c) 2013 Thorsten Hans
       result = null;
       try {
         result = {
-          url: options.hostWebUrl != null ? "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppSiteContext(@target)/" + options.url + "?@target='" + options.hostWebUrl + "'" : "" + (ShareCoffee.Commons.getApiRootUrl()) + options.url,
+          url: options.getUrl(),
           type: 'json',
           method: this.method.toLowerCase(),
           contentType: ShareCoffee.REST.applicationType,
@@ -483,6 +476,7 @@ ShareCoffee (c) 2013 Thorsten Hans
       this.hostWebUrl = hostWebUrl;
       this.eTag = eTag;
       this.extend = __bind(this.extend, this);
+      this.getUrl = __bind(this.getUrl, this);
       if (this.url == null) {
         this.url = null;
       }
@@ -496,6 +490,18 @@ ShareCoffee (c) 2013 Thorsten Hans
         this.eTag = null;
       }
     }
+
+    _Class.prototype.getUrl = function() {
+      if (this.hostWebUrl != null) {
+        if (this.url.indexOf("?") === -1) {
+          return "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppContextSite(@target)/" + this.url + "?@target='" + this.hostWebUrl + "'";
+        } else {
+          return "" + (ShareCoffee.Commons.getApiRootUrl()) + "SP.AppContextSite(@target)/" + this.url + "&@target='" + this.hostWebUrl + "'";
+        }
+      } else {
+        return "" + (ShareCoffee.Commons.getApiRootUrl()) + this.url;
+      }
+    };
 
     _Class.prototype.extend = function() {
       var key, object, objects, value, _i, _len;

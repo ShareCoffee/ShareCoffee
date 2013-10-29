@@ -154,13 +154,6 @@ describe 'ShareCoffee.CrossDomain', ->
       actual.headers.Accept.should.be.an 'string'
       actual.headers.Accept.should.equal ShareCoffee.REST.applicationType
 
-    it 'should provide the X-RequestDigest property on headers if method is not GET', ->
-      sut = new ShareCoffee.CrossDomainRESTFactory 'DELETE'
-      actual = sut.SPCrossDomainLib {url: 'foo'}
-      actual.headers.should.have.property 'X-RequestDigest'
-      actual.headers['X-RequestDigest'].should.be.an 'string'
-      actual.headers['X-RequestDigest'].should.equal '1234567890'
-
     it 'should not provide a headers.X-RequestDigest proeprty if method is GET', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
       actual = sut.SPCrossDomainLib {url: 'foo'}
@@ -251,7 +244,7 @@ describe 'ShareCoffee.CrossDomain', ->
     it 'should call loadScript on ShareCoffee.Core thrice ', ->
       spy = sinon.spy ShareCoffee.Core, 'loadScript'
       ShareCoffee.CrossDomain.loadCrossDomainLibrary null, null
-      spy.calledThrice.should.be.ok
+      spy.calledOnce.should.be.ok
       spy.restore()
 
     it 'should fire onSuccess when loadScript succeeded', ->

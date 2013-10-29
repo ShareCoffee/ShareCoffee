@@ -2,6 +2,12 @@ module.exports = (grunt)->
 
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json'),
+    nugetpack:
+      dist:
+        src: 'ShareCoffee.nuspec',
+        dest: 'nuget/'
+        options:
+          version: '0.0.4'
     coffee:
       options:
         sourceMap:true
@@ -26,5 +32,8 @@ module.exports = (grunt)->
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
-  grunt.registerTask 'default', ['simplemocha', 'coffee','uglify','clean']
+  grunt.loadNpmTasks 'grunt-nuget'
+
+  grunt.registerTask 'default', ['simplemocha', 'coffee','uglify', 'nugetpack']
   grunt.registerTask 'test', ['simplemocha']
+

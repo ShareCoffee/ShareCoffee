@@ -19,7 +19,6 @@ root.ShareCoffee.CrossDomainRESTFactory = class
       error: options.onError
       headers: 
         'Accept': ShareCoffee.REST.applicationType
-        'X-RequestDigest' : ShareCoffee.Commons.getFormDigest()
         'Content-Type': ShareCoffee.REST.applicationType
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
@@ -43,16 +42,10 @@ root.ShareCoffee.CrossDomain = class
     onAnyError = () =>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
       onError() if onError
-    runtimeScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.Runtime.js"
-    spScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.js"
     requestExecutorScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.RequestExecutor.js"
-    ShareCoffee.Core.loadScript runtimeScriptUrl, ()=>
-      ShareCoffee.Core.loadScript spScriptUrl, ()=>
-        ShareCoffee.Core.loadScript requestExecutorScriptUrl, ()=>
-          ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
-          onSuccess() if onSuccess
-        , onAnyError
-      , onAnyError
+    ShareCoffee.Core.loadScript requestExecutorScriptUrl, ()=>
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+      onSuccess() if onSuccess
     , onAnyError
 
   @build = 
