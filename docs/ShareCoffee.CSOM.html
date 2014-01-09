@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>ShareCoffee.CSOM.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>ShareCoffee.CSOM.coffee</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="ShareCoffee.CSOM.html">
+                    ShareCoffee.CSOM.coffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ShareCoffee.Commons.html">
+                    ShareCoffee.Commons.coffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ShareCoffee.Core.html">
+                    ShareCoffee.Core.coffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ShareCoffee.CrossDomain.html">
+                    ShareCoffee.CrossDomain.coffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ShareCoffee.Rest.html">
+                    ShareCoffee.Rest.coffee
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ShareCoffee.UI.html">
+                    ShareCoffee.UI.coffee
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        <p>Node.JS doesn&#39;t offer window... </p>
+
+        
+          <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span></pre></div>
+        
+      
+        
+        <p>ensure the core namespace</p>
+
+        
+          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-csom">ShareCoffee.CSOM</h2>
+<p>The ShareCoffee.CSOM class is providing functionality which can be used when working with the SharePoint&#39;s CSOM
+<strong>Important</strong> These methods are designed to use in non CrossDomain scenarios</p>
+
+        
+          <div class='highlight'><pre>root.ShareCoffee.CSOM = <span class="hljs-class"><span class="hljs-keyword">class</span></span></pre></div>
+        
+      
+        
+        <h2 id="gethostweb">getHostWeb</h2>
+<p>getHost web uses the SP.AppContextSite in order to receive the SPHostWeb requested by it&#39;s url</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>[Object] appWebCtx - The current AppWeb Context</li>
+<li>[String] hostWebUrl - The HostWebUrl you&#39;re looking for</li>
+</ul>
+<h3 id="return-value">Return Value</h3>
+<p>getHostWeb returns the suggested HostWeb Context</p>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@getHostWeb</span> = <span class="hljs-function"><span class="hljs-params">(appWebCtx, hostWebUrl)</span> -&gt;</span>
+    hostWebCtx = <span class="hljs-keyword">new</span> SP.AppContextSite appWebCtx, hostWebUrl
+    hostWebCtx.get_web()</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
