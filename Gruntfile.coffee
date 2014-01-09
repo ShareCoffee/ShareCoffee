@@ -33,6 +33,7 @@ module.exports = (grunt)->
         options:
           output: 'docs/'
           layout: 'linear'
+          css: 'docs/assets/sharecoffee.css'
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-clean'

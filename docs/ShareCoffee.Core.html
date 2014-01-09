@@ -5,7 +5,7 @@
   <title>ShareCoffee.Core.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
-  <link rel="stylesheet" media="all" href="docco.css" />
+  <link rel="stylesheet" media="all" href="sharecoffee.css" />
 </head>
 <body>
   <div class="container">
@@ -96,8 +96,8 @@
 <p>checkConditions evaluates the method provided as 2nd parameter and throw’s an error as far as the return value is false.</p>
 <h3 id="parameters">Parameters</h3>
 <ul>
-<li>[String] errorMessage the error message which will be logged and thrown</li>
-<li>[function] condition the condition which will be evaluated</li>
+<li>[String] errorMessage - the error message which will be logged and thrown</li>
+<li>[function] condition - the condition which will be evaluated</li>
 </ul>
 
         
@@ -112,9 +112,9 @@
 <p>loadScript loads JavaScript resources from any url and adds it to the current <head> tag.</p>
 <h3 id="parameters">Parameters</h3>
 <ul>
-<li>[String] scriptUrl The script’s location</li>
-<li>[function] onLoaded Callback which will be executed as soon as the script is loaded</li>
-<li>[function] onError Callback which will be invoked as soon as the script loading failes</li>
+<li>[String] scriptUrl - The script’s location</li>
+<li>[function] onLoaded - Callback which will be executed as soon as the script is loaded</li>
+<li>[function] onError - Callback which will be invoked as soon as the script loading failes</li>
 </ul>
 
         

@@ -5,7 +5,7 @@
   <title>ShareCoffee.Commons.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
-  <link rel="stylesheet" media="all" href="docco.css" />
+  <link rel="stylesheet" media="all" href="sharecoffee.css" />
 </head>
 <body>
   <div class="container">
@@ -70,21 +70,66 @@
 
       
         
-        
-        
-          <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span>
-root.ShareCoffee <span class="hljs-keyword">or</span> = {}
-root.ShareCoffee.Commons = <span class="hljs-class"><span class="hljs-keyword">class</span> </span>
+        <p>Node.JS doesn’t offer window… </p>
 
-  <span class="hljs-property">@getQueryString</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
-    <span class="hljs-built_in">document</span>.URL.split(<span class="hljs-string">"?"</span>)[<span class="hljs-number">1</span>]
+        
+          <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span></pre></div>
+        
+      
+        
+        <p>ensure the core namespace</p>
 
-  <span class="hljs-property">@getQueryStringParameter</span> = <span class="hljs-function"><span class="hljs-params">(parameterName)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-commons">ShareCoffee.Commons</h2>
+<p>This class offers different helper functions which makes your life as App-Dev easier</p>
+
+        
+          <div class='highlight'><pre>root.ShareCoffee.Commons = <span class="hljs-class"><span class="hljs-keyword">class</span> </span></pre></div>
+        
+      
+        
+        <h2 id="getquerystring">getQueryString</h2>
+<p>getQueryString returns the entire QueryString from the current document’s URL</p>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>The entire QueryString</p>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@getQueryString</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+    <span class="hljs-built_in">document</span>.URL.split(<span class="hljs-string">"?"</span>)[<span class="hljs-number">1</span>]</pre></div>
+        
+      
+        
+        <h2 id="getquerystringparameter">getQueryStringParameter</h2>
+<p>getQueryStringParameter returns a single parameter value from the current document’s QueryString</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>[String] parameterName - The name of the parameter</li>
+</ul>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>Returns the value of the parameter, if no parameter is found by the name, an empty string is returned</p>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@getQueryStringParameter</span> = <span class="hljs-function"><span class="hljs-params">(parameterName)</span> -&gt;</span>
     params = <span class="hljs-built_in">document</span>.URL.split(<span class="hljs-string">"?"</span>)[<span class="hljs-number">1</span>].split(<span class="hljs-string">"&amp;"</span>)
     parameterValue = (p.split(<span class="hljs-string">"="</span>)[<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> params <span class="hljs-keyword">when</span> p.split(<span class="hljs-string">"="</span>)[<span class="hljs-number">0</span>] <span class="hljs-keyword">is</span> parameterName)
-    parameterValue[<span class="hljs-number">0</span>] ? <span class="hljs-string">''</span>
+    parameterValue[<span class="hljs-number">0</span>] ? <span class="hljs-string">''</span></pre></div>
+        
+      
+        
+        <h2 id="getappweburl">getAppWebUrl</h2>
+<p>getAppWebUrl will return the AppWebUrl. if a custom load method is associated to 
+<strong>ShareCoffee.Commons.loadAppWebUrlFrom</strong> only this injected method will be executed
+in all other cases getAppWebUrl will first try to get the AppWebUrl from <strong>_spPageContextInfo</strong> 
+if this object isn’t present the method looks inside of the <strong>QueryString</strong></p>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>Returns the current AppWebUrl or returns an empty String if no method contains a value</p>
 
-  <span class="hljs-property">@getAppWebUrl</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@getAppWebUrl</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-keyword">if</span> ShareCoffee.Commons.loadAppWebUrlFrom?
       <span class="hljs-keyword">return</span> ShareCoffee.Commons.loadAppWebUrlFrom()
     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> _spPageContextInfo? &amp;&amp; _spPageContextInfo.webAbsoluteUrl?
@@ -95,22 +140,49 @@ root.ShareCoffee.Commons = <span class="hljs-class"><span class="hljs-keyword">c
       <span class="hljs-keyword">return</span> decodeURIComponent appWebUrlFromQueryString
     <span class="hljs-keyword">else</span>
       <span class="hljs-built_in">console</span>.error <span class="hljs-string">"_spPageContextInfo is not defined"</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">console</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">console</span>.error
-      <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-string">""</span></pre></div>
+        
+      
+        
+        <h2 id="gethostweburl">getHostWebUrl</h2>
+<p>getHostWebUrl will return the HostWebURl. If a custom load method is associated to
+<strong>ShareCoffee.Commons.loadHostWebUrlFrom</strong> only this injected method will be executed
+in all other cases getHostWebUrl looks inside of the QueryString for SPHostUrl parameter</p>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>Returns the current HostWebUrl or returns an empty string if neither custom load method associated nor QueryString parameter is present</p>
 
-  <span class="hljs-property">@getHostWebUrl</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
-    hostWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter <span class="hljs-string">"SPHostUrl"</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@getHostWebUrl</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-keyword">if</span> ShareCoffee.Commons.loadHostWebUrlFrom?
       <span class="hljs-keyword">return</span> ShareCoffee.Commons.loadHostWebUrlFrom()
+    
+    hostWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter <span class="hljs-string">"SPHostUrl"</span>
     <span class="hljs-keyword">if</span> hostWebUrlFromQueryString
       <span class="hljs-keyword">return</span> decodeURIComponent hostWebUrlFromQueryString
     <span class="hljs-keyword">else</span>
       <span class="hljs-built_in">console</span>.error <span class="hljs-string">"SPHostUrl is not defined in the QueryString"</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">console</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">console</span>.error
-      <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-string">""</span></pre></div>
+        
+      
+        
+        <h2 id="getapirooturl">getApiRootUrl</h2>
+<p>getApiRootUrl will return the the root path to SharePoint’s REST endpoint {AppWebUrl}/_api/</p>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>REST API entrypoint {AppWebUrl}/_api/</p>
 
-  <span class="hljs-property">@getApiRootUrl</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
-    <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getAppWebUrl()}</span>/_api/"</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@getApiRootUrl</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+    <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getAppWebUrl()}</span>/_api/"</span></pre></div>
+        
+      
+        
+        <h2 id="getformdigest">getFormDigest</h2>
+<p>getFormDigest returns the Form Digest Control value using plain old JavaScript instead of relying on jQuery</p>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>Form Digest’s value</p>
 
-  <span class="hljs-property">@getFormDigest</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@getFormDigest</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__REQUESTDIGEST'</span>).value</pre></div>
         
       
