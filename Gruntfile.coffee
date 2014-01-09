@@ -27,13 +27,20 @@ module.exports = (grunt)->
           'dist/ShareCoffee.min.js': 'dist/ShareCoffee.js'
     clean:
       dist: ['dist/**/*.src.coffee']
+    docco:
+      coffee:
+        src: 'src/*.coffee'
+        options:
+          output: 'docs/'
+          layout: 'linear'
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-nuget'
+  grunt.loadNpmTasks 'grunt-docco'
 
-  grunt.registerTask 'default', ['simplemocha', 'coffee','uglify', 'nugetpack']
+  grunt.registerTask 'default', ['simplemocha', 'docco:coffee', 'coffee','uglify', 'nugetpack']
   grunt.registerTask 'test', ['simplemocha']
-
+  grunt.registerTask 'docs', ['docco:coffee']
