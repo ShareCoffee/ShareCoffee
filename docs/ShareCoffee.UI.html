@@ -70,32 +70,95 @@
 
       
         
-        
-        
-          <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span>
+        <p>Node.JS doesn’t offer window… </p>
 
-root.ShareCoffee <span class="hljs-keyword">or</span> = {}
+        
+          <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span></pre></div>
+        
+      
+        
+        <p>ensure the core namespace</p>
 
-root.ShareCoffee.<span class="hljs-function"><span class="hljs-title">SettingsLink</span> = <span class="hljs-params">(url, title, appendQueryStringToUrl = <span class="hljs-literal">false</span>)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-settingslink">ShareCoffee.SettingsLink</h2>
+<p>Create a new instance of ShareCoffee.SettingsLink which can be placed inside of the App-ChromeBar</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>[String] url - the target url for the settings link</li>
+<li>[String] title - visual representation for the settings link</li>
+<li>[bool] appendQueryStringToUrl - determines if the entire QueryString should be appended to the url</li>
+</ul>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>Returns a configured instance of ShareCoffee.SettingsLink</p>
+
+        
+          <div class='highlight'><pre>root.ShareCoffee.<span class="hljs-function"><span class="hljs-title">SettingsLink</span> = <span class="hljs-params">(url, title, appendQueryStringToUrl = <span class="hljs-literal">false</span>)</span> -&gt;</span>
   <span class="hljs-attribute">linkUrl</span>: <span class="hljs-keyword">if</span> appendQueryStringToUrl <span class="hljs-keyword">then</span> <span class="hljs-string">"<span class="hljs-subst">#{url}</span>?<span class="hljs-subst">#{ShareCoffee.Commons.getQueryString()}</span>"</span> <span class="hljs-keyword">else</span> url
-  <span class="hljs-attribute">displayName</span>: title 
+  <span class="hljs-attribute">displayName</span>: title</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-chromesettings">ShareCoffee.ChromeSettings</h2>
+<p>An instance of ShareCoffee.ChromeSettings is used to configure the entire App-ChromeBar.</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>[String] iconUrl - URL to the AppIcon</li>
+<li>[String] title - Title of your App</li>
+<li>[String] helpPageUrl - optinal URL which points to your App’s help page</li>
+<li>[SettingsLinks] settingsLinkSplat - You can pass as many SettingsLink instances as you want to</li>
+</ul>
 
-root.ShareCoffee.<span class="hljs-function"><span class="hljs-title">ChromeSettings</span> = <span class="hljs-params">(iconUrl, title,helpPageUrl, settingsLinkSplat...)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>root.ShareCoffee.<span class="hljs-function"><span class="hljs-title">ChromeSettings</span> = <span class="hljs-params">(iconUrl, title,helpPageUrl, settingsLinkSplat...)</span> -&gt;</span>
   <span class="hljs-attribute">appIconUrl</span>: iconUrl
   <span class="hljs-attribute">appTitle</span>: title
   <span class="hljs-attribute">appHelpPageUrl</span>: helpPageUrl
-  <span class="hljs-attribute">settingsLinks</span>: settingsLinkSplat
+  <span class="hljs-attribute">settingsLinks</span>: settingsLinkSplat</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-ui">ShareCoffee.UI</h2>
+<p>This class capsulates all SharePoint UI interactions</p>
 
-root.ShareCoffee.UI = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
-  
-  <span class="hljs-property">@showNotification</span> = <span class="hljs-function"><span class="hljs-params">(message, isSticky = <span class="hljs-literal">false</span>)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>root.ShareCoffee.UI = <span class="hljs-class"><span class="hljs-keyword">class</span></span></pre></div>
+        
+      
+        
+        <h2 id="shownotification">showNotification</h2>
+<p>The showNotification method provides an wrapper for SharePoint’s SP.UI.Notify API. On top of just calling SharePoint’s API, 
+showNotification checks if all required objects are available. If not, an error will be logged to the JS Console.</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>[String] message - The message you’d like to display</li>
+<li>[bool] isSticky - Determines if the message should stuck on the page or if it should disappear after a few seconds</li>
+</ul>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>showNotification returns an NotificationId, which can be used to manually remove the notification later using the removeNotification function</p>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@showNotification</span> = <span class="hljs-function"><span class="hljs-params">(message, isSticky = <span class="hljs-literal">false</span>)</span> -&gt;</span>
     <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Notify? <span class="hljs-keyword">and</span> SP.UI.Notify.addNotification?
     
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)"</span>, condition
-    SP.UI.Notify.addNotification message, isSticky
+    SP.UI.Notify.addNotification message, isSticky</pre></div>
+        
+      
+        
+        <h2 id="removenotification">removeNotification</h2>
+<p>The removeNotification will remove a notification from the current page. If any of the required SharePoint libraries is not loaded, an error is displayed within the browser console</p>
+<h3 id="parameter">Parameter</h3>
+<ul>
+<li>[int] notificationId - The notification’s id that should be removed from the page</li>
+</ul>
 
-  <span class="hljs-property">@removeNotification</span> = <span class="hljs-function"><span class="hljs-params">(notificationId)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@removeNotification</span> = <span class="hljs-function"><span class="hljs-params">(notificationId)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> notificationId?
     <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Notify? <span class="hljs-keyword">and</span> SP.UI.Notify.removeNotification?
