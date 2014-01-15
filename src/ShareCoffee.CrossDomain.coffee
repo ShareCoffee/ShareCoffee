@@ -1,4 +1,7 @@
+# Node.JS doesn't offer window... 
 root = window ? global
+
+# ensure the core namespace
 root.ShareCoffee or = {}
 
 root.ShareCoffee.CrossDomainRESTFactory = class
@@ -34,9 +37,19 @@ root.ShareCoffee.CrossDomainRESTFactory = class
     delete result.error unless options.onError?
     delete result.body unless @method is 'POST'
     result
-
+# ##ShareCoffee.CrossDomain
+# The CrossDomain namespace offers functionality which will be used when you're building Cloud-Hosted Apps (AutoHosted-and ProviderHosted-Apps).
 root.ShareCoffee.CrossDomain = class 
+  # ##crossDomainLibrariesLoaded
+  # flag which determines if CrossDomain libraries are loaded or not.
   @crossDomainLibrariesLoaded = false
+
+  # ##loadCSOMCrossDomainLibraries
+  # This method will load all required libraries from SharePoint/Office365 that are required when you'd like to use CSOM(JSOM) from your Cloud-Hosted-App
+  # 
+  # ### Parameter
+  #   * [function] onSuccess - Success callback, which will be invoked as soon as all required libraries are loaded
+  #   * [function] onError - Error callback, which will be invoked when an error is raised
   @loadCSOMCrossDomainLibraries = (onSuccess, onError) ->
     onAnyError = () =>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
@@ -54,6 +67,12 @@ root.ShareCoffee.CrossDomain = class
       , onAnyError
     , onAnyError
 
+  # ##loadCrossDomainLibrary
+  # The loadCrossDomainLibrary should be used when you'd like to use SharePoint's REST interface. The method will load SP.RequestExecutor.js from the associated SharePoint/SharePoint-Online
+  #
+  # ### Parameters
+  #   * [function] onSuccess - Success callback, which will be invoked as soon as all required libraries are loaded
+  #   * [function] onError - Error callback, which will be invoked when an error is raised
   @loadCrossDomainLibrary = (onSuccess, onError) ->
     onAnyError = () =>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
@@ -64,6 +83,8 @@ root.ShareCoffee.CrossDomain = class
       onSuccess() if onSuccess
     , onAnyError
 
+  # ##build
+  # build is the entry point for CRUD operations using the REST interface it supports create, read, update, delete
   @build = 
     create:
       for: new ShareCoffee.CrossDomainRESTFactory 'POST'
@@ -74,6 +95,11 @@ root.ShareCoffee.CrossDomain = class
     delete:
       for: new ShareCoffee.CrossDomainRESTFactory 'DELETE'
  
+  # ##getClientContext
+  # It checks if all required cross domain libraries are loaded for using CSOM from a Cloud-Hosted App, if so, it will return the preconfigured SP.ClientContext instance
+  #
+  # ### ReturnValue
+  # Returns an instance of SP.ClientContext which is targeting the AppWeb as far as all required libraries are loeded
   @getClientContext = () ->
     throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext' if ShareCoffee.CrossDomain.crossDomainLibrariesLoaded is false
     appWebUrl = ShareCoffee.Commons.getAppWebUrl()
@@ -82,12 +108,33 @@ root.ShareCoffee.CrossDomain = class
     ctx.set_webRequestExecutorFactory factory
     ctx
 
+  # ##getHostWeb
+  # The getHostWeb method will return an instance of SP.Web targeting the suggested Web
+  #
+  # ### Parameters
+  #   * [Object] ctx - The preconfigured instance of SP.ClientContext
+  #   * [String] hostWebUrl - The site's url you're looking for (defaults to the SPHostUrl)
+  #
+  # ### ReturnValue
+  # returns an instance of SP.Web targeting the suggested SharePoint Web
   @getHostWeb = (ctx, hostWebUrl = ShareCoffee.Commons.getHostWebUrl()) ->
     throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext' if ShareCoffee.CrossDomain.crossDomainLibrariesLoaded is false
     throw 'ClientContext cant be null, call ShareCoffee.CrossDomain.getClientContext() first' if not ctx?
     appContextSite = new SP.AppContextSite ctx, hostWebUrl
     appContextSite.get_web()
 
+# ##ShareCoffee.CrossDomain.SharePointRestProperties
+# This class offers all properties for configuring REST requests from a CloudHosted App
+#
+# ### Parameters
+#   * [String] url - Endpoint Url
+#   * [Object] payload - the payload you'd like to send
+#   * [String] hostWebUrl - the HostWebUrl
+#   * [String] eTag - The eTag which will be used when writing data inside of SharePoint
+#   * [function] onSuccess - Success callback
+#   * [function] onError - Error callback
+# ### Remark
+# The url parameter is the only one which is required all other parameters are optional depending on the kind of REST request you're going to execute. 
 root.ShareCoffee.CrossDomain.SharePointRestProperties = class
   constructor: (@url, @payload, @hostWebUrl, @eTag, @onSuccess, @onError) ->
     @url = null unless @url?

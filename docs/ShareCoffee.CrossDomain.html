@@ -70,10 +70,17 @@
 
       
         
+        <p>Node.JS doesn’t offer window… </p>
+
         
+          <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span></pre></div>
         
-          <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span>
-root.ShareCoffee <span class="hljs-keyword">or</span> = {}
+      
+        
+        <p>ensure the core namespace</p>
+
+        
+          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}
 
 root.ShareCoffee.CrossDomainRESTFactory = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
   <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@method</span>, <span class="hljs-property">@updateQuery</span> = <span class="hljs-literal">false</span>)</span> -&gt;</span>
@@ -107,11 +114,36 @@ root.ShareCoffee.CrossDomainRESTFactory = <span class="hljs-class"><span class="
     <span class="hljs-keyword">delete</span> result.success <span class="hljs-keyword">unless</span> options.onSuccess?
     <span class="hljs-keyword">delete</span> result.error <span class="hljs-keyword">unless</span> options.onError?
     <span class="hljs-keyword">delete</span> result.body <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span>
-    result
+    result</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-crossdomain">ShareCoffee.CrossDomain</h2>
+<p>The CrossDomain namespace offers functionality which will be used when you’re building Cloud-Hosted Apps (AutoHosted-and ProviderHosted-Apps).</p>
 
-root.ShareCoffee.CrossDomain = <span class="hljs-class"><span class="hljs-keyword">class</span> </span>
-  <span class="hljs-property">@crossDomainLibrariesLoaded</span> = <span class="hljs-literal">false</span>
-  <span class="hljs-property">@loadCSOMCrossDomainLibraries</span> = <span class="hljs-function"><span class="hljs-params">(onSuccess, onError)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>root.ShareCoffee.CrossDomain = <span class="hljs-class"><span class="hljs-keyword">class</span> </span></pre></div>
+        
+      
+        
+        <h2 id="crossdomainlibrariesloaded">crossDomainLibrariesLoaded</h2>
+<p>flag which determines if CrossDomain libraries are loaded or not.</p>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@crossDomainLibrariesLoaded</span> = <span class="hljs-literal">false</span></pre></div>
+        
+      
+        
+        <h2 id="loadcsomcrossdomainlibraries">loadCSOMCrossDomainLibraries</h2>
+<p>This method will load all required libraries from SharePoint/Office365 that are required when you’d like to use CSOM(JSOM) from your Cloud-Hosted-App</p>
+<h3 id="parameter">Parameter</h3>
+<ul>
+<li>[function] onSuccess - Success callback, which will be invoked as soon as all required libraries are loaded</li>
+<li>[function] onError - Error callback, which will be invoked when an error is raised</li>
+</ul>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@loadCSOMCrossDomainLibraries</span> = <span class="hljs-function"><span class="hljs-params">(onSuccess, onError)</span> -&gt;</span>
     <span class="hljs-function"><span class="hljs-title">onAnyError</span> = <span class="hljs-params">()</span> =&gt;</span>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = <span class="hljs-literal">false</span>
       onError() <span class="hljs-keyword">if</span> onError
@@ -126,9 +158,20 @@ root.ShareCoffee.CrossDomain = <span class="hljs-class"><span class="hljs-keywor
           onSuccess() <span class="hljs-keyword">if</span> onSuccess
         , onAnyError
       , onAnyError
-    , onAnyError
+    , onAnyError</pre></div>
+        
+      
+        
+        <h2 id="loadcrossdomainlibrary">loadCrossDomainLibrary</h2>
+<p>The loadCrossDomainLibrary should be used when you’d like to use SharePoint’s REST interface. The method will load SP.RequestExecutor.js from the associated SharePoint/SharePoint-Online</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>[function] onSuccess - Success callback, which will be invoked as soon as all required libraries are loaded</li>
+<li>[function] onError - Error callback, which will be invoked when an error is raised</li>
+</ul>
 
-  <span class="hljs-property">@loadCrossDomainLibrary</span> = <span class="hljs-function"><span class="hljs-params">(onSuccess, onError)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@loadCrossDomainLibrary</span> = <span class="hljs-function"><span class="hljs-params">(onSuccess, onError)</span> -&gt;</span>
     <span class="hljs-function"><span class="hljs-title">onAnyError</span> = <span class="hljs-params">()</span> =&gt;</span>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = <span class="hljs-literal">false</span>
       onError() <span class="hljs-keyword">if</span> onError
@@ -136,9 +179,15 @@ root.ShareCoffee.CrossDomain = <span class="hljs-class"><span class="hljs-keywor
     ShareCoffee.Core.loadScript requestExecutorScriptUrl, <span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = <span class="hljs-literal">true</span>
       onSuccess() <span class="hljs-keyword">if</span> onSuccess
-    , onAnyError
+    , onAnyError</pre></div>
+        
+      
+        
+        <h2 id="build">build</h2>
+<p>build is the entry point for CRUD operations using the REST interface it supports create, read, update, delete</p>
 
-  <span class="hljs-property">@build</span> = 
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@build</span> = 
     <span class="hljs-attribute">create</span>:
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.CrossDomainRESTFactory <span class="hljs-string">'POST'</span>
     <span class="hljs-attribute">read</span>:
@@ -146,23 +195,60 @@ root.ShareCoffee.CrossDomain = <span class="hljs-class"><span class="hljs-keywor
     <span class="hljs-attribute">update</span>:
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.CrossDomainRESTFactory(<span class="hljs-string">'POST'</span>, <span class="hljs-literal">true</span>)
     <span class="hljs-attribute">delete</span>:
-      <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.CrossDomainRESTFactory <span class="hljs-string">'DELETE'</span>
- 
-  <span class="hljs-property">@getClientContext</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+      <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.CrossDomainRESTFactory <span class="hljs-string">'DELETE'</span></pre></div>
+        
+      
+        
+        <h2 id="getclientcontext">getClientContext</h2>
+<p>It checks if all required cross domain libraries are loaded for using CSOM from a Cloud-Hosted App, if so, it will return the preconfigured SP.ClientContext instance</p>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>Returns an instance of SP.ClientContext which is targeting the AppWeb as far as all required libraries are loeded</p>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@getClientContext</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-keyword">throw</span> <span class="hljs-string">'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext'</span> <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.crossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">false</span>
     appWebUrl = ShareCoffee.Commons.getAppWebUrl()
     ctx = <span class="hljs-keyword">new</span> SP.ClientContext appWebUrl 
     factory = <span class="hljs-keyword">new</span> SP.ProxyWebRequestExecutorFactory appWebUrl
     ctx.set_webRequestExecutorFactory factory
-    ctx
+    ctx</pre></div>
+        
+      
+        
+        <h2 id="gethostweb">getHostWeb</h2>
+<p>The getHostWeb method will return an instance of SP.Web targeting the suggested Web</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>[Object] ctx - The preconfigured instance of SP.ClientContext</li>
+<li>[String] hostWebUrl - The site’s url you’re looking for (defaults to the SPHostUrl)</li>
+</ul>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>returns an instance of SP.Web targeting the suggested SharePoint Web</p>
 
-  <span class="hljs-property">@getHostWeb</span> = <span class="hljs-function"><span class="hljs-params">(ctx, hostWebUrl = ShareCoffee.Commons.getHostWebUrl())</span> -&gt;</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@getHostWeb</span> = <span class="hljs-function"><span class="hljs-params">(ctx, hostWebUrl = ShareCoffee.Commons.getHostWebUrl())</span> -&gt;</span>
     <span class="hljs-keyword">throw</span> <span class="hljs-string">'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext'</span> <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.crossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">false</span>
     <span class="hljs-keyword">throw</span> <span class="hljs-string">'ClientContext cant be null, call ShareCoffee.CrossDomain.getClientContext() first'</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> ctx?
     appContextSite = <span class="hljs-keyword">new</span> SP.AppContextSite ctx, hostWebUrl
-    appContextSite.get_web()
+    appContextSite.get_web()</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-crossdomain-sharepointrestproperties">ShareCoffee.CrossDomain.SharePointRestProperties</h2>
+<p>This class offers all properties for configuring REST requests from a CloudHosted App</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>[String] url - Endpoint Url</li>
+<li>[Object] payload - the payload you’d like to send</li>
+<li>[String] hostWebUrl - the HostWebUrl</li>
+<li>[String] eTag - The eTag which will be used when writing data inside of SharePoint</li>
+<li>[function] onSuccess - Success callback</li>
+<li>[function] onError - Error callback<h3 id="remark">Remark</h3>
+The url parameter is the only one which is required all other parameters are optional depending on the kind of REST request you’re going to execute. </li>
+</ul>
 
-root.ShareCoffee.CrossDomain.SharePointRestProperties = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
+        
+          <div class='highlight'><pre>root.ShareCoffee.CrossDomain.SharePointRestProperties = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
   <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@url</span>, <span class="hljs-property">@payload</span>, <span class="hljs-property">@hostWebUrl</span>, <span class="hljs-property">@eTag</span>, <span class="hljs-property">@onSuccess</span>, <span class="hljs-property">@onError</span>)</span> -&gt;</span>
     <span class="hljs-property">@url</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@url</span>?
     <span class="hljs-property">@payload</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@payload</span>?
