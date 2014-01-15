@@ -70,12 +70,25 @@
 
       
         
-        
-        
-          <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span>
-root.ShareCoffee <span class="hljs-keyword">or</span> = {}
+        <p>Node.JS doesn’t offer window… </p>
 
-root.ShareCoffee.RESTFactory = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
+        
+          <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span></pre></div>
+        
+      
+        
+        <p>ensure the core namespace</p>
+
+        
+          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-restfactory">ShareCoffee.RESTFactory</h2>
+<p>Internal class which is responsible for translating your RequestOptions into the required format</p>
+
+        
+          <div class='highlight'><pre>root.ShareCoffee.RESTFactory = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
   <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@method</span>, <span class="hljs-property">@updateQuery</span> = <span class="hljs-literal">false</span>)</span> -&gt;</span>
 
   <span class="hljs-attribute">jQuery</span>: <span class="hljs-function"><span class="hljs-params">(jQueryProperties)</span> =&gt;</span>
@@ -162,13 +175,25 @@ root.ShareCoffee.RESTFactory = <span class="hljs-class"><span class="hljs-keywor
 
     <span class="hljs-keyword">catch</span> Error
       <span class="hljs-keyword">throw</span> <span class="hljs-string">'please provide either a json string or an object as payload'</span>
-    result
+    result</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-rest">ShareCoffee.REST</h2>
+<p>This namespace is responsible for exposing REST functionality for SharePoint-Hosted Apps</p>
 
-root.ShareCoffee.REST = <span class="hljs-class"><span class="hljs-keyword">class</span> </span>
+        
+          <div class='highlight'><pre>root.ShareCoffee.REST = <span class="hljs-class"><span class="hljs-keyword">class</span> </span>
 
-  <span class="hljs-property">@applicationType</span> = <span class="hljs-string">"application/json;odata=verbose"</span>
+  <span class="hljs-property">@applicationType</span> = <span class="hljs-string">"application/json;odata=verbose"</span></pre></div>
+        
+      
+        
+        <h2 id="build">build</h2>
+<p>Build offers CRUD API for REST queries. Available methods are create, update, read, delete</p>
 
-  <span class="hljs-property">@build</span> = 
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@build</span> = 
     <span class="hljs-attribute">create</span>: 
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'POST'</span>
     <span class="hljs-attribute">read</span>: 
@@ -176,9 +201,15 @@ root.ShareCoffee.REST = <span class="hljs-class"><span class="hljs-keyword">clas
     update : 
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory(<span class="hljs-string">'POST'</span>, <span class="hljs-literal">true</span>)
     <span class="hljs-attribute">delete</span>: 
-      <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'DELETE'</span>
+      <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'DELETE'</span></pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-rest-angularproperties">ShareCoffee.REST.angularProperties</h2>
+<p>This class is used to configure REST requests and expose them for AngularJS</p>
 
-root.ShareCoffee.REST.angularProperties = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
+        
+          <div class='highlight'><pre>root.ShareCoffee.REST.angularProperties = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
   <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@url</span>, <span class="hljs-property">@payload</span>, <span class="hljs-property">@hostWebUrl</span>, <span class="hljs-property">@eTag</span>)</span> -&gt;</span>
     <span class="hljs-property">@url</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@url</span>?
     <span class="hljs-property">@payload</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@payload</span>?
@@ -198,11 +229,23 @@ root.ShareCoffee.REST.angularProperties = <span class="hljs-class"><span class="
     <span class="hljs-keyword">for</span> object <span class="hljs-keyword">in</span> objects
       <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">of</span> object
         @[key] = value
-    <span class="hljs-keyword">return</span> 
+    <span class="hljs-keyword">return</span></pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-rest-jqueryproperties">ShareCoffee.REST.jQueryProperties</h2>
+<p>This class is used to configure REST requests and expose them for jQuery</p>
 
-root.ShareCoffee.REST.jQueryProperties = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">root</span>.<span class="hljs-title">ShareCoffee</span>.<span class="hljs-title">REST</span>.<span class="hljs-title">angularProperties</span></span>
+        
+          <div class='highlight'><pre>root.ShareCoffee.REST.jQueryProperties = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">root</span>.<span class="hljs-title">ShareCoffee</span>.<span class="hljs-title">REST</span>.<span class="hljs-title">angularProperties</span></span></pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-rest-reqwestproperties">ShareCoffee.REST.reqwestProperties</h2>
+<p>This class is used to configure REST requests and expose them for reqwest</p>
 
-root.ShareCoffee.REST.reqwestProperties = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">root</span>.<span class="hljs-title">ShareCoffee</span>.<span class="hljs-title">REST</span>.<span class="hljs-title">angularProperties</span></span>
+        
+          <div class='highlight'><pre>root.ShareCoffee.REST.reqwestProperties = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">root</span>.<span class="hljs-title">ShareCoffee</span>.<span class="hljs-title">REST</span>.<span class="hljs-title">angularProperties</span></span>
   <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@url</span>, <span class="hljs-property">@payload</span>, <span class="hljs-property">@hostWebUrl</span>, <span class="hljs-property">@eTag</span>, <span class="hljs-property">@onSuccess</span>, <span class="hljs-property">@onError</span>)</span> -&gt;</span>
     <span class="hljs-keyword">super</span> <span class="hljs-property">@url</span>, <span class="hljs-property">@payload</span>, <span class="hljs-property">@hostWebUrl</span>, <span class="hljs-property">@eTag</span>
     <span class="hljs-property">@onSuccess</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@onSuccess</span>?

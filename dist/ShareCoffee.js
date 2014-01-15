@@ -76,10 +76,10 @@ ShareCoffee (c) 2013 Thorsten Hans
 
     _Class.getHostWebUrl = function() {
       var hostWebUrlFromQueryString;
-      hostWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter("SPHostUrl");
       if (ShareCoffee.Commons.loadHostWebUrlFrom != null) {
         return ShareCoffee.Commons.loadHostWebUrlFrom();
       }
+      hostWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter("SPHostUrl");
       if (hostWebUrlFromQueryString) {
         return decodeURIComponent(hostWebUrlFromQueryString);
       } else {

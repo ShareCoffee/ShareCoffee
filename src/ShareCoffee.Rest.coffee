@@ -1,6 +1,11 @@
+# Node.JS doesn't offer window... 
 root = window ? global
+
+# ensure the core namespace
 root.ShareCoffee or = {}
 
+# ##ShareCoffee.RESTFactory
+# Internal class which is responsible for translating your RequestOptions into the required format
 root.ShareCoffee.RESTFactory = class
   constructor: (@method, @updateQuery = false) ->
 
@@ -90,10 +95,13 @@ root.ShareCoffee.RESTFactory = class
       throw 'please provide either a json string or an object as payload'
     result
 
+# ##ShareCoffee.REST
+# This namespace is responsible for exposing REST functionality for SharePoint-Hosted Apps
 root.ShareCoffee.REST = class 
 
   @applicationType = "application/json;odata=verbose"
-
+  # ##build
+  # Build offers CRUD API for REST queries. Available methods are create, update, read, delete
   @build = 
     create: 
       for: new ShareCoffee.RESTFactory 'POST'
@@ -104,6 +112,8 @@ root.ShareCoffee.REST = class
     delete: 
       for: new ShareCoffee.RESTFactory 'DELETE'
 
+# ##ShareCoffee.REST.angularProperties
+# This class is used to configure REST requests and expose them for AngularJS
 root.ShareCoffee.REST.angularProperties = class
   constructor: (@url, @payload, @hostWebUrl, @eTag) ->
     @url = null unless @url?
@@ -126,8 +136,12 @@ root.ShareCoffee.REST.angularProperties = class
         @[key] = value
     return 
 
+# ##ShareCoffee.REST.jQueryProperties
+# This class is used to configure REST requests and expose them for jQuery
 root.ShareCoffee.REST.jQueryProperties = class extends root.ShareCoffee.REST.angularProperties
 
+# ##ShareCoffee.REST.reqwestProperties
+# This class is used to configure REST requests and expose them for reqwest
 root.ShareCoffee.REST.reqwestProperties = class extends root.ShareCoffee.REST.angularProperties
   constructor: (@url, @payload, @hostWebUrl, @eTag, @onSuccess, @onError) ->
     super @url, @payload, @hostWebUrl, @eTag
