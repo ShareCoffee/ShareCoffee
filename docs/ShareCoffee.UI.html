@@ -151,7 +151,7 @@ showNotification checks if all required objects are available. If not, an error 
       
         
         <h2 id="removenotification">removeNotification</h2>
-<p>The removeNotification will remove a notification from the current page. If any of the required SharePoint libraries is not loaded, an error is displayed within the browser console</p>
+<p>The removeNotification function will remove a notification from the current page. If any of the required SharePoint libraries is not loaded, an error is displayed within the browser console</p>
 <h3 id="parameter">Parameter</h3>
 <ul>
 <li>[int] notificationId - The notification’s id that should be removed from the page</li>
@@ -164,33 +164,75 @@ showNotification checks if all required objects are available. If not, an error 
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Notify? <span class="hljs-keyword">and</span> SP.UI.Notify.removeNotification?
 
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)"</span>, condition
-    SP.UI.Notify.removeNotification notificationId
+    SP.UI.Notify.removeNotification notificationId</pre></div>
+        
+      
+        
+        <h2 id="showstatus">showStatus</h2>
+<p>The showStatus method is used to display a status message on the current page. If any of the required SharePoint scripts isn’t loaded, an error will be logged to the browsers console</p>
+<h3 id="parameter">Parameter</h3>
+<ul>
+<li>[String] title - The title of the status</li>
+<li>[String] contentAsHtml - Content of the status (supports HTML)</li>
+<li>[bool] showOnTp - determines if the status should appear on top (defaults to false)</li>
+<li>[String] color - sets the color of the status message (defaults to blue)</li>
+</ul>
+<h3 id="returnvalue">ReturnValue</h3>
+<p>Returns the status’ Id</p>
 
-  <span class="hljs-property">@showStatus</span> = <span class="hljs-function"><span class="hljs-params">(title, contentAsHtml, showOnTop = <span class="hljs-literal">false</span>, color = <span class="hljs-string">'blue'</span>)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@showStatus</span> = <span class="hljs-function"><span class="hljs-params">(title, contentAsHtml, showOnTop = <span class="hljs-literal">false</span>, color = <span class="hljs-string">'blue'</span>)</span> -&gt;</span>
     <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Status? <span class="hljs-keyword">and</span> SP.UI.Status.addStatus? <span class="hljs-keyword">and</span> SP.UI.Status.setStatusPriColor?
     
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)"</span>, condition
     statusId = SP.UI.Status.addStatus title, contentAsHtml, showOnTop
     SP.UI.Status.setStatusPriColor statusId, color
-    statusId
+    statusId</pre></div>
+        
+      
+        
+        <h2 id="removestatus">removeStatus</h2>
+<p>This method is used to remove an existing status from the current page</p>
+<h3 id="parameter">Parameter</h3>
+<ul>
+<li>[int] statusId - Id of the status message which should be removed from the page</li>
+</ul>
 
-  <span class="hljs-property">@removeStatus</span> = <span class="hljs-function"><span class="hljs-params">(statusId)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@removeStatus</span> = <span class="hljs-function"><span class="hljs-params">(statusId)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> statusId?
     <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Status? <span class="hljs-keyword">and</span> SP.UI.Status.removeStatus? 
     
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)"</span>, condition
-    SP.UI.Status.removeStatus statusId
+    SP.UI.Status.removeStatus statusId</pre></div>
+        
+      
+        
+        <h2 id="removeallstatus">removeAllStatus</h2>
+<p>This method is used to remove all status messages from the current page</p>
 
-  <span class="hljs-property">@removeAllStatus</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@removeAllStatus</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Status? <span class="hljs-keyword">and</span> SP.UI.Status.removeAllStatus? 
 
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)"</span>, condition
-    SP.UI.Status.removeAllStatus()
+    SP.UI.Status.removeAllStatus()</pre></div>
+        
+      
+        
+        <h2 id="setstatuscolor">setStatusColor</h2>
+<p>The setStatusColor function is used to change the color of an existing status message.</p>
+<h3 id="parameter">Parameter</h3>
+<ul>
+<li>[int] statusId - Id of the status message you want to colorize</li>
+<li>[String] color - The new color value for the status message (defaults to blue)</li>
+</ul>
 
-  <span class="hljs-property">@setStatusColor</span> = <span class="hljs-function"><span class="hljs-params">(statusId, color=<span class="hljs-string">'blue'</span>)</span> -&gt;</span>
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@setStatusColor</span> = <span class="hljs-function"><span class="hljs-params">(statusId, color=<span class="hljs-string">'blue'</span>)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> statusId?
     <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Status? <span class="hljs-keyword">and</span> SP.UI.Status.setStatusPriColor? 
@@ -198,9 +240,25 @@ showNotification checks if all required objects are available. If not, an error 
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)"</span>, condition
     SP.UI.Status.setStatusPriColor statusId, color
 
-  <span class="hljs-property">@onChromeLoadedCallback</span> = <span class="hljs-literal">null</span>
 
-  <span class="hljs-property">@loadAppChrome</span> = <span class="hljs-function"><span class="hljs-params">(placeHolderId, chromeSettings, onAppChromeLoaded = <span class="hljs-literal">undefined</span>)</span> -&gt;</span>
+  <span class="hljs-property">@onChromeLoadedCallback</span> = <span class="hljs-literal">null</span></pre></div>
+        
+      
+        
+        <h2 id="loadappchrome">loadAppChrome</h2>
+<p>The loadAppChrome method will load all required scripts from SharePoint or Office365 and display the App-Chrome-Bar
+If you’re developing Cloud-Hosted Apps for SharePoint you should consider including the AppChromeBar. Users recognize that they are still in the context of SharePoint/Office365 and they can easily navigate back to their entry point.</p>
+<h3 id="parameters">Parameters</h3>
+<ul>
+<li>[String] placeHolderId - The ChromeBar requires an DIV element where the Chrome will be displayed. Provide the id from the div here</li>
+<li>[Object] chromeSettings - Either provide an instance of ShareCoffee.ChromeSettings or an JSON object which defines the options for the AppChromeBar</li>
+<li>[function] onAppChromeLoaded - Provide a callback which will be executed as soon as the ChromeBar is loaded</li>
+</ul>
+<h3 id="throws">Throws</h3>
+<p>Throws an exception if the SP.UI.Controls.js file can’t be loaded from SharePoint/Office365</p>
+
+        
+          <div class='highlight'><pre>  <span class="hljs-property">@loadAppChrome</span> = <span class="hljs-function"><span class="hljs-params">(placeHolderId, chromeSettings, onAppChromeLoaded = <span class="hljs-literal">undefined</span>)</span> -&gt;</span>
     <span class="hljs-keyword">if</span> onAppChromeLoaded?
       ShareCoffee.UI.onChromeLoadedCallback = onAppChromeLoaded
       chromeSettings.onCssLoaded = <span class="hljs-string">"ShareCoffee.UI.onChromeLoadedCallback()"</span>
