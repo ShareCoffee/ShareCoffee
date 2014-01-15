@@ -4,6 +4,8 @@ root = window ? global
 # ensure the core namespace
 root.ShareCoffee or = {}
 
+# ##ShareCoffee.CrossDomainRESTFactory
+# This class is an internal class which is used for translating an instance of ShareCoffee.CrossDomain.SharePointRestProperties to the format that SP.RequestExecutor understands
 root.ShareCoffee.CrossDomainRESTFactory = class
   constructor: (@method, @updateQuery = false) ->
 

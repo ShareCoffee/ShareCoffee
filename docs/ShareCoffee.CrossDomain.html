@@ -80,9 +80,15 @@
         <p>ensure the core namespace</p>
 
         
-          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}
+          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}</pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-crossdomainrestfactory">ShareCoffee.CrossDomainRESTFactory</h2>
+<p>This class is an internal class which is used for translating an instance of ShareCoffee.CrossDomain.SharePointRestProperties to the format that SP.RequestExecutor understands</p>
 
-root.ShareCoffee.CrossDomainRESTFactory = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
+        
+          <div class='highlight'><pre>root.ShareCoffee.CrossDomainRESTFactory = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
   <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@method</span>, <span class="hljs-property">@updateQuery</span> = <span class="hljs-literal">false</span>)</span> -&gt;</span>
 
   <span class="hljs-attribute">SPCrossDomainLib</span>: <span class="hljs-function"><span class="hljs-params">(sharePointRestProperties)</span> =&gt;</span>
