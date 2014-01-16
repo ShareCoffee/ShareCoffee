@@ -5,11 +5,9 @@ ShareCoffee (c) 2013 Thorsten Hans
 
 
 (function() {
-  var root, _ref,
+  var root,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __slice = [].slice,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __slice = [].slice;
 
   root = typeof window !== "undefined" && window !== null ? window : global;
 
@@ -347,7 +345,7 @@ ShareCoffee (c) 2013 Thorsten Hans
 
     _Class.prototype.jQuery = function(jQueryProperties) {
       var options, result;
-      options = new ShareCoffee.REST.jQueryProperties();
+      options = new ShareCoffee.REST.RequestProperties();
       options.extend(jQueryProperties);
       if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
         options.eTag = '*';
@@ -382,7 +380,7 @@ ShareCoffee (c) 2013 Thorsten Hans
 
     _Class.prototype.angularJS = function(angularProperties) {
       var options, result;
-      options = new ShareCoffee.REST.angularProperties();
+      options = new ShareCoffee.REST.RequestProperties();
       options.extend(angularProperties);
       if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
         options.eTag = '*';
@@ -417,7 +415,7 @@ ShareCoffee (c) 2013 Thorsten Hans
 
     _Class.prototype.reqwest = function(reqwestProperties) {
       var Error, options, result;
-      options = new ShareCoffee.REST.reqwestProperties();
+      options = new ShareCoffee.REST.RequestProperties();
       options.extend(reqwestProperties);
       if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
         options.eTag = '*';
@@ -493,12 +491,14 @@ ShareCoffee (c) 2013 Thorsten Hans
 
   })();
 
-  root.ShareCoffee.REST.angularProperties = (function() {
-    function _Class(url, payload, hostWebUrl, eTag) {
+  root.ShareCoffee.REST.RequestProperties = (function() {
+    function _Class(url, payload, hostWebUrl, eTag, onSuccess, onError) {
       this.url = url;
       this.payload = payload;
       this.hostWebUrl = hostWebUrl;
       this.eTag = eTag;
+      this.onSuccess = onSuccess;
+      this.onError = onError;
       this.extend = __bind(this.extend, this);
       this.getUrl = __bind(this.getUrl, this);
       if (this.url == null) {
@@ -512,6 +512,12 @@ ShareCoffee (c) 2013 Thorsten Hans
       }
       if (this.eTag == null) {
         this.eTag = null;
+      }
+      if (this.onSuccess == null) {
+        this.onSuccess = null;
+      }
+      if (this.onError == null) {
+        this.onError = null;
       }
     }
 
@@ -542,41 +548,6 @@ ShareCoffee (c) 2013 Thorsten Hans
     return _Class;
 
   })();
-
-  root.ShareCoffee.REST.jQueryProperties = (function(_super) {
-    __extends(_Class, _super);
-
-    function _Class() {
-      _ref = _Class.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return _Class;
-
-  })(root.ShareCoffee.REST.angularProperties);
-
-  root.ShareCoffee.REST.reqwestProperties = (function(_super) {
-    __extends(_Class, _super);
-
-    function _Class(url, payload, hostWebUrl, eTag, onSuccess, onError) {
-      this.url = url;
-      this.payload = payload;
-      this.hostWebUrl = hostWebUrl;
-      this.eTag = eTag;
-      this.onSuccess = onSuccess;
-      this.onError = onError;
-      _Class.__super__.constructor.call(this, this.url, this.payload, this.hostWebUrl, this.eTag);
-      if (this.onSuccess == null) {
-        this.onSuccess = null;
-      }
-      if (this.onError == null) {
-        this.onError = null;
-      }
-    }
-
-    return _Class;
-
-  })(root.ShareCoffee.REST.angularProperties);
 
   root = typeof window !== "undefined" && window !== null ? window : global;
 
