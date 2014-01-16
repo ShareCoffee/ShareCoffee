@@ -10,7 +10,7 @@ root.ShareCoffee.RESTFactory = class
   constructor: (@method, @updateQuery = false) ->
 
   jQuery: (jQueryProperties) =>
-    options = new ShareCoffee.REST.jQueryProperties()
+    options = new ShareCoffee.REST.RequestProperties()
     options.extend jQueryProperties
     
     options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
@@ -36,7 +36,7 @@ root.ShareCoffee.RESTFactory = class
     result
 
   angularJS: (angularProperties) =>
-    options = new ShareCoffee.REST.angularProperties()
+    options = new ShareCoffee.REST.RequestProperties()
     options.extend angularProperties
     options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
 
@@ -61,7 +61,7 @@ root.ShareCoffee.RESTFactory = class
     result
   
   reqwest: (reqwestProperties) =>
-    options = new ShareCoffee.REST.reqwestProperties()
+    options = new ShareCoffee.REST.RequestProperties()
     options.extend reqwestProperties 
     options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
     result = null
@@ -111,15 +111,26 @@ root.ShareCoffee.REST = class
       for: new ShareCoffee.RESTFactory('POST', true)
     delete: 
       for: new ShareCoffee.RESTFactory 'DELETE'
+# ##ShareCoffee.REST.RequestProperties 
+# Use this class to configure your REST requests. If you prefer plain JSON objects, you can also provide the configuration as plain JSON object
+#
+# ### Parameters
+#
+#   * [String] url - the Request URL
+#   * [Object|String] payload - The request payload
+#   * [String] hostWebUrl - Optional the HostWebUrl
+#   * [String] eTag - Optional pass eTag for POST, PUT or DELETE requests
+#   * [Function] onSuccess - onSuccess callback
+#   * [Function] onError - onError callback
+root.ShareCoffee.REST.RequestProperties = class
 
-# ##ShareCoffee.REST.angularProperties
-# This class is used to configure REST requests and expose them for AngularJS
-root.ShareCoffee.REST.angularProperties = class
-  constructor: (@url, @payload, @hostWebUrl, @eTag) ->
+  constructor: (@url, @payload, @hostWebUrl, @eTag, @onSuccess, @onError) ->
     @url = null unless @url?
     @payload = null unless @payload?
     @hostWebUrl = null unless @hostWebUrl?
     @eTag = null unless @eTag?
+    @onSuccess = null unless @onSuccess?
+    @onError = null unless @onError?
 
   getUrl: ()=>
     if @hostWebUrl?
@@ -135,15 +146,3 @@ root.ShareCoffee.REST.angularProperties = class
       for key, value of object
         @[key] = value
     return 
-
-# ##ShareCoffee.REST.jQueryProperties
-# This class is used to configure REST requests and expose them for jQuery
-root.ShareCoffee.REST.jQueryProperties = class extends root.ShareCoffee.REST.angularProperties
-
-# ##ShareCoffee.REST.reqwestProperties
-# This class is used to configure REST requests and expose them for reqwest
-root.ShareCoffee.REST.reqwestProperties = class extends root.ShareCoffee.REST.angularProperties
-  constructor: (@url, @payload, @hostWebUrl, @eTag, @onSuccess, @onError) ->
-    super @url, @payload, @hostWebUrl, @eTag
-    @onSuccess = null unless @onSuccess?
-    @onError = null unless @onError?

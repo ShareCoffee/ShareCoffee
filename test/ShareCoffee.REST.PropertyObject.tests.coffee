@@ -6,41 +6,14 @@ require '../src/ShareCoffee.REST'
 
 root = global ? window
 
-describe 'ShareCoffee.REST.angularProperties', ->
+describe 'ShareCoffee.REST.RequestProperties', ->
 
   it 'should be an constructor function', ->
-    ShareCoffee.REST.should.have.property 'angularProperties'
-    ShareCoffee.REST.angularProperties.should.be.an 'function'
+    ShareCoffee.REST.should.have.property 'RequestProperties'
+    ShareCoffee.REST.RequestProperties.should.be.an 'function'
 
   it 'should have required properties', ->
-    sut = new ShareCoffee.REST.angularProperties()
-    sut.should.have.property 'url'
-    sut.should.have.property 'payload'
-    sut.should.have.property 'hostWebUrl'
-    sut.should.have.property 'eTag'
-
-describe 'ShareCoffee.REST.jQueryProperties', ->
-  
-  it 'should be a constructor function', ->
-    ShareCoffee.REST.should.have.property 'jQueryProperties'
-    ShareCoffee.REST.jQueryProperties.should.be.an 'function'
-
-  it 'should have required properties', ->
-    sut = new ShareCoffee.REST.jQueryProperties()
-    sut.should.have.property 'url'
-    sut.should.have.property 'payload'
-    sut.should.have.property 'hostWebUrl'
-    sut.should.have.property 'eTag'
-
-  
-describe 'ShareCoffee.REST.reqwestProperties', ->
-  
-  it 'should be a constructor function', ->
-    ShareCoffee.REST.should.have.property 'reqwestProperties'
-    ShareCoffee.REST.reqwestProperties.should.be.an 'function'
-
-  it 'should have required properties', ->
-    sut = new ShareCoffee.REST.reqwestProperties()
+    sut = new ShareCoffee.REST.RequestProperties()
     sut.should.have.property 'url'
     sut.should.have.property 'payload'
     sut.should.have.property 'hostWebUrl'

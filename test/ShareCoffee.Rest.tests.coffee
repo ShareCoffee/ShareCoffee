@@ -207,7 +207,7 @@ describe 'ShareCoffee.REST', ->
       actual3.headers.should.not.have.property 'If-Match'
 
     it 'should set eTag to * if update query is created and no eTag passed', ->
-      sut = new ShareCoffee.RESTFactory('POST',true)
+      sut = new ShareCoffee.RESTFactory 'POST',true
       actual = sut.reqwest {url: 'foo'} 
       actual.headers['If-Match'].should.equal '*' 
 
