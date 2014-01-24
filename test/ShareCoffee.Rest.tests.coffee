@@ -6,11 +6,11 @@ require '../src/ShareCoffee.REST'
 
 root = global ? window
 
-describe 'ShareCoffee.REST', ->  
-  
+describe 'ShareCoffee.REST', ->
+
   beforeEach () ->
-    root.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar&?SPHostUrl=', getElementById : ()-> } 
-    root.ShareCoffee.Commons = 
+    root.document = { URL: 'http://dotnetrocks.sharepoint.com/Default.aspx?Foo=Bar&?SPHostUrl=', getElementById : ()-> }
+    root.ShareCoffee.Commons =
       getHostWebUrl: ()->
         "https://foo.sharepoint.com/sites/dev"
       getApiRootUrl: ()->
@@ -19,13 +19,13 @@ describe 'ShareCoffee.REST', ->
         "1234567890"
 
   afterEach () ->
-    delete root._spPageContextInfo 
-    delete root.document 
+    delete root._spPageContextInfo
+    delete root.document
 
   describe 'API', ->
-    
+
     #ShareCoffee.REST.build.create.for.jQuery()
-    
+
     it 'should provide build as an object',->
       ShareCoffee.REST.build.should.be.an 'object'
 
@@ -62,14 +62,25 @@ describe 'ShareCoffee.REST', ->
       ShareCoffee.REST.build.create.for.reqwest.should.be.an 'function'
 
   describe 'reqwest REST request object creator', ->
-    
+
     it 'should return an object', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       sut.reqwest().should.be.an 'object'
 
+     it 'should call getRequestProperties on properties object if method is present (AddOnIntegration)', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      fakeRequestProperties =
+        url : 'search/suggest'
+        getRequestProperties: () =>
+
+      spy = sinon.spy fakeRequestProperties, 'getRequestProperties'
+      actual = sut.reqwest fakeRequestProperties
+      spy.calledOnce.should.be.true
+      fakeRequestProperties.getRequestProperties.restore()
+
     it 'should explicitly set reqwest type to json', ->
       sut = new ShareCoffee.RESTFactory 'GET'
-      actual = sut.reqwest { url: 'foo'} 
+      actual = sut.reqwest { url: 'foo'}
       actual.should.have.property 'type'
       actual.type.should.equal 'json'
 
@@ -86,7 +97,7 @@ describe 'ShareCoffee.REST', ->
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
       actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
-    
+
     it 'should contain correct url for HostWeb access if hostWebUrl is given and already a parameter in url exists', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       actual = sut.reqwest {url: 'web/?$Select=Title', hostWebUrl: ShareCoffee.Commons.getHostWebUrl()}
@@ -106,7 +117,7 @@ describe 'ShareCoffee.REST', ->
       actual = sut.reqwest {url: 'foo'}
       actual.should.have.property 'headers'
       actual.headers.should.be.an 'object'
-    
+
     it 'should provide a Accept property within headers object containing current applicationType as string value', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       actual = sut.reqwest {url: 'foo'}
@@ -129,16 +140,16 @@ describe 'ShareCoffee.REST', ->
     it 'should store onError handler in error property if given',->
       sut = new ShareCoffee.RESTFactory 'GET'
       onError = ()->
-      actual = sut.reqwest {url: 'foo', onError: onError} 
+      actual = sut.reqwest {url: 'foo', onError: onError}
       actual.should.have.property 'error'
       actual.error.should.be.an 'function'
 
     it 'should not provide an error property if no handler present', ->
       sut = new ShareCoffee.RESTFactory 'GET'
-      actual = sut.reqwest {url: 'foo'} 
+      actual = sut.reqwest {url: 'foo'}
       actual.should.not.have.property 'error'
 
-    
+
     it 'should provide a contentType property if method is not GET', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
       actual = sut.reqwest {url: 'foo'}
@@ -153,7 +164,7 @@ describe 'ShareCoffee.REST', ->
 
     it 'should provide the X-RequestDigest property on headers if method is not GET', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
-      actual = sut.reqwest {url: 'foo'} 
+      actual = sut.reqwest {url: 'foo'}
       actual.headers.should.have.property 'X-RequestDigest'
       actual.headers['X-RequestDigest'].should.be.an 'string'
       actual.headers['X-RequestDigest'].should.equal '1234567890'
@@ -165,7 +176,7 @@ describe 'ShareCoffee.REST', ->
 
     it 'should provide payload as data property if method is POST', ->
       sut = new ShareCoffee.RESTFactory 'POST'
-      payload = 
+      payload =
         a:'b'
       actual = sut.reqwest {url: 'foo', payload: payload}
       actual.should.have.property 'data'
@@ -174,7 +185,7 @@ describe 'ShareCoffee.REST', ->
 
     it 'should not provide a data property if method is not POST', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
-      payload = 
+      payload =
         a: 'b'
       actual = sut.reqwest {url: 'foo', payload: payload}
       actual.should.not.have.property 'data'
@@ -208,8 +219,8 @@ describe 'ShareCoffee.REST', ->
 
     it 'should set eTag to * if update query is created and no eTag passed', ->
       sut = new ShareCoffee.RESTFactory 'POST',true
-      actual = sut.reqwest {url: 'foo'} 
-      actual.headers['If-Match'].should.equal '*' 
+      actual = sut.reqwest {url: 'foo'}
+      actual.headers['If-Match'].should.equal '*'
 
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'
@@ -226,7 +237,7 @@ describe 'ShareCoffee.REST', ->
       actual2 = sut2.reqwest {url: 'foo'}
       actual2.headers.should.not.have.property 'X-HTTP-Method'
       sut3 = new ShareCoffee.RESTFactory 'GET'
-      actual3 = sut3.reqwest {url :'foo'} 
+      actual3 = sut3.reqwest {url :'foo'}
       actual3.headers.should.not.have.property 'X-HTTP-Method'
 
 
@@ -235,6 +246,17 @@ describe 'ShareCoffee.REST', ->
     it 'should return an object', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       sut.angularJS().should.be.an 'object'
+
+    it 'should call getRequestProperties on properties object if method is present (AddOnIntegration)', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      fakeRequestProperties =
+        url : 'search/suggest'
+        getRequestProperties: () =>
+
+      spy = sinon.spy fakeRequestProperties, 'getRequestProperties'
+      actual = sut.angularJS fakeRequestProperties
+      spy.calledOnce.should.be.true
+      fakeRequestProperties.getRequestProperties.restore()
 
     it 'should contain passed url combined with AppWeb API endpoint as url property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'
@@ -249,7 +271,7 @@ describe 'ShareCoffee.REST', ->
       actual.should.have.property 'url'
       actual.url.should.be.an 'string'
       actual.url.should.equal "https://dotnetrocks.sharepoint.com/_api/SP.AppContextSite(@target)/web/title?@target='https://foo.sharepoint.com/sites/dev'"
-    
+
     it 'should contain correct url for HostWeb access if hostWebUrl is given and already a parameter in url exists', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       actual = sut.angularJS {url: 'web/?$Select=Title', hostWebUrl: ShareCoffee.Commons.getHostWebUrl()}
@@ -269,7 +291,7 @@ describe 'ShareCoffee.REST', ->
       actual = sut.angularJS {url: 'foo'}
       actual.should.have.property 'headers'
       actual.headers.should.be.an 'object'
-    
+
     it 'should provide a Accept property within headers object containing current applicationType as string value', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       actual = sut.angularJS {url: 'foo'}
@@ -316,7 +338,7 @@ describe 'ShareCoffee.REST', ->
 
     it 'should stringify the payload if it is not given as string', ->
       sut = new ShareCoffee.RESTFactory 'POST'
-      payload = 
+      payload =
         name: 'foo'
       expected = JSON.stringify payload
       actual = sut.angularJS {url: 'foo', payload: payload}
@@ -346,7 +368,7 @@ describe 'ShareCoffee.REST', ->
     it 'should set eTag to * if update query is created and no eTag passed', ->
       sut = new ShareCoffee.RESTFactory('POST',true)
       actual = sut.angularJS {url: 'foo'}
-      actual.headers['If-Match'].should.equal '*' 
+      actual.headers['If-Match'].should.equal '*'
 
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'
@@ -367,11 +389,22 @@ describe 'ShareCoffee.REST', ->
       actual3.headers.should.not.have.property 'X-HTTP-Method'
 
   describe 'jQuery REST request object creator', ->
-    
+
     it 'should return an object', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       sut.jQuery().should.be.an 'object'
-  
+
+    it 'should call getRequestProperties on properties object if method is present (AddOnIntegration)', ->
+      sut = new ShareCoffee.RESTFactory 'GET'
+      fakeRequestProperties =
+        url : 'search/suggest'
+        getRequestProperties: () =>
+
+      spy = sinon.spy fakeRequestProperties, 'getRequestProperties'
+      actual = sut.jQuery fakeRequestProperties
+      spy.calledOnce.should.be.true
+      fakeRequestProperties.getRequestProperties.restore()
+
     it 'should contain passed url combined with AppWeb API endpoint as url property of type string', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       actual = sut.jQuery {url: 'web/title'}
@@ -452,12 +485,12 @@ describe 'ShareCoffee.REST', ->
 
     it 'should stringify the payload if it is not given as string', ->
       sut = new ShareCoffee.RESTFactory 'POST'
-      payload = 
+      payload =
         name: 'foo'
       expected = JSON.stringify payload
       actual = sut.jQuery {url: 'foo', payload: payload}
       actual.data.should.equal expected
-    
+
     it 'should provide a If-Match property with value * if mathod is DELETE', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
       actual = sut.jQuery {url: 'foo'}
@@ -482,7 +515,7 @@ describe 'ShareCoffee.REST', ->
     it 'should set eTag to * if update query is created and no eTag passed', ->
       sut = new ShareCoffee.RESTFactory('POST',true)
       actual = sut.jQuery {url: 'foo'}
-      actual.headers['If-Match'].should.equal '*' 
+      actual.headers['If-Match'].should.equal '*'
 
     it 'should provide a X-HTTP-Method header property with value MERGE only if method is POST and etag is given', ->
       sut = new ShareCoffee.RESTFactory 'POST'

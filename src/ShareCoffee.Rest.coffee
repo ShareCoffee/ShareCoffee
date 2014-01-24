@@ -1,4 +1,4 @@
-# Node.JS doesn't offer window... 
+# Node.JS doesn't offer window...
 root = window ? global
 
 # ensure the core namespace
@@ -10,16 +10,20 @@ root.ShareCoffee.RESTFactory = class
   constructor: (@method, @updateQuery = false) ->
 
   jQuery: (jQueryProperties) =>
+
+    if jQueryProperties? and jQueryProperties.getRequestProperties?
+      jQueryProperties = jQueryProperties.getRequestProperties()
+
     options = new ShareCoffee.REST.RequestProperties()
     options.extend jQueryProperties
-    
+
     options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
 
-    result = 
+    result =
       url: options.getUrl()
       type: @method
       contentType: ShareCoffee.REST.applicationType
-      headers: 
+      headers:
         'Accept' : ShareCoffee.REST.applicationType
         'X-RequestDigest' : ShareCoffee.Commons.getFormDigest()
         'X-HTTP-Method' : 'MERGE'
@@ -29,18 +33,22 @@ root.ShareCoffee.RESTFactory = class
     if @method is 'GET'
       delete result.contentType
       delete result.headers['X-RequestDigest']
-    
+
     delete result.headers['X-HTTP-Method'] unless @method is 'POST' and options.eTag?
     delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and options.eTag?)
     delete result.data unless @method is 'POST'
     result
 
   angularJS: (angularProperties) =>
+
+    if angularProperties? and angularProperties.getRequestProperties?
+      angularProperties = angularProperties.getRequestProperties()
+
     options = new ShareCoffee.REST.RequestProperties()
     options.extend angularProperties
     options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
 
-    result = 
+    result =
       url: options.getUrl()
       method: @method
       headers:
@@ -51,18 +59,22 @@ root.ShareCoffee.RESTFactory = class
         'If-Match' : options.eTag
       data: if typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
 
-    if @method is 'GET'    
+    if @method is 'GET'
       delete result.headers['Content-Type']
       delete result.headers['X-RequestDigest']
-    
+
     delete result.headers['X-HTTP-Method'] unless @method is 'POST' and options.eTag?
     delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and options.eTag?)
     delete result.data unless @method is 'POST'
     result
-  
+
   reqwest: (reqwestProperties) =>
+
+    if reqwestProperties? and reqwestProperties.getRequestProperties?
+      reqwestProperties = reqwestProperties.getRequestProperties()
+
     options = new ShareCoffee.REST.RequestProperties()
-    options.extend reqwestProperties 
+    options.extend reqwestProperties
     options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
     result = null
     try
@@ -71,7 +83,7 @@ root.ShareCoffee.RESTFactory = class
         type: 'json'
         method: @method.toLowerCase()
         contentType: ShareCoffee.REST.applicationType
-        headers: 
+        headers:
           'Accept' : ShareCoffee.REST.applicationType
           'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
           'If-Match' : options.eTag
@@ -97,21 +109,21 @@ root.ShareCoffee.RESTFactory = class
 
 # ##ShareCoffee.REST
 # This namespace is responsible for exposing REST functionality for SharePoint-Hosted Apps
-root.ShareCoffee.REST = class 
+root.ShareCoffee.REST = class
 
   @applicationType = "application/json;odata=verbose"
   # ##build
   # Build offers CRUD API for REST queries. Available methods are create, update, read, delete
-  @build = 
-    create: 
+  @build =
+    create:
       for: new ShareCoffee.RESTFactory 'POST'
-    read: 
+    read:
       for: new ShareCoffee.RESTFactory 'GET'
-    update : 
+    update :
       for: new ShareCoffee.RESTFactory('POST', true)
-    delete: 
+    delete:
       for: new ShareCoffee.RESTFactory 'DELETE'
-# ##ShareCoffee.REST.RequestProperties 
+# ##ShareCoffee.REST.RequestProperties
 # Use this class to configure your REST requests. If you prefer plain JSON objects, you can also provide the configuration as plain JSON object
 #
 # ### Parameters
@@ -135,14 +147,14 @@ root.ShareCoffee.REST.RequestProperties = class
   getUrl: ()=>
     if @hostWebUrl?
       if @url.indexOf("?") is -1
-        return "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{@url}?@target='#{@hostWebUrl}'" 
+        return "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{@url}?@target='#{@hostWebUrl}'"
       else
-        return "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{@url}&@target='#{@hostWebUrl}'" 
-    else 
+        return "#{ShareCoffee.Commons.getApiRootUrl()}SP.AppContextSite(@target)/#{@url}&@target='#{@hostWebUrl}'"
+    else
       return "#{ShareCoffee.Commons.getApiRootUrl()}#{@url}"
 
   extend:  (objects...) =>
     for object in objects
       for key, value of object
         @[key] = value
-    return 
+    return
