@@ -345,6 +345,9 @@ ShareCoffee (c) 2013 Thorsten Hans
 
     _Class.prototype.jQuery = function(jQueryProperties) {
       var options, result;
+      if ((jQueryProperties != null) && (jQueryProperties.getRequestProperties != null)) {
+        jQueryProperties = jQueryProperties.getRequestProperties();
+      }
       options = new ShareCoffee.REST.RequestProperties();
       options.extend(jQueryProperties);
       if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
@@ -380,6 +383,9 @@ ShareCoffee (c) 2013 Thorsten Hans
 
     _Class.prototype.angularJS = function(angularProperties) {
       var options, result;
+      if ((angularProperties != null) && (angularProperties.getRequestProperties != null)) {
+        angularProperties = angularProperties.getRequestProperties();
+      }
       options = new ShareCoffee.REST.RequestProperties();
       options.extend(angularProperties);
       if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
@@ -415,6 +421,9 @@ ShareCoffee (c) 2013 Thorsten Hans
 
     _Class.prototype.reqwest = function(reqwestProperties) {
       var Error, options, result;
+      if ((reqwestProperties != null) && (reqwestProperties.getRequestProperties != null)) {
+        reqwestProperties = reqwestProperties.getRequestProperties();
+      }
       options = new ShareCoffee.REST.RequestProperties();
       options.extend(reqwestProperties);
       if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {

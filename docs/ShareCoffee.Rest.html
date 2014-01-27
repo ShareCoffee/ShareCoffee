@@ -70,7 +70,7 @@
 
       
         
-        <p>Node.JS doesn’t offer window… </p>
+        <p>Node.JS doesn’t offer window…</p>
 
         
           <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span></pre></div>
@@ -92,16 +92,20 @@
   <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@method</span>, <span class="hljs-property">@updateQuery</span> = <span class="hljs-literal">false</span>)</span> -&gt;</span>
 
   <span class="hljs-attribute">jQuery</span>: <span class="hljs-function"><span class="hljs-params">(jQueryProperties)</span> =&gt;</span>
+
+    <span class="hljs-keyword">if</span> jQueryProperties? <span class="hljs-keyword">and</span> jQueryProperties.getRequestProperties?
+      jQueryProperties = jQueryProperties.getRequestProperties()
+
     options = <span class="hljs-keyword">new</span> ShareCoffee.REST.RequestProperties()
     options.extend jQueryProperties
-    
+
     options.eTag = <span class="hljs-string">'*'</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@updateQuery</span> <span class="hljs-keyword">is</span> <span class="hljs-literal">on</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> options.eTag?)
 
-    result = 
+    result =
       <span class="hljs-attribute">url</span>: options.getUrl()
       <span class="hljs-attribute">type</span>: <span class="hljs-property">@method</span>
       <span class="hljs-attribute">contentType</span>: ShareCoffee.REST.applicationType
-      <span class="hljs-attribute">headers</span>: 
+      <span class="hljs-attribute">headers</span>:
         <span class="hljs-string">'Accept'</span> : ShareCoffee.REST.applicationType
         <span class="hljs-string">'X-RequestDigest'</span> : ShareCoffee.Commons.getFormDigest()
         <span class="hljs-string">'X-HTTP-Method'</span> : <span class="hljs-string">'MERGE'</span>
@@ -111,18 +115,22 @@
     <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'GET'</span>
       <span class="hljs-keyword">delete</span> result.contentType
       <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-RequestDigest'</span>]
-    
+
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-HTTP-Method'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'If-Match'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?)
     <span class="hljs-keyword">delete</span> result.data <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span>
     result
 
   <span class="hljs-attribute">angularJS</span>: <span class="hljs-function"><span class="hljs-params">(angularProperties)</span> =&gt;</span>
+
+    <span class="hljs-keyword">if</span> angularProperties? <span class="hljs-keyword">and</span> angularProperties.getRequestProperties?
+      angularProperties = angularProperties.getRequestProperties()
+
     options = <span class="hljs-keyword">new</span> ShareCoffee.REST.RequestProperties()
     options.extend angularProperties
     options.eTag = <span class="hljs-string">'*'</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@updateQuery</span> <span class="hljs-keyword">is</span> <span class="hljs-literal">on</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> options.eTag?)
 
-    result = 
+    result =
       <span class="hljs-attribute">url</span>: options.getUrl()
       <span class="hljs-attribute">method</span>: <span class="hljs-property">@method</span>
       <span class="hljs-attribute">headers</span>:
@@ -133,18 +141,22 @@
         <span class="hljs-string">'If-Match'</span> : options.eTag
       <span class="hljs-attribute">data</span>: <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> options.payload <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span> options.payload <span class="hljs-keyword">else</span> JSON.stringify(options.payload)
 
-    <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'GET'</span>    
+    <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'GET'</span>
       <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'Content-Type'</span>]
       <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-RequestDigest'</span>]
-    
+
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-HTTP-Method'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'If-Match'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?)
     <span class="hljs-keyword">delete</span> result.data <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span>
     result
-  
+
   <span class="hljs-attribute">reqwest</span>: <span class="hljs-function"><span class="hljs-params">(reqwestProperties)</span> =&gt;</span>
+
+    <span class="hljs-keyword">if</span> reqwestProperties? <span class="hljs-keyword">and</span> reqwestProperties.getRequestProperties?
+      reqwestProperties = reqwestProperties.getRequestProperties()
+
     options = <span class="hljs-keyword">new</span> ShareCoffee.REST.RequestProperties()
-    options.extend reqwestProperties 
+    options.extend reqwestProperties
     options.eTag = <span class="hljs-string">'*'</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@updateQuery</span> <span class="hljs-keyword">is</span> <span class="hljs-literal">on</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> options.eTag?)
     result = <span class="hljs-literal">null</span>
     <span class="hljs-keyword">try</span>
@@ -153,7 +165,7 @@
         <span class="hljs-attribute">type</span>: <span class="hljs-string">'json'</span>
         <span class="hljs-attribute">method</span>: <span class="hljs-property">@method</span>.toLowerCase()
         <span class="hljs-attribute">contentType</span>: ShareCoffee.REST.applicationType
-        <span class="hljs-attribute">headers</span>: 
+        <span class="hljs-attribute">headers</span>:
           <span class="hljs-string">'Accept'</span> : ShareCoffee.REST.applicationType
           <span class="hljs-string">'X-RequestDigest'</span>: ShareCoffee.Commons.getFormDigest()
           <span class="hljs-string">'If-Match'</span> : options.eTag
@@ -183,7 +195,7 @@
 <p>This namespace is responsible for exposing REST functionality for SharePoint-Hosted Apps</p>
 
         
-          <div class='highlight'><pre>root.ShareCoffee.REST = <span class="hljs-class"><span class="hljs-keyword">class</span> </span>
+          <div class='highlight'><pre>root.ShareCoffee.REST = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
 
   <span class="hljs-property">@applicationType</span> = <span class="hljs-string">"application/json;odata=verbose"</span></pre></div>
         
@@ -193,14 +205,14 @@
 <p>Build offers CRUD API for REST queries. Available methods are create, update, read, delete</p>
 
         
-          <div class='highlight'><pre>  <span class="hljs-property">@build</span> = 
-    <span class="hljs-attribute">create</span>: 
+          <div class='highlight'><pre>  <span class="hljs-property">@build</span> =
+    <span class="hljs-attribute">create</span>:
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'POST'</span>
-    <span class="hljs-attribute">read</span>: 
+    <span class="hljs-attribute">read</span>:
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'GET'</span>
-    update : 
+    update :
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory(<span class="hljs-string">'POST'</span>, <span class="hljs-literal">true</span>)
-    <span class="hljs-attribute">delete</span>: 
+    <span class="hljs-attribute">delete</span>:
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'DELETE'</span></pre></div>
         
       
@@ -231,10 +243,10 @@
   <span class="hljs-attribute">getUrl</span>: <span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>
     <span class="hljs-keyword">if</span> <span class="hljs-property">@hostWebUrl</span>?
       <span class="hljs-keyword">if</span> <span class="hljs-property">@url</span>.indexOf(<span class="hljs-string">"?"</span>) <span class="hljs-keyword">is</span> -<span class="hljs-number">1</span>
-        <span class="hljs-keyword">return</span> <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getApiRootUrl()}</span>SP.AppContextSite(@target)/<span class="hljs-subst">#{<span class="hljs-property">@url</span>}</span>?@target='<span class="hljs-subst">#{<span class="hljs-property">@hostWebUrl</span>}</span>'"</span> 
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getApiRootUrl()}</span>SP.AppContextSite(@target)/<span class="hljs-subst">#{<span class="hljs-property">@url</span>}</span>?@target='<span class="hljs-subst">#{<span class="hljs-property">@hostWebUrl</span>}</span>'"</span>
       <span class="hljs-keyword">else</span>
-        <span class="hljs-keyword">return</span> <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getApiRootUrl()}</span>SP.AppContextSite(@target)/<span class="hljs-subst">#{<span class="hljs-property">@url</span>}</span>&amp;@target='<span class="hljs-subst">#{<span class="hljs-property">@hostWebUrl</span>}</span>'"</span> 
-    <span class="hljs-keyword">else</span> 
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getApiRootUrl()}</span>SP.AppContextSite(@target)/<span class="hljs-subst">#{<span class="hljs-property">@url</span>}</span>&amp;@target='<span class="hljs-subst">#{<span class="hljs-property">@hostWebUrl</span>}</span>'"</span>
+    <span class="hljs-keyword">else</span>
       <span class="hljs-keyword">return</span> <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getApiRootUrl()}</span><span class="hljs-subst">#{<span class="hljs-property">@url</span>}</span>"</span>
 
   <span class="hljs-attribute">extend</span>:  <span class="hljs-function"><span class="hljs-params">(objects...)</span> =&gt;</span>

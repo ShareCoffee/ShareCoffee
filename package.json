@@ -1,6 +1,6 @@
 {
   "name": "ShareCoffee",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "SharePoint Hosted App Helpers",
   "main": "index.js",
   "directories": {
