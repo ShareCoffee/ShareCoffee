@@ -145,7 +145,10 @@ ShareCoffee (c) 2013 Thorsten Hans
 
     _Class.prototype.SPCrossDomainLib = function(sharePointRestProperties) {
       var options, result;
-      options = new ShareCoffee.CrossDomain.SharePointRestProperties();
+      if ((sharePointRestProperties != null) && (sharePointRestProperties.getRequestProperties != null)) {
+        sharePointRestProperties = sharePointRestProperties.getRequestProperties();
+      }
+      options = new ShareCoffee.REST.RequestProperties();
       options.extend(sharePointRestProperties);
       if (ShareCoffee.CrossDomain.crossDomainLibrariesLoaded === false) {
         throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the CrossDomain REST libraries';
@@ -279,51 +282,6 @@ ShareCoffee (c) 2013 Thorsten Hans
       }
       appContextSite = new SP.AppContextSite(ctx, hostWebUrl);
       return appContextSite.get_web();
-    };
-
-    return _Class;
-
-  })();
-
-  root.ShareCoffee.CrossDomain.SharePointRestProperties = (function() {
-    function _Class(url, payload, hostWebUrl, eTag, onSuccess, onError) {
-      this.url = url;
-      this.payload = payload;
-      this.hostWebUrl = hostWebUrl;
-      this.eTag = eTag;
-      this.onSuccess = onSuccess;
-      this.onError = onError;
-      this.extend = __bind(this.extend, this);
-      if (this.url == null) {
-        this.url = null;
-      }
-      if (this.payload == null) {
-        this.payload = null;
-      }
-      if (this.hostWebUrl == null) {
-        this.hostWebUrl = null;
-      }
-      if (this.eTag == null) {
-        this.eTag = null;
-      }
-      if (this.onSuccess == null) {
-        this.onSuccess = null;
-      }
-      if (this.onError == null) {
-        this.onError = null;
-      }
-    }
-
-    _Class.prototype.extend = function() {
-      var key, object, objects, value, _i, _len;
-      objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      for (_i = 0, _len = objects.length; _i < _len; _i++) {
-        object = objects[_i];
-        for (key in object) {
-          value = object[key];
-          this[key] = value;
-        }
-      }
     };
 
     return _Class;

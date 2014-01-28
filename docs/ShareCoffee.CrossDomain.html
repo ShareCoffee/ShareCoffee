@@ -70,7 +70,7 @@
 
       
         
-        <p>Node.JS doesn’t offer window… </p>
+        <p>Node.JS doesn’t offer window…</p>
 
         
           <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span></pre></div>
@@ -92,19 +92,21 @@
   <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@method</span>, <span class="hljs-property">@updateQuery</span> = <span class="hljs-literal">false</span>)</span> -&gt;</span>
 
   <span class="hljs-attribute">SPCrossDomainLib</span>: <span class="hljs-function"><span class="hljs-params">(sharePointRestProperties)</span> =&gt;</span>
-    options = <span class="hljs-keyword">new</span> ShareCoffee.CrossDomain.SharePointRestProperties()
+    <span class="hljs-keyword">if</span> sharePointRestProperties? <span class="hljs-keyword">and</span> sharePointRestProperties.getRequestProperties?
+      sharePointRestProperties = sharePointRestProperties.getRequestProperties()
+    options = <span class="hljs-keyword">new</span> ShareCoffee.REST.RequestProperties()
     options.extend sharePointRestProperties
-    
+
     <span class="hljs-keyword">throw</span> <span class="hljs-string">'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the CrossDomain REST libraries'</span> <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.crossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">false</span>
 
     options.eTag = <span class="hljs-string">'*'</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@updateQuery</span> <span class="hljs-keyword">is</span> <span class="hljs-literal">on</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> options.eTag?)
 
-    result = 
+    result =
       <span class="hljs-attribute">url</span>: <span class="hljs-keyword">if</span> options.hostWebUrl? <span class="hljs-keyword">then</span> <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getApiRootUrl()}</span>SP.AppContextSite(@target)/<span class="hljs-subst">#{options.url}</span>?@target='<span class="hljs-subst">#{options.hostWebUrl}</span>'"</span> <span class="hljs-keyword">else</span> <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getApiRootUrl()}</span><span class="hljs-subst">#{options.url}</span>"</span>
       <span class="hljs-attribute">method</span>: <span class="hljs-property">@method</span>
       <span class="hljs-attribute">success</span>: options.onSuccess
       <span class="hljs-attribute">error</span>: options.onError
-      <span class="hljs-attribute">headers</span>: 
+      <span class="hljs-attribute">headers</span>:
         <span class="hljs-string">'Accept'</span>: ShareCoffee.REST.applicationType
         <span class="hljs-string">'Content-Type'</span>: ShareCoffee.REST.applicationType
         <span class="hljs-string">'X-HTTP-Method'</span> : <span class="hljs-string">'MERGE'</span>
@@ -114,7 +116,7 @@
     <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'GET'</span>
       <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-RequestDigest'</span>]
       <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'Content-Type'</span>]
-    
+
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-HTTP-Method'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'If-Match'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?)
     <span class="hljs-keyword">delete</span> result.success <span class="hljs-keyword">unless</span> options.onSuccess?
@@ -128,7 +130,7 @@
 <p>The CrossDomain namespace offers functionality which will be used when you’re building Cloud-Hosted Apps (AutoHosted-and ProviderHosted-Apps).</p>
 
         
-          <div class='highlight'><pre>root.ShareCoffee.CrossDomain = <span class="hljs-class"><span class="hljs-keyword">class</span> </span></pre></div>
+          <div class='highlight'><pre>root.ShareCoffee.CrossDomain = <span class="hljs-class"><span class="hljs-keyword">class</span></span></pre></div>
         
       
         
@@ -193,7 +195,7 @@
 <p>build is the entry point for CRUD operations using the REST interface it supports create, read, update, delete</p>
 
         
-          <div class='highlight'><pre>  <span class="hljs-property">@build</span> = 
+          <div class='highlight'><pre>  <span class="hljs-property">@build</span> =
     <span class="hljs-attribute">create</span>:
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.CrossDomainRESTFactory <span class="hljs-string">'POST'</span>
     <span class="hljs-attribute">read</span>:
@@ -214,7 +216,7 @@
           <div class='highlight'><pre>  <span class="hljs-property">@getClientContext</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-keyword">throw</span> <span class="hljs-string">'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext'</span> <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.crossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">false</span>
     appWebUrl = ShareCoffee.Commons.getAppWebUrl()
-    ctx = <span class="hljs-keyword">new</span> SP.ClientContext appWebUrl 
+    ctx = <span class="hljs-keyword">new</span> SP.ClientContext appWebUrl
     factory = <span class="hljs-keyword">new</span> SP.ProxyWebRequestExecutorFactory appWebUrl
     ctx.set_webRequestExecutorFactory factory
     ctx</pre></div>
@@ -237,37 +239,6 @@
     <span class="hljs-keyword">throw</span> <span class="hljs-string">'ClientContext cant be null, call ShareCoffee.CrossDomain.getClientContext() first'</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> ctx?
     appContextSite = <span class="hljs-keyword">new</span> SP.AppContextSite ctx, hostWebUrl
     appContextSite.get_web()</pre></div>
-        
-      
-        
-        <h2 id="sharecoffee-crossdomain-sharepointrestproperties">ShareCoffee.CrossDomain.SharePointRestProperties</h2>
-<p>This class offers all properties for configuring REST requests from a CloudHosted App</p>
-<h3 id="parameters">Parameters</h3>
-<ul>
-<li>[String] url - Endpoint Url</li>
-<li>[Object] payload - the payload you’d like to send</li>
-<li>[String] hostWebUrl - the HostWebUrl</li>
-<li>[String] eTag - The eTag which will be used when writing data inside of SharePoint</li>
-<li>[function] onSuccess - Success callback</li>
-<li>[function] onError - Error callback<h3 id="remark">Remark</h3>
-The url parameter is the only one which is required all other parameters are optional depending on the kind of REST request you’re going to execute. </li>
-</ul>
-
-        
-          <div class='highlight'><pre>root.ShareCoffee.CrossDomain.SharePointRestProperties = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
-  <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@url</span>, <span class="hljs-property">@payload</span>, <span class="hljs-property">@hostWebUrl</span>, <span class="hljs-property">@eTag</span>, <span class="hljs-property">@onSuccess</span>, <span class="hljs-property">@onError</span>)</span> -&gt;</span>
-    <span class="hljs-property">@url</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@url</span>?
-    <span class="hljs-property">@payload</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@payload</span>?
-    <span class="hljs-property">@hostWebUrl</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@hostWebUrl</span>?
-    <span class="hljs-property">@eTag</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@eTag</span>?
-    <span class="hljs-property">@onSuccess</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@onSuccess</span>?
-    <span class="hljs-property">@onError</span> = <span class="hljs-literal">null</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@onError</span>?
-
-  <span class="hljs-attribute">extend</span>:  <span class="hljs-function"><span class="hljs-params">(objects...)</span> =&gt;</span>
-    <span class="hljs-keyword">for</span> object <span class="hljs-keyword">in</span> objects
-      <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">of</span> object
-        @[key] = value
-    <span class="hljs-keyword">return</span></pre></div>
         
       
       <div class="fleur">h</div>
