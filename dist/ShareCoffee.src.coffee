@@ -114,7 +114,7 @@ root.ShareCoffee.Commons = class
   @getFormDigest = () ->
     document.getElementById('__REQUESTDIGEST').value
 
-# Node.JS doesn't offer window... 
+# Node.JS doesn't offer window...
 root = global ? window
 
 # ensure the core namespace
@@ -123,8 +123,8 @@ root.ShareCoffee or = {}
 # ##ShareCoffee.Core
 # This class is used internally because these methods are used more frequently within the entire project
 root.ShareCoffee.Core = class
-  
-  # ##checkConditions 
+
+  # ##checkConditions
   # checkConditions evaluates the method provided as 2nd parameter and throw's an error as far as the return value is false.
   #
   # ### Parameters
@@ -136,7 +136,7 @@ root.ShareCoffee.Core = class
       console.error errorMessage if console and console.error
       throw errorMessage
 
-  # ##loadScript 
+  # ##loadScript
   # loadScript loads JavaScript resources from any url and adds it to the current <head> tag.
   #
   # ### Parameters
@@ -154,6 +154,8 @@ root.ShareCoffee.Core = class
     s.onerror = onError
     head.appendChild(s)
 
+# shorthand for ShareCoffee
+root.$s = root.ShareCoffee unless root.$s?
 
 # Node.JS doesn't offer window...
 root = window ? global

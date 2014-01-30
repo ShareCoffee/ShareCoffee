@@ -132,6 +132,10 @@ ShareCoffee (c) 2013 Thorsten Hans
 
   })();
 
+  if (root.$s == null) {
+    root.$s = root.ShareCoffee;
+  }
+
   root = typeof window !== "undefined" && window !== null ? window : global;
 
   root.ShareCoffee || (root.ShareCoffee = {});

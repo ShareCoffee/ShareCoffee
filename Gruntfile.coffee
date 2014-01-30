@@ -44,5 +44,6 @@ module.exports = (grunt)->
   grunt.loadNpmTasks 'grunt-docco'
 
   grunt.registerTask 'default', ['simplemocha', 'docco:coffee', 'coffee','uglify', 'nugetpack']
+  grunt.registerTask 'build', ['simplemocha', 'docco:coffee', 'coffee','uglify']
   grunt.registerTask 'test', ['simplemocha']
   grunt.registerTask 'docs', ['docco:coffee']
