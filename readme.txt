@@ -1,5 +1,10 @@
 ShareCoffee 0.0.9
 
+See detailed tutorials on https://github.com/ThorstenHans/ShareCoffee
+
+See also available addons
+  - ShareCoffee.Search
+
 Release Notes
   - With ShareCoffee 0.0.9 the class ShareCoffee.CrossDomain.SharePointRestProperties has been removed from the project. Use ShareCoffee.REST.RequestProperties insted.
   - With ShareCoffee 0.0.8 the classes ShareCoffee.REST.angularProperties,
