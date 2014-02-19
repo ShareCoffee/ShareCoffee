@@ -107,14 +107,14 @@
       <span class="hljs-attribute">contentType</span>: ShareCoffee.REST.applicationType
       <span class="hljs-attribute">headers</span>:
         <span class="hljs-string">'Accept'</span> : ShareCoffee.REST.applicationType
-        <span class="hljs-string">'X-RequestDigest'</span> : ShareCoffee.Commons.getFormDigest()
         <span class="hljs-string">'X-HTTP-Method'</span> : <span class="hljs-string">'MERGE'</span>
         <span class="hljs-string">'If-Match'</span> : options.eTag
       <span class="hljs-attribute">data</span>: <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> options.payload <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span> options.payload <span class="hljs-keyword">else</span> JSON.stringify(options.payload)
 
     <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'GET'</span>
       <span class="hljs-keyword">delete</span> result.contentType
-      <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-RequestDigest'</span>]
+    <span class="hljs-keyword">else</span>
+      result.headers[<span class="hljs-string">'X-RequestDigest'</span>] = ShareCoffee.Commons.getFormDigest()
 
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-HTTP-Method'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'If-Match'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?)
@@ -136,14 +136,14 @@
       <span class="hljs-attribute">headers</span>:
         <span class="hljs-string">'Accept'</span> : ShareCoffee.REST.applicationType
         <span class="hljs-string">'Content-Type'</span>: ShareCoffee.REST.applicationType
-        <span class="hljs-string">'X-RequestDigest'</span>: ShareCoffee.Commons.getFormDigest()
         <span class="hljs-string">'X-HTTP-Method'</span> : <span class="hljs-string">'MERGE'</span>
         <span class="hljs-string">'If-Match'</span> : options.eTag
       <span class="hljs-attribute">data</span>: <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> options.payload <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span> options.payload <span class="hljs-keyword">else</span> JSON.stringify(options.payload)
 
     <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'GET'</span>
       <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'Content-Type'</span>]
-      <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-RequestDigest'</span>]
+    <span class="hljs-keyword">else</span>
+      result.headers[<span class="hljs-string">'X-RequestDigest'</span>] = ShareCoffee.Commons.getFormDigest()
 
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-HTTP-Method'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?
     <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'If-Match'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?)
@@ -167,7 +167,6 @@
         <span class="hljs-attribute">contentType</span>: ShareCoffee.REST.applicationType
         <span class="hljs-attribute">headers</span>:
           <span class="hljs-string">'Accept'</span> : ShareCoffee.REST.applicationType
-          <span class="hljs-string">'X-RequestDigest'</span>: ShareCoffee.Commons.getFormDigest()
           <span class="hljs-string">'If-Match'</span> : options.eTag
           <span class="hljs-string">'X-HTTP-Method'</span> : <span class="hljs-string">'MERGE'</span>
         <span class="hljs-attribute">data</span>: <span class="hljs-keyword">if</span> options.payload? <span class="hljs-keyword">and</span> <span class="hljs-keyword">typeof</span> options.payload <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span> options.payload <span class="hljs-keyword">else</span> JSON.stringify(options.payload)
@@ -177,7 +176,8 @@
 
       <span class="hljs-keyword">if</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'GET'</span>
         <span class="hljs-keyword">delete</span> result.contentType
-        <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-RequestDigest'</span>]
+      <span class="hljs-keyword">else</span>
+        result.headers[<span class="hljs-string">'X-RequestDigest'</span>] = ShareCoffee.Commons.getFormDigest()
 
       <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'X-HTTP-Method'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?
       <span class="hljs-keyword">delete</span> result.headers[<span class="hljs-string">'If-Match'</span>] <span class="hljs-keyword">unless</span> <span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'DELETE'</span> <span class="hljs-keyword">or</span> (<span class="hljs-property">@method</span> <span class="hljs-keyword">is</span> <span class="hljs-string">'POST'</span> <span class="hljs-keyword">and</span> options.eTag?)

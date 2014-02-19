@@ -313,14 +313,14 @@ root.ShareCoffee.RESTFactory = class
       contentType: ShareCoffee.REST.applicationType
       headers:
         'Accept' : ShareCoffee.REST.applicationType
-        'X-RequestDigest' : ShareCoffee.Commons.getFormDigest()
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
       data: if typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
 
     if @method is 'GET'
       delete result.contentType
-      delete result.headers['X-RequestDigest']
+    else
+      result.headers['X-RequestDigest'] = ShareCoffee.Commons.getFormDigest()
 
     delete result.headers['X-HTTP-Method'] unless @method is 'POST' and options.eTag?
     delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and options.eTag?)
@@ -342,14 +342,14 @@ root.ShareCoffee.RESTFactory = class
       headers:
         'Accept' : ShareCoffee.REST.applicationType
         'Content-Type': ShareCoffee.REST.applicationType
-        'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
       data: if typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
 
     if @method is 'GET'
       delete result.headers['Content-Type']
-      delete result.headers['X-RequestDigest']
+    else
+      result.headers['X-RequestDigest'] = ShareCoffee.Commons.getFormDigest()
 
     delete result.headers['X-HTTP-Method'] unless @method is 'POST' and options.eTag?
     delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and options.eTag?)
@@ -373,7 +373,6 @@ root.ShareCoffee.RESTFactory = class
         contentType: ShareCoffee.REST.applicationType
         headers:
           'Accept' : ShareCoffee.REST.applicationType
-          'X-RequestDigest': ShareCoffee.Commons.getFormDigest()
           'If-Match' : options.eTag
           'X-HTTP-Method' : 'MERGE'
         data: if options.payload? and typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
@@ -383,7 +382,8 @@ root.ShareCoffee.RESTFactory = class
 
       if @method is 'GET'
         delete result.contentType
-        delete result.headers['X-RequestDigest']
+      else
+        result.headers['X-RequestDigest'] = ShareCoffee.Commons.getFormDigest()
 
       delete result.headers['X-HTTP-Method'] unless @method is 'POST' and options.eTag?
       delete result.headers['If-Match'] unless @method is 'DELETE' or (@method is 'POST' and options.eTag?)
