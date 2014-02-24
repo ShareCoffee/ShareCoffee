@@ -48,6 +48,10 @@ root.ShareCoffee.RESTFactory = class
     options.extend angularProperties
     options.eTag = '*' if @method is 'DELETE' or (@updateQuery is on and not options.eTag?)
 
+    stringify = if (typeof root.angular isnt "undefined")
+      root.angular.toJson
+    else JSON.stringify
+
     result =
       url: options.getUrl()
       method: @method
@@ -56,7 +60,7 @@ root.ShareCoffee.RESTFactory = class
         'Content-Type': ShareCoffee.REST.applicationType
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
-      data: if typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
+      data: if typeof options.payload is 'string' then options.payload else stringify(options.payload)
 
     if @method is 'GET'
       delete result.headers['Content-Type']
