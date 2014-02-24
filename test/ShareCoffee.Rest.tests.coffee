@@ -344,6 +344,14 @@ describe 'ShareCoffee.REST', ->
       actual = sut.angularJS {url: 'foo', payload: payload}
       actual.data.should.equal expected
 
+    it 'should stringify the payload using angular when available if it is not given as string', ->
+      payload =
+        name: 'foo'
+      root.angular = toJson: sinon.stub().withArgs(payload).returns("angular serialized")
+      sut = new ShareCoffee.RESTFactory 'POST'
+      actual = sut.angularJS {url: 'foo', payload: payload}
+      actual.data.should.equal "angular serialized"
+
     it 'should provide a If-Match property with value * if mathod is DELETE', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
       actual = sut.angularJS {url: 'foo'}
