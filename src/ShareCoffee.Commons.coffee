@@ -77,9 +77,10 @@ root.ShareCoffee.Commons = class
     "#{ShareCoffee.Commons.getAppWebUrl()}/_api/"
 
   # ##getFormDigest
-  # getFormDigest returns the Form Digest Control value using plain old JavaScript instead of relying on jQuery
+  # getFormDigest returns the Form Digest Control value using plain old JavaScript instead of relying on jQuery.
+  # When the Form Digest Control cannot be found, undefined is returned
   #
   # ### ReturnValue
   # Form Digest's value
   @getFormDigest = () ->
-    document.getElementById('__REQUESTDIGEST').value
+    document.getElementById('__REQUESTDIGEST')?.value
