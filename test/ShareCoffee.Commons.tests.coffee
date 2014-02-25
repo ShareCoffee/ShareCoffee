@@ -1,6 +1,6 @@
 chai = require 'chai'
 sinon = require 'sinon'
-chai.should()
+should = chai.should()
 
 require '../src/ShareCoffee.Commons'
 
@@ -81,6 +81,12 @@ describe 'ShareCoffee.Commons', ->
       stub.returns {value : expectedRequestDigest}
 
       ShareCoffee.Commons.getFormDigest().should.equal expectedRequestDigest
+
+    it 'should return undefined when the request digest element cannot be found', ->
+      stub = sinon.stub document, "getElementById"
+      stub.returns undefined
+
+      should.not.exist ShareCoffee.Commons.getFormDigest()
 
   describe 'getHostWebUrl', ->
 
