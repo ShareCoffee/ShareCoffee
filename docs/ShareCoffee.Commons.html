@@ -70,7 +70,7 @@
 
       
         
-        <p>Node.JS doesn’t offer window… </p>
+        <p>Node.JS doesn’t offer window…</p>
 
         
           <div class='highlight'><pre>root = <span class="hljs-built_in">window</span> ? <span class="hljs-built_in">global</span></pre></div>
@@ -88,7 +88,7 @@
 <p>This class offers different helper functions which makes your life as App-Dev easier</p>
 
         
-          <div class='highlight'><pre>root.ShareCoffee.Commons = <span class="hljs-class"><span class="hljs-keyword">class</span> </span></pre></div>
+          <div class='highlight'><pre>root.ShareCoffee.Commons = <span class="hljs-class"><span class="hljs-keyword">class</span></span></pre></div>
         
       
         
@@ -121,9 +121,9 @@
       
         
         <h2 id="getappweburl">getAppWebUrl</h2>
-<p>getAppWebUrl will return the AppWebUrl. if a custom load method is associated to 
+<p>getAppWebUrl will return the AppWebUrl. if a custom load method is associated to
 <strong>ShareCoffee.Commons.loadAppWebUrlFrom</strong> only this injected method will be executed
-in all other cases getAppWebUrl will first try to get the AppWebUrl from <strong>_spPageContextInfo</strong> 
+in all other cases getAppWebUrl will first try to get the AppWebUrl from <strong>_spPageContextInfo</strong>
 if this object isn’t present the method looks inside of the <strong>QueryString</strong></p>
 <h3 id="returnvalue">ReturnValue</h3>
 <p>Returns the current AppWebUrl or returns an empty String if no method contains a value</p>
@@ -131,6 +131,8 @@ if this object isn’t present the method looks inside of the <strong>QueryStrin
         
           <div class='highlight'><pre>  <span class="hljs-property">@getAppWebUrl</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-keyword">if</span> ShareCoffee.Commons.loadAppWebUrlFrom?
+      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> ShareCoffee.Commons.loadAppWebUrlFrom <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+        <span class="hljs-keyword">return</span> ShareCoffee.Commons.loadAppWebUrlFrom
       <span class="hljs-keyword">return</span> ShareCoffee.Commons.loadAppWebUrlFrom()
     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> _spPageContextInfo? &amp;&amp; _spPageContextInfo.webAbsoluteUrl?
       <span class="hljs-keyword">return</span> _spPageContextInfo.webAbsoluteUrl
@@ -154,8 +156,10 @@ in all other cases getHostWebUrl looks inside of the QueryString for SPHostUrl p
         
           <div class='highlight'><pre>  <span class="hljs-property">@getHostWebUrl</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
     <span class="hljs-keyword">if</span> ShareCoffee.Commons.loadHostWebUrlFrom?
+      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> ShareCoffee.Commons.loadHostWebUrlFrom <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+        <span class="hljs-keyword">return</span> ShareCoffee.Commons.loadHostWebUrlFrom
       <span class="hljs-keyword">return</span> ShareCoffee.Commons.loadHostWebUrlFrom()
-    
+
     hostWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter <span class="hljs-string">"SPHostUrl"</span>
     <span class="hljs-keyword">if</span> hostWebUrlFromQueryString
       <span class="hljs-keyword">return</span> decodeURIComponent hostWebUrlFromQueryString
@@ -183,7 +187,14 @@ in all other cases getHostWebUrl looks inside of the QueryString for SPHostUrl p
 
         
           <div class='highlight'><pre>  <span class="hljs-property">@getFormDigest</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
-    <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__REQUESTDIGEST'</span>).value</pre></div>
+    <span class="hljs-keyword">if</span> ShareCoffee.Commons.formDigestValue?
+      <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> ShareCoffee.Commons.formDigestValue <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+        <span class="hljs-keyword">return</span> ShareCoffee.Commons.formDigestValue
+      <span class="hljs-keyword">return</span> ShareCoffee.Commons.formDigestValue()
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__REQUESTDIGEST'</span>)?.value
+
+
+  <span class="hljs-property">@formDigestValue</span> = <span class="hljs-literal">null</span></pre></div>
         
       
       <div class="fleur">h</div>

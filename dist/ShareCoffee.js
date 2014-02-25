@@ -57,6 +57,9 @@ ShareCoffee (c) 2013 Thorsten Hans
     _Class.getAppWebUrl = function() {
       var appWebUrlFromQueryString;
       if (ShareCoffee.Commons.loadAppWebUrlFrom != null) {
+        if (typeof ShareCoffee.Commons.loadAppWebUrlFrom === 'string') {
+          return ShareCoffee.Commons.loadAppWebUrlFrom;
+        }
         return ShareCoffee.Commons.loadAppWebUrlFrom();
       } else if ((typeof _spPageContextInfo !== "undefined" && _spPageContextInfo !== null) && (_spPageContextInfo.webAbsoluteUrl != null)) {
         return _spPageContextInfo.webAbsoluteUrl;
@@ -75,6 +78,9 @@ ShareCoffee (c) 2013 Thorsten Hans
     _Class.getHostWebUrl = function() {
       var hostWebUrlFromQueryString;
       if (ShareCoffee.Commons.loadHostWebUrlFrom != null) {
+        if (typeof ShareCoffee.Commons.loadHostWebUrlFrom === 'string') {
+          return ShareCoffee.Commons.loadHostWebUrlFrom;
+        }
         return ShareCoffee.Commons.loadHostWebUrlFrom();
       }
       hostWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter("SPHostUrl");
@@ -93,8 +99,17 @@ ShareCoffee (c) 2013 Thorsten Hans
     };
 
     _Class.getFormDigest = function() {
-      return document.getElementById('__REQUESTDIGEST').value;
+      var _ref;
+      if (ShareCoffee.Commons.formDigestValue != null) {
+        if (typeof ShareCoffee.Commons.formDigestValue === 'string') {
+          return ShareCoffee.Commons.formDigestValue;
+        }
+        return ShareCoffee.Commons.formDigestValue();
+      }
+      return (_ref = document.getElementById('__REQUESTDIGEST')) != null ? _ref.value : void 0;
     };
+
+    _Class.formDigestValue = null;
 
     return _Class;
 
@@ -344,7 +359,7 @@ ShareCoffee (c) 2013 Thorsten Hans
     };
 
     _Class.prototype.angularJS = function(angularProperties) {
-      var options, result;
+      var options, result, stringify;
       if ((angularProperties != null) && (angularProperties.getRequestProperties != null)) {
         angularProperties = angularProperties.getRequestProperties();
       }
@@ -353,6 +368,7 @@ ShareCoffee (c) 2013 Thorsten Hans
       if (this.method === 'DELETE' || (this.updateQuery === true && (options.eTag == null))) {
         options.eTag = '*';
       }
+      stringify = typeof root.angular !== "undefined" ? root.angular.toJson : JSON.stringify;
       result = {
         url: options.getUrl(),
         method: this.method,
@@ -362,7 +378,7 @@ ShareCoffee (c) 2013 Thorsten Hans
           'X-HTTP-Method': 'MERGE',
           'If-Match': options.eTag
         },
-        data: typeof options.payload === 'string' ? options.payload : JSON.stringify(options.payload)
+        data: typeof options.payload === 'string' ? options.payload : stringify(options.payload)
       };
       if (this.method === 'GET') {
         delete result.headers['Content-Type'];

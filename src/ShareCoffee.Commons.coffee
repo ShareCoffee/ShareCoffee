@@ -1,4 +1,4 @@
-# Node.JS doesn't offer window... 
+# Node.JS doesn't offer window...
 root = window ? global
 
 # ensure the core namespace
@@ -6,11 +6,11 @@ root.ShareCoffee or = {}
 
 # ##ShareCoffee.Commons
 # This class offers different helper functions which makes your life as App-Dev easier
-root.ShareCoffee.Commons = class 
+root.ShareCoffee.Commons = class
 
   # ##getQueryString
   # getQueryString returns the entire QueryString from the current document's URL
-  # 
+  #
   # ### ReturnValue
   # The entire QueryString
   @getQueryString = () ->
@@ -18,10 +18,10 @@ root.ShareCoffee.Commons = class
 
   # ##getQueryStringParameter
   # getQueryStringParameter returns a single parameter value from the current document's QueryString
-  # 
+  #
   # ### Parameters
   #   * [String] parameterName - The name of the parameter
-  # 
+  #
   # ### ReturnValue
   # Returns the value of the parameter, if no parameter is found by the name, an empty string is returned
   @getQueryStringParameter = (parameterName) ->
@@ -30,15 +30,17 @@ root.ShareCoffee.Commons = class
     parameterValue[0] ? ''
 
   # ##getAppWebUrl
-  # getAppWebUrl will return the AppWebUrl. if a custom load method is associated to 
+  # getAppWebUrl will return the AppWebUrl. if a custom load method is associated to
   # **ShareCoffee.Commons.loadAppWebUrlFrom** only this injected method will be executed
-  # in all other cases getAppWebUrl will first try to get the AppWebUrl from **_spPageContextInfo** 
+  # in all other cases getAppWebUrl will first try to get the AppWebUrl from **_spPageContextInfo**
   # if this object isn't present the method looks inside of the **QueryString**
   #
   # ### ReturnValue
   # Returns the current AppWebUrl or returns an empty String if no method contains a value
   @getAppWebUrl = () ->
     if ShareCoffee.Commons.loadAppWebUrlFrom?
+      if typeof ShareCoffee.Commons.loadAppWebUrlFrom is 'string'
+        return ShareCoffee.Commons.loadAppWebUrlFrom
       return ShareCoffee.Commons.loadAppWebUrlFrom()
     else if _spPageContextInfo? && _spPageContextInfo.webAbsoluteUrl?
       return _spPageContextInfo.webAbsoluteUrl
@@ -59,8 +61,10 @@ root.ShareCoffee.Commons = class
   # Returns the current HostWebUrl or returns an empty string if neither custom load method associated nor QueryString parameter is present
   @getHostWebUrl = () ->
     if ShareCoffee.Commons.loadHostWebUrlFrom?
+      if typeof ShareCoffee.Commons.loadHostWebUrlFrom is 'string'
+        return ShareCoffee.Commons.loadHostWebUrlFrom
       return ShareCoffee.Commons.loadHostWebUrlFrom()
-    
+
     hostWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter "SPHostUrl"
     if hostWebUrlFromQueryString
       return decodeURIComponent hostWebUrlFromQueryString
@@ -82,4 +86,11 @@ root.ShareCoffee.Commons = class
   # ### ReturnValue
   # Form Digest's value
   @getFormDigest = () ->
-    document.getElementById('__REQUESTDIGEST').value
+    if ShareCoffee.Commons.formDigestValue?
+      if typeof ShareCoffee.Commons.formDigestValue is 'string'
+        return ShareCoffee.Commons.formDigestValue
+      return ShareCoffee.Commons.formDigestValue()
+    return document.getElementById('__REQUESTDIGEST')?.value
+
+
+  @formDigestValue = null
