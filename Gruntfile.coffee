@@ -8,7 +8,7 @@ module.exports = (grunt)->
         dest: 'nuget/'
         verbose: true
         options:
-          version: '0.0.10'
+          version: '0.0.11'
     coffee:
       options:
         sourceMap:true
