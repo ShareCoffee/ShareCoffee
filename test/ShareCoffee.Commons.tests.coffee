@@ -53,9 +53,9 @@ describe 'ShareCoffee.Commons', ->
       actual.should.equal "http://myappweburl"
       delete ShareCoffee.Commons.loadAppWebUrlFrom
 
-    it 'should look for AppWebUrl also within the QueryString', ->
+    it 'should look for AppWebUrl also within the QueryString and removes trailing hash routes', ->
       delete root._spPageContextInfo
-      root.document.URL = "#{root.document.URL}&SPAppWebUrl=https%3A%2F%2Ffoo.sharepoint.com"
+      root.document.URL = "#{root.document.URL}&SPAppWebUrl=https%3A%2F%2Ffoo.sharepoint.com#/bar"
       expected = "https://foo.sharepoint.com"
       actual = ShareCoffee.Commons.getAppWebUrl()
       actual.should.equal expected

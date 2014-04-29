@@ -47,7 +47,8 @@ root.ShareCoffee.Commons = class
 
     appWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter "SPAppWebUrl"
     if appWebUrlFromQueryString
-      return decodeURIComponent appWebUrlFromQueryString
+      appWebUrl = decodeURIComponent appWebUrlFromQueryString
+      return appWebUrl.replace /#.*$/, '' # http://appWebUrl#/someRoute -> http://appWebUrl
     else
       console.error "_spPageContextInfo is not defined" if console and console.error
       return ""
