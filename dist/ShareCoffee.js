@@ -1,5 +1,5 @@
 /*
-ShareCoffee (c) 2013 Thorsten Hans 
+ShareCoffee (c) 2014 Thorsten Hans 
 | dotnet-rocks.com | https://github.com/ThorstenHans/ShareCoffee/ | under MIT License |
 */
 
@@ -55,7 +55,7 @@ ShareCoffee (c) 2013 Thorsten Hans
     };
 
     _Class.getAppWebUrl = function() {
-      var appWebUrlFromQueryString;
+      var appWebUrl, appWebUrlFromQueryString;
       if (ShareCoffee.Commons.loadAppWebUrlFrom != null) {
         if (typeof ShareCoffee.Commons.loadAppWebUrlFrom === 'string') {
           return ShareCoffee.Commons.loadAppWebUrlFrom;
@@ -66,7 +66,8 @@ ShareCoffee (c) 2013 Thorsten Hans
       }
       appWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter("SPAppWebUrl");
       if (appWebUrlFromQueryString) {
-        return decodeURIComponent(appWebUrlFromQueryString);
+        appWebUrl = decodeURIComponent(appWebUrlFromQueryString);
+        return appWebUrl.replace(/#.*$/, '');
       } else {
         if (console && console.error) {
           console.error("_spPageContextInfo is not defined");

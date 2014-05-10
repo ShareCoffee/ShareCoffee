@@ -8,7 +8,7 @@ module.exports = (grunt)->
         dest: 'nuget/'
         verbose: true
         options:
-          version: '0.0.11'
+          version: '0.0.12'
     coffee:
       options:
         sourceMap:true
@@ -22,7 +22,7 @@ module.exports = (grunt)->
         src: ['test/**/*.coffee']
     uglify:
       options:
-        banner: '/* ShareCoffee (c) 2013 Thorsten Hans | dotnet-rocks.com | https://github.com/ThorstenHans/ShareCoffee/ | under MIT License | */'
+        banner: '/* ShareCoffee (c) 2014 Thorsten Hans | dotnet-rocks.com | https://github.com/ThorstenHans/ShareCoffee/ | under MIT License | */'
       dist:
         files:
           'dist/ShareCoffee.min.js': 'dist/ShareCoffee.js'
@@ -46,4 +46,5 @@ module.exports = (grunt)->
   grunt.registerTask 'default', ['simplemocha', 'docco:coffee', 'coffee','uglify', 'nugetpack']
   grunt.registerTask 'build', ['simplemocha', 'docco:coffee', 'coffee','uglify']
   grunt.registerTask 'test', ['simplemocha']
+  grunt.registerTask 'nuget', ['nugetpack']
   grunt.registerTask 'docs', ['docco:coffee']

@@ -1,5 +1,5 @@
 ###
-ShareCoffee (c) 2013 Thorsten Hans 
+ShareCoffee (c) 2014 Thorsten Hans 
 | dotnet-rocks.com | https://github.com/ThorstenHans/ShareCoffee/ | under MIT License |
 ###
 
@@ -77,7 +77,8 @@ root.ShareCoffee.Commons = class
 
     appWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter "SPAppWebUrl"
     if appWebUrlFromQueryString
-      return decodeURIComponent appWebUrlFromQueryString
+      appWebUrl = decodeURIComponent appWebUrlFromQueryString
+      return appWebUrl.replace /#.*$/, '' # http://appWebUrl#/someRoute -> http://appWebUrl
     else
       console.error "_spPageContextInfo is not defined" if console and console.error
       return ""

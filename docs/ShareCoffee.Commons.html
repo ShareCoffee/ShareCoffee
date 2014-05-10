@@ -139,7 +139,8 @@ if this object isn’t present the method looks inside of the <strong>QueryStrin
 
     appWebUrlFromQueryString = ShareCoffee.Commons.getQueryStringParameter <span class="hljs-string">"SPAppWebUrl"</span>
     <span class="hljs-keyword">if</span> appWebUrlFromQueryString
-      <span class="hljs-keyword">return</span> decodeURIComponent appWebUrlFromQueryString
+      appWebUrl = decodeURIComponent appWebUrlFromQueryString
+      <span class="hljs-keyword">return</span> appWebUrl.replace <span class="hljs-regexp">/#.*$/</span>, <span class="hljs-string">''</span> <span class="hljs-comment"># http://appWebUrl#/someRoute -&gt; http://appWebUrl</span>
     <span class="hljs-keyword">else</span>
       <span class="hljs-built_in">console</span>.error <span class="hljs-string">"_spPageContextInfo is not defined"</span> <span class="hljs-keyword">if</span> <span class="hljs-built_in">console</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">console</span>.error
       <span class="hljs-keyword">return</span> <span class="hljs-string">""</span></pre></div>
