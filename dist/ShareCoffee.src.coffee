@@ -44,6 +44,8 @@ root.ShareCoffee.Commons = class
   # ### ReturnValue
   # The entire QueryString
   @getQueryString = () ->
+    if document.URL.indexOf('?') is -1
+      return ""
     document.URL.split("?")[1]
 
   # ##getQueryStringParameter
@@ -55,7 +57,7 @@ root.ShareCoffee.Commons = class
   # ### ReturnValue
   # Returns the value of the parameter, if no parameter is found by the name, an empty string is returned
   @getQueryStringParameter = (parameterName) ->
-    params = document.URL.split("?")[1].split("&")
+    params = @getQueryString().split("&")
     parameterValue = (p.split("=")[1] for p in params when p.split("=")[0] is parameterName)
     parameterValue[0] ? ''
 

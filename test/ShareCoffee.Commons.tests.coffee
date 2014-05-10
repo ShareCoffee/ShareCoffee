@@ -17,6 +17,13 @@ describe 'ShareCoffee.Commons', ->
     delete root.document
 
   describe 'getQueryString', ->
+    
+    it 'should return an empty string if no parameters present', ->
+      backup = root.document.URL
+      root.document.URL = "http://foo.bar"
+
+      ShareCoffee.Commons.getQueryString().should.equal ''
+      root.document.URL = backup
 
     it 'should return the entire querystring if present', ->
       ShareCoffee.Commons.getQueryString().should.equal 'Foo=Bar'

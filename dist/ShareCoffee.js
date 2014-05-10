@@ -34,12 +34,15 @@ ShareCoffee (c) 2014 Thorsten Hans
     function _Class() {}
 
     _Class.getQueryString = function() {
+      if (document.URL.indexOf('?') === -1) {
+        return "";
+      }
       return document.URL.split("?")[1];
     };
 
     _Class.getQueryStringParameter = function(parameterName) {
       var p, parameterValue, params, _ref;
-      params = document.URL.split("?")[1].split("&");
+      params = this.getQueryString().split("&");
       parameterValue = (function() {
         var _i, _len, _results;
         _results = [];

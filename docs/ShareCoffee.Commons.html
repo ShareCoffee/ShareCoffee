@@ -99,6 +99,8 @@
 
         
           <div class='highlight'><pre>  <span class="hljs-property">@getQueryString</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-built_in">document</span>.URL.indexOf(<span class="hljs-string">'?'</span>) <span class="hljs-keyword">is</span> -<span class="hljs-number">1</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-string">""</span>
     <span class="hljs-built_in">document</span>.URL.split(<span class="hljs-string">"?"</span>)[<span class="hljs-number">1</span>]</pre></div>
         
       
@@ -114,7 +116,7 @@
 
         
           <div class='highlight'><pre>  <span class="hljs-property">@getQueryStringParameter</span> = <span class="hljs-function"><span class="hljs-params">(parameterName)</span> -&gt;</span>
-    params = <span class="hljs-built_in">document</span>.URL.split(<span class="hljs-string">"?"</span>)[<span class="hljs-number">1</span>].split(<span class="hljs-string">"&amp;"</span>)
+    params = <span class="hljs-property">@getQueryString</span>().split(<span class="hljs-string">"&amp;"</span>)
     parameterValue = (p.split(<span class="hljs-string">"="</span>)[<span class="hljs-number">1</span>] <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> params <span class="hljs-keyword">when</span> p.split(<span class="hljs-string">"="</span>)[<span class="hljs-number">0</span>] <span class="hljs-keyword">is</span> parameterName)
     parameterValue[<span class="hljs-number">0</span>] ? <span class="hljs-string">''</span></pre></div>
         
