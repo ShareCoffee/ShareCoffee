@@ -1,5 +1,6 @@
 ShareCoffee 0.0.12
 
+now with travis ci integration
 See detailed tutorials on https://github.com/ThorstenHans/ShareCoffee
 
 See also available addons
