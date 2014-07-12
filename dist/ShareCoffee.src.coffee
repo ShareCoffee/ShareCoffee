@@ -220,7 +220,7 @@ root.ShareCoffee.CrossDomain = class
   # ##crossDomainLibrariesLoaded
   # flag which determines if CrossDomain libraries are loaded or not.
   @crossDomainLibrariesLoaded = false
-
+  @csomCrossDomainLibrariesLoaded = false
   # ##loadCSOMCrossDomainLibraries
   # This method will load all required libraries from SharePoint/Office365 that are required when you'd like to use CSOM(JSOM) from your Cloud-Hosted-App
   #
@@ -229,8 +229,11 @@ root.ShareCoffee.CrossDomain = class
   #   * [function] onError - Error callback, which will be invoked when an error is raised
   @loadCSOMCrossDomainLibraries = (onSuccess, onError) ->
     onAnyError = () =>
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = false
       onError() if onError
+    if ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded is on
+      onSuccess() if onSuccess
+      return
     runtimeScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.Runtime.js"
     spScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.js"
     requestExecutorScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.RequestExecutor.js"
@@ -238,7 +241,7 @@ root.ShareCoffee.CrossDomain = class
     ShareCoffee.Core.loadScript runtimeScriptUrl, ()=>
       ShareCoffee.Core.loadScript spScriptUrl, ()=>
         ShareCoffee.Core.loadScript requestExecutorScriptUrl, ()=>
-          ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+          ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = true
           onSuccess() if onSuccess
         , onAnyError
       , onAnyError
@@ -254,6 +257,9 @@ root.ShareCoffee.CrossDomain = class
     onAnyError = () =>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
       onError() if onError
+    if ShareCoffee.CrossDomain.crossDomainLibrariesLoaded is on
+      onSuccess() if onSuccess
+      return 
     requestExecutorScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.RequestExecutor.js"
     ShareCoffee.Core.loadScript requestExecutorScriptUrl, ()=>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
@@ -283,7 +289,7 @@ root.ShareCoffee.CrossDomain = class
   # ### ReturnValue
   # Returns an instance of SP.ClientContext which is targeting the AppWeb as far as all required libraries are loeded
   @getClientContext = () ->
-    throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext' if ShareCoffee.CrossDomain.crossDomainLibrariesLoaded is false
+    throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCSOMCrossDomainLibraries() before acting with the ClientCotext' if ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded is false
     appWebUrl = ShareCoffee.Commons.getAppWebUrl()
     ctx = new SP.ClientContext appWebUrl
     factory = new SP.ProxyWebRequestExecutorFactory appWebUrl
@@ -300,7 +306,7 @@ root.ShareCoffee.CrossDomain = class
   # ### ReturnValue
   # returns an instance of SP.Web targeting the suggested SharePoint Web
   @getHostWeb = (ctx, hostWebUrl = ShareCoffee.Commons.getHostWebUrl()) ->
-    throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext' if ShareCoffee.CrossDomain.crossDomainLibrariesLoaded is false
+    throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCSOMCrossDomainLibraries() before acting with the ClientCotext' if ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded is false
     throw 'ClientContext cant be null, call ShareCoffee.CrossDomain.getClientContext() first' if not ctx?
     appContextSite = new SP.AppContextSite ctx, hostWebUrl
     appContextSite.get_web()
