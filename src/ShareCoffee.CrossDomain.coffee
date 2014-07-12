@@ -47,7 +47,7 @@ root.ShareCoffee.CrossDomain = class
   # ##crossDomainLibrariesLoaded
   # flag which determines if CrossDomain libraries are loaded or not.
   @crossDomainLibrariesLoaded = false
-
+  @csomCrossDomainLibrariesLoaded = false
   # ##loadCSOMCrossDomainLibraries
   # This method will load all required libraries from SharePoint/Office365 that are required when you'd like to use CSOM(JSOM) from your Cloud-Hosted-App
   #
@@ -56,8 +56,11 @@ root.ShareCoffee.CrossDomain = class
   #   * [function] onError - Error callback, which will be invoked when an error is raised
   @loadCSOMCrossDomainLibraries = (onSuccess, onError) ->
     onAnyError = () =>
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = false
       onError() if onError
+    if ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded is on
+      onSuccess() if onSuccess
+      return
     runtimeScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.Runtime.js"
     spScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.js"
     requestExecutorScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.RequestExecutor.js"
@@ -65,7 +68,7 @@ root.ShareCoffee.CrossDomain = class
     ShareCoffee.Core.loadScript runtimeScriptUrl, ()=>
       ShareCoffee.Core.loadScript spScriptUrl, ()=>
         ShareCoffee.Core.loadScript requestExecutorScriptUrl, ()=>
-          ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+          ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = true
           onSuccess() if onSuccess
         , onAnyError
       , onAnyError
@@ -81,6 +84,9 @@ root.ShareCoffee.CrossDomain = class
     onAnyError = () =>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
       onError() if onError
+    if ShareCoffee.CrossDomain.crossDomainLibrariesLoaded is on
+      onSuccess() if onSuccess
+      return 
     requestExecutorScriptUrl = "#{ShareCoffee.Commons.getHostWebUrl()}/_layouts/15/SP.RequestExecutor.js"
     ShareCoffee.Core.loadScript requestExecutorScriptUrl, ()=>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true

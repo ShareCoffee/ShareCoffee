@@ -241,8 +241,9 @@ describe 'ShareCoffee.CrossDomain', ->
     afterEach () ->
       delete root.ShareCoffee.Core
 
-    it 'should call loadScript on ShareCoffee.Core thrice ', ->
+    it 'should call loadScript on ShareCoffee.Core once for REST ', ->
       spy = sinon.spy ShareCoffee.Core, 'loadScript'
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false 
       ShareCoffee.CrossDomain.loadCrossDomainLibrary null, null
       spy.calledOnce.should.be.ok
       spy.restore()
@@ -251,6 +252,7 @@ describe 'ShareCoffee.CrossDomain', ->
       loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
         s() if s
       onSuccess = sinon.spy()
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false 
       ShareCoffee.CrossDomain.loadCrossDomainLibrary onSuccess, null
       onSuccess.calledOnce.should.be.true
       loadScriptStub.restore()
@@ -259,6 +261,7 @@ describe 'ShareCoffee.CrossDomain', ->
       loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
         e() if e
       onError = sinon.spy()
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
       ShareCoffee.CrossDomain.loadCrossDomainLibrary null, onError
       onError.calledOnce.should.be.true
       loadScriptStub.restore()
@@ -267,6 +270,7 @@ describe 'ShareCoffee.CrossDomain', ->
       loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
         s() if s
       onSuccess = sinon.spy()
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false 
       ShareCoffee.CrossDomain.loadCrossDomainLibrary onSuccess, null
       onSuccess.calledOnce.should.be.true
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded.should.be.true
@@ -276,6 +280,7 @@ describe 'ShareCoffee.CrossDomain', ->
       loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
         e() if e
       onError = sinon.spy()
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false 
       ShareCoffee.CrossDomain.loadCrossDomainLibrary null, onError
       onError.calledOnce.should.be.true
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded.should.be.false
