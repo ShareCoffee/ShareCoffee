@@ -46,6 +46,27 @@ describe 'ShareCoffee.CrossDomain', ->
       ShareCoffee.CrossDomain.build.update.should.be.an 'object'
       ShareCoffee.CrossDomain.build.delete.should.be.an 'object'
 
+    it 'should provide a configured object for all CRUD ops as object (IE8 fixes)', ->
+      forCreate = ShareCoffee.CrossDomain.build.create.f
+      forRead = ShareCoffee.CrossDomain.build.read.f
+      forUpdate = ShareCoffee.CrossDomain.build.update.f
+      forDelete = ShareCoffee.CrossDomain.build.delete.f
+
+      forCreate.should.be.an 'object'
+      forRead.should.be.an 'object'
+      forUpdate.should.be.an 'object'
+      forDelete.should.be.an 'object'
+
+      forCreate.should.have.property('method')
+      forCreate.method.should.equal 'POST'
+      forRead.should.have.property('method')
+      forRead.method.should.equal 'GET'
+      forUpdate.should.have.property('method')
+      forUpdate.method.should.equal 'POST'
+      forUpdate.updateQuery.should.be.true
+      forDelete.should.have.property('method')
+      forDelete.method.should.equal 'DELETE'
+
     it 'should provide a configured object for all CRUD ops as object', ->
       forCreate = ShareCoffee.CrossDomain.build.create.for
       forRead = ShareCoffee.CrossDomain.build.read.for

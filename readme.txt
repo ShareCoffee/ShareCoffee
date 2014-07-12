@@ -1,4 +1,4 @@
-ShareCoffee 0.0.12
+ShareCoffee 0.1.0
 
 now with travis ci integration
 See detailed tutorials on https://github.com/ThorstenHans/ShareCoffee
@@ -8,6 +8,8 @@ See also available addons
   - ShareCoffee.UserProfiles
 
 Release Notes
+  - 0.1.0  - IE8 fixes for REST and CrossDomain. IE8 doesn't allow to call a method named 'for' there is now an alternative method called 'f'. use it like the following ShareCoffee.REST.build.create.f.angularJS()
+  
   - 0.0.12 - HashUrls are removed by ShareCoffee.Commons in order to provide a even better angularJS integration.
   - 0.0.11 - ShareCoffee allows you now to inject a custom load method for ShareCoffee.Commons.getFormDigest(). You can either set a method to ShareCoffee.commons.formDigestValue or a string. depending of the type either the function will be invoked or the actual string will be returned; ShareCoffee.Commons.loadAppWebUrlFrom and ShareCoffee.Commons.loadHostWebUrlFrom are now also supporting strings and functions.
   - 0.0.10 - Added $s as a shortcut for ShareCoffee; getFormDigest will now only be called when not executing GET requests
