@@ -212,12 +212,16 @@
           <div class='highlight'><pre>  <span class="hljs-property">@build</span> =
     <span class="hljs-attribute">create</span>:
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'POST'</span>
+      <span class="hljs-attribute">f</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'POST'</span>
     <span class="hljs-attribute">read</span>:
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'GET'</span>
+      <span class="hljs-attribute">f</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'GET'</span>
     update :
       <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory(<span class="hljs-string">'POST'</span>, <span class="hljs-literal">true</span>)
+      <span class="hljs-attribute">f</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory(<span class="hljs-string">'POST'</span>, <span class="hljs-literal">true</span>)
     <span class="hljs-attribute">delete</span>:
-      <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'DELETE'</span></pre></div>
+      <span class="hljs-attribute">for</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'DELETE'</span>
+      <span class="hljs-attribute">f</span>: <span class="hljs-keyword">new</span> ShareCoffee.RESTFactory <span class="hljs-string">'DELETE'</span></pre></div>
         
       
         

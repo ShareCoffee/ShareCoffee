@@ -35,6 +35,27 @@ describe 'ShareCoffee.REST', ->
       ShareCoffee.REST.build.update.should.be.an 'object'
       ShareCoffee.REST.build.delete.should.be.an 'object'
 
+    it 'should provide a "for" object for all CRUD ops as object (IE8 fixes)', ->
+      forCreate = ShareCoffee.REST.build.create.f
+      forRead = ShareCoffee.REST.build.read.f
+      forUpdate = ShareCoffee.REST.build.update.f
+      forDelete = ShareCoffee.REST.build.delete.f
+
+      forCreate.should.be.an 'object'
+      forRead.should.be.an 'object'
+      forUpdate.should.be.an 'object'
+      forDelete.should.be.an 'object'
+
+      forCreate.should.have.property('method')
+      forCreate.method.should.equal 'POST'
+      forRead.should.have.property('method')
+      forRead.method.should.equal 'GET'
+      forUpdate.should.have.property('method')
+      forUpdate.method.should.equal 'POST'
+      forUpdate.updateQuery.should.be.true
+      forDelete.should.have.property('method')
+      forDelete.method.should.equal 'DELETE'
+
     it 'should provide a "for" object for all CRUD ops as object', ->
       forCreate = ShareCoffee.REST.build.create.for
       forRead = ShareCoffee.REST.build.read.for

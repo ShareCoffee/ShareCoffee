@@ -121,12 +121,16 @@ root.ShareCoffee.REST = class
   @build =
     create:
       for: new ShareCoffee.RESTFactory 'POST'
+      f: new ShareCoffee.RESTFactory 'POST'
     read:
       for: new ShareCoffee.RESTFactory 'GET'
+      f: new ShareCoffee.RESTFactory 'GET'
     update :
       for: new ShareCoffee.RESTFactory('POST', true)
+      f: new ShareCoffee.RESTFactory('POST', true)
     delete:
       for: new ShareCoffee.RESTFactory 'DELETE'
+      f: new ShareCoffee.RESTFactory 'DELETE'
 # ##ShareCoffee.REST.RequestProperties
 # Use this class to configure your REST requests. If you prefer plain JSON objects, you can also provide the configuration as plain JSON object
 #

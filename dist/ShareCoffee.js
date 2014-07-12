@@ -267,16 +267,20 @@ ShareCoffee (c) 2014 Thorsten Hans
 
     _Class.build = {
       create: {
-        "for": new ShareCoffee.CrossDomainRESTFactory('POST')
+        "for": new ShareCoffee.CrossDomainRESTFactory('POST'),
+        f: new ShareCoffee.CrossDomainRESTFactory('POST')
       },
       read: {
-        "for": new ShareCoffee.CrossDomainRESTFactory('GET')
+        "for": new ShareCoffee.CrossDomainRESTFactory('GET'),
+        f: new ShareCoffee.CrossDomainRESTFactory('GET')
       },
       update: {
-        "for": new ShareCoffee.CrossDomainRESTFactory('POST', true)
+        "for": new ShareCoffee.CrossDomainRESTFactory('POST', true),
+        f: new ShareCoffee.CrossDomainRESTFactory('POST', true)
       },
       "delete": {
-        "for": new ShareCoffee.CrossDomainRESTFactory('DELETE')
+        "for": new ShareCoffee.CrossDomainRESTFactory('DELETE'),
+        f: new ShareCoffee.CrossDomainRESTFactory('DELETE')
       }
     };
 
@@ -465,16 +469,20 @@ ShareCoffee (c) 2014 Thorsten Hans
 
     _Class.build = {
       create: {
-        "for": new ShareCoffee.RESTFactory('POST')
+        "for": new ShareCoffee.RESTFactory('POST'),
+        f: new ShareCoffee.RESTFactory('POST')
       },
       read: {
-        "for": new ShareCoffee.RESTFactory('GET')
+        "for": new ShareCoffee.RESTFactory('GET'),
+        f: new ShareCoffee.RESTFactory('GET')
       },
       update: {
-        "for": new ShareCoffee.RESTFactory('POST', true)
+        "for": new ShareCoffee.RESTFactory('POST', true),
+        f: new ShareCoffee.RESTFactory('POST', true)
       },
       "delete": {
-        "for": new ShareCoffee.RESTFactory('DELETE')
+        "for": new ShareCoffee.RESTFactory('DELETE'),
+        f: new ShareCoffee.RESTFactory('DELETE')
       }
     };
 

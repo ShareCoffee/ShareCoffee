@@ -95,15 +95,20 @@ root.ShareCoffee.CrossDomain = class
 
   # ##build
   # build is the entry point for CRUD operations using the REST interface it supports create, read, update, delete
+  # there is a 'f' clone right now which will work with IE8 which doesnt allow a method to be called 'for'
   @build =
     create:
       for: new ShareCoffee.CrossDomainRESTFactory 'POST'
+      f: new ShareCoffee.CrossDomainRESTFactory 'POST'
     read:
       for: new ShareCoffee.CrossDomainRESTFactory 'GET'
+      f: new ShareCoffee.CrossDomainRESTFactory 'GET'
     update:
       for: new ShareCoffee.CrossDomainRESTFactory('POST', true)
+      f: new ShareCoffee.CrossDomainRESTFactory('POST', true)  
     delete:
       for: new ShareCoffee.CrossDomainRESTFactory 'DELETE'
+      f: new ShareCoffee.CrossDomainRESTFactory 'DELETE'
 
   # ##getClientContext
   # It checks if all required cross domain libraries are loaded for using CSOM from a Cloud-Hosted App, if so, it will return the preconfigured SP.ClientContext instance
