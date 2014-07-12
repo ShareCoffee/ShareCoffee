@@ -1,4 +1,4 @@
-﻿ShareCoffee 0.1.0
+﻿ShareCoffee 0.1.1
 
 now with travis ci integration
 See detailed tutorials on https://github.com/ThorstenHans/ShareCoffee
@@ -8,6 +8,7 @@ See also available addons
   - ShareCoffee.UserProfiles
 
 Release Notes
+  - 0.1.1 dedicated handling for CrossDomain libraries in both cases (CSOM|REST), libraries will now load only once. by evaluating crossDomainLibrariesLoaded or csomCrossDomainLibrariesLoaded before actually executing loadScript() internally
   - 0.1.0  - IE8 fixes for REST and CrossDomain. IE8 doesn't allow to call a method named 'for' there is now an alternative method called 'f'. use it like the following ShareCoffee.REST.build.create.f.angularJS()
   - 0.0.13 - Fixed broken NuGet Package
   - 0.0.12 - HashUrls are removed by ShareCoffee.Commons in order to provide a even better angularJS integration.

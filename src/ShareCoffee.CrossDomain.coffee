@@ -116,7 +116,7 @@ root.ShareCoffee.CrossDomain = class
   # ### ReturnValue
   # Returns an instance of SP.ClientContext which is targeting the AppWeb as far as all required libraries are loeded
   @getClientContext = () ->
-    throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext' if ShareCoffee.CrossDomain.crossDomainLibrariesLoaded is false
+    throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCSOMCrossDomainLibraries() before acting with the ClientCotext' if ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded is false
     appWebUrl = ShareCoffee.Commons.getAppWebUrl()
     ctx = new SP.ClientContext appWebUrl
     factory = new SP.ProxyWebRequestExecutorFactory appWebUrl
@@ -133,7 +133,7 @@ root.ShareCoffee.CrossDomain = class
   # ### ReturnValue
   # returns an instance of SP.Web targeting the suggested SharePoint Web
   @getHostWeb = (ctx, hostWebUrl = ShareCoffee.Commons.getHostWebUrl()) ->
-    throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext' if ShareCoffee.CrossDomain.crossDomainLibrariesLoaded is false
+    throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCSOMCrossDomainLibraries() before acting with the ClientCotext' if ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded is false
     throw 'ClientContext cant be null, call ShareCoffee.CrossDomain.getClientContext() first' if not ctx?
     appContextSite = new SP.AppContextSite ctx, hostWebUrl
     appContextSite.get_web()
