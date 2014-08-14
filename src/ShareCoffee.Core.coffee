@@ -4,12 +4,22 @@ root = global ? window
 # ensure the core namespace
 root.ShareCoffee or = {}
 
+# ##JsonRequestBehaviors
+# Offering three different modes for REST responses
+# verbose - will set Accept heraders to `application/json;odata=verbose`
+# default - will set Accept heraders to `application/json;odata=verbose`
+# minimal - will set Accept heraders to `application/json;odata=minimalmetadata`
+# nometadata - will set Accept heraders to `application/json;odata=nometadata`
 root.ShareCoffee.JsonRequestBehaviors =
   default: 'application/json;odata=verbose'
   verbose: 'application/json;odata=verbose'
   minimal: 'application/json;odata=minimalmetadata'
   nometadata: 'application/json;odata=nometadata'
 
+# ##ShareCoffee.jsonRequestBehavior
+# use this global setting to use either verbose|minimalmetadata|nometadata mode for REST requests (JSONLight support)
+# See **ShareCoffee.JsonRequestBehaviors** object for more info
+# [default] verbose
 root.ShareCoffee.jsonRequestBehavior = "application/json;odata=verbose"
 
 # ##ShareCoffee.Core

@@ -107,8 +107,8 @@
       <span class="hljs-attribute">success</span>: options.onSuccess
       <span class="hljs-attribute">error</span>: options.onError
       <span class="hljs-attribute">headers</span>:
-        <span class="hljs-string">'Accept'</span>: ShareCoffee.REST.applicationType
-        <span class="hljs-string">'Content-Type'</span>: ShareCoffee.REST.applicationType
+        <span class="hljs-string">'Accept'</span>: ShareCoffee.jsonRequestBehavior
+        <span class="hljs-string">'Content-Type'</span>: ShareCoffee.REST.contentType
         <span class="hljs-string">'X-HTTP-Method'</span> : <span class="hljs-string">'MERGE'</span>
         <span class="hljs-string">'If-Match'</span> : options.eTag
       <span class="hljs-attribute">body</span>: <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> options.payload <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span> options.payload <span class="hljs-keyword">else</span> JSON.stringify(options.payload)

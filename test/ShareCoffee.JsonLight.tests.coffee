@@ -11,7 +11,10 @@ describe 'ShareCoffee', ->
     it 'should expose jsonRequestBehavior as property', ->
         ShareCoffee.should.have.property 'jsonRequestBehavior'
         ShareCoffee.jsonRequestBehavior.should.be.an 'string'
-
+describe 'ShareCoffee.JSONLight Support', ->
+    beforeEach () ->
+      ShareCoffee.jsonRequestBehavior = ShareCoffee.JsonRequestBehaviors.default
+      
     it 'should provide verbose mode as default', ->
         actual = ShareCoffee.jsonRequestBehavior
         actual.should.be.an 'string'

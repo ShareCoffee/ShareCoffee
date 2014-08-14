@@ -134,12 +134,22 @@ root = global ? window
 # ensure the core namespace
 root.ShareCoffee or = {}
 
+# ##JsonRequestBehaviors
+# Offering three different modes for REST responses
+# verbose - will set Accept heraders to `application/json;odata=verbose`
+# default - will set Accept heraders to `application/json;odata=verbose`
+# minimal - will set Accept heraders to `application/json;odata=minimalmetadata`
+# nometadata - will set Accept heraders to `application/json;odata=nometadata`
 root.ShareCoffee.JsonRequestBehaviors =
   default: 'application/json;odata=verbose'
   verbose: 'application/json;odata=verbose'
   minimal: 'application/json;odata=minimalmetadata'
   nometadata: 'application/json;odata=nometadata'
 
+# ##ShareCoffee.jsonRequestBehavior
+# use this global setting to use either verbose|minimalmetadata|nometadata mode for REST requests (JSONLight support)
+# See **ShareCoffee.JsonRequestBehaviors** object for more info
+# [default] verbose
 root.ShareCoffee.jsonRequestBehavior = "application/json;odata=verbose"
 
 # ##ShareCoffee.Core
@@ -208,8 +218,8 @@ root.ShareCoffee.CrossDomainRESTFactory = class
       success: options.onSuccess
       error: options.onError
       headers:
-        'Accept': ShareCoffee.REST.applicationType
-        'Content-Type': ShareCoffee.REST.applicationType
+        'Accept': ShareCoffee.jsonRequestBehavior
+        'Content-Type': ShareCoffee.REST.contentType
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
       body: if typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
@@ -339,9 +349,9 @@ root.ShareCoffee.RESTFactory = class
     result =
       url: options.getUrl()
       type: @method
-      contentType: ShareCoffee.REST.applicationType
+      contentType: ShareCoffee.REST.contentType
       headers:
-        'Accept' : ShareCoffee.REST.applicationType
+        'Accept' : ShareCoffee.jsonRequestBehavior
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
       data: if typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
@@ -373,8 +383,8 @@ root.ShareCoffee.RESTFactory = class
       url: options.getUrl()
       method: @method
       headers:
-        'Accept' : ShareCoffee.REST.applicationType
-        'Content-Type': ShareCoffee.REST.applicationType
+        'Accept' : ShareCoffee.jsonRequestBehavior
+        'Content-Type': ShareCoffee.REST.contentType
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
       data: if typeof options.payload is 'string' then options.payload else stringify(options.payload)
@@ -403,9 +413,9 @@ root.ShareCoffee.RESTFactory = class
         url: options.getUrl()
         type: 'json'
         method: @method.toLowerCase()
-        contentType: ShareCoffee.REST.applicationType
+        contentType: ShareCoffee.REST.contentType
         headers:
-          'Accept' : ShareCoffee.REST.applicationType
+          'Accept' : ShareCoffee.jsonRequestBehavior
           'If-Match' : options.eTag
           'X-HTTP-Method' : 'MERGE'
         data: if options.payload? and typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
@@ -432,7 +442,7 @@ root.ShareCoffee.RESTFactory = class
 # This namespace is responsible for exposing REST functionality for SharePoint-Hosted Apps
 root.ShareCoffee.REST = class
 
-  @applicationType = "application/json;odata=verbose"
+  @contentType = "application/json"
   # ##build
   # Build offers CRUD API for REST queries. Available methods are create, update, read, delete
   @build =

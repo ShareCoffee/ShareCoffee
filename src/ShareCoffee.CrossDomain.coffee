@@ -25,8 +25,8 @@ root.ShareCoffee.CrossDomainRESTFactory = class
       success: options.onSuccess
       error: options.onError
       headers:
-        'Accept': ShareCoffee.REST.applicationType
-        'Content-Type': ShareCoffee.REST.applicationType
+        'Accept': ShareCoffee.jsonRequestBehavior
+        'Content-Type': ShareCoffee.REST.contentType
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
       body: if typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)

@@ -1,7 +1,7 @@
 chai = require 'chai'
 sinon = require 'sinon'
 chai.should()
-
+require '../src/ShareCoffee.Core'
 require '../src/ShareCoffee.REST'
 
 root = global ? window
@@ -81,6 +81,34 @@ describe 'ShareCoffee.REST', ->
       ShareCoffee.REST.build.create.for.jQuery.should.be.an 'function'
       ShareCoffee.REST.build.create.for.angularJS.should.be.an 'function'
       ShareCoffee.REST.build.create.for.reqwest.should.be.an 'function'
+  
+  describe 'JsonRequestBehavior should be used', ->
+    beforeEach () ->
+      ShareCoffee.jsonRequestBehavior = ShareCoffee.JsonRequestBehaviors.default
+      
+    it 'should default to verbose', ->
+      sut = ShareCoffee.REST.build.read.for.angularJS()
+      sut.should.have.property 'headers'
+      headers = sut.headers
+      headers.should.have.property 'Accept'
+      headers.Accept.should.equal 'application/json;odata=verbose'
+
+    it 'should use minimal if globally set', ->
+      ShareCoffee.jsonRequestBehavior = ShareCoffee.JsonRequestBehaviors.minimal
+      sut = ShareCoffee.REST.build.read.for.angularJS()
+      sut.should.have.property 'headers'
+      headers = sut.headers
+      headers.should.have.property 'Accept'
+      headers.Accept.should.equal 'application/json;odata=minimalmetadata'
+
+    it 'should use nometadata if globally set', ->
+      ShareCoffee.jsonRequestBehavior = ShareCoffee.JsonRequestBehaviors.nometadata
+      sut = ShareCoffee.REST.build.read.for.angularJS()
+      sut.should.have.property 'headers'
+      headers = sut.headers
+      headers.should.have.property 'Accept'
+      headers.Accept.should.equal 'application/json;odata=nometadata'
+
 
   describe 'reqwest REST request object creator', ->
 
@@ -139,12 +167,12 @@ describe 'ShareCoffee.REST', ->
       actual.should.have.property 'headers'
       actual.headers.should.be.an 'object'
 
-    it 'should provide a Accept property within headers object containing current applicationType as string value', ->
+    it 'should provide a Accept property within headers object containing current jsonRequestBehavior as string value', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       actual = sut.reqwest {url: 'foo'}
       actual.headers.should.have.property 'Accept'
       actual.headers.Accept.should.be.an 'string'
-      actual.headers.Accept.should.equal ShareCoffee.REST.applicationType
+      actual.headers.Accept.should.equal ShareCoffee.jsonRequestBehavior
 
     it 'should store onSuccess handler in success property if given',->
       sut = new ShareCoffee.RESTFactory 'GET'
@@ -176,7 +204,7 @@ describe 'ShareCoffee.REST', ->
       actual = sut.reqwest {url: 'foo'}
       actual.should.have.property 'contentType'
       actual.contentType.should.be.an 'string'
-      actual.contentType.should.equal ShareCoffee.REST.applicationType
+      actual.contentType.should.equal ShareCoffee.REST.contentType
 
     it 'should not provide a contentType property if method is GET', ->
       sut = new ShareCoffee.RESTFactory 'GET'
@@ -313,19 +341,19 @@ describe 'ShareCoffee.REST', ->
       actual.should.have.property 'headers'
       actual.headers.should.be.an 'object'
 
-    it 'should provide a Accept property within headers object containing current applicationType as string value', ->
+    it 'should provide a Accept property within headers object containing current jsonRequestBehavior as string value', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       actual = sut.angularJS {url: 'foo'}
       actual.headers.should.have.property 'Accept'
       actual.headers.Accept.should.be.an 'string'
-      actual.headers.Accept.should.equal ShareCoffee.REST.applicationType
+      actual.headers.Accept.should.equal ShareCoffee.jsonRequestBehavior
 
-    it 'should provide a Content-Type property within headers object containing current applicationType if method is not GET', ->
+    it 'should provide a Content-Type property within headers object containing current contentType if method is not GET', ->
       sut = new ShareCoffee.RESTFactory 'POST'
       actual = sut.angularJS {url: 'foo'}
       actual.headers.should.have.property 'Content-Type'
       actual.headers['Content-Type'].should.be.an 'string'
-      actual.headers['Content-Type'].should.equal ShareCoffee.REST.applicationType
+      actual.headers['Content-Type'].should.equal ShareCoffee.REST.contentType
 
     it 'should not provide a Content-Type property within headers if method is GET', ->
       sut = new ShareCoffee.RESTFactory 'GET'
@@ -468,19 +496,19 @@ describe 'ShareCoffee.REST', ->
       actual.should.have.property 'headers'
       actual.headers.should.be.an 'object'
 
-    it 'should provide a Accept property within headers object containing current applicationType as string value', ->
+    it 'should provide a Accept property within headers object containing current jsonRequestBehavior as string value', ->
       sut = new ShareCoffee.RESTFactory 'GET'
       actual = sut.jQuery {url: 'foo'}
       actual.headers.should.have.property 'Accept'
       actual.headers.Accept.should.be.an 'string'
-      actual.headers.Accept.should.equal ShareCoffee.REST.applicationType
+      actual.headers.Accept.should.equal ShareCoffee.jsonRequestBehavior
 
     it 'should provide a contentType property if method is not GET', ->
       sut = new ShareCoffee.RESTFactory 'DELETE'
       actual = sut.jQuery {url: 'foo'}
       actual.should.have.property 'contentType'
       actual.contentType.should.be.an 'string'
-      actual.contentType.should.equal ShareCoffee.REST.applicationType
+      actual.contentType.should.equal ShareCoffee.REST.contentType
 
     it 'should not provide a contentType property if method is GET', ->
       sut = new ShareCoffee.RESTFactory 'GET'

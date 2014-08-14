@@ -194,8 +194,8 @@ ShareCoffee (c) 2014 Thorsten Hans
         success: options.onSuccess,
         error: options.onError,
         headers: {
-          'Accept': ShareCoffee.REST.applicationType,
-          'Content-Type': ShareCoffee.REST.applicationType,
+          'Accept': ShareCoffee.jsonRequestBehavior,
+          'Content-Type': ShareCoffee.REST.contentType,
           'X-HTTP-Method': 'MERGE',
           'If-Match': options.eTag
         },
@@ -350,9 +350,9 @@ ShareCoffee (c) 2014 Thorsten Hans
       result = {
         url: options.getUrl(),
         type: this.method,
-        contentType: ShareCoffee.REST.applicationType,
+        contentType: ShareCoffee.REST.contentType,
         headers: {
-          'Accept': ShareCoffee.REST.applicationType,
+          'Accept': ShareCoffee.jsonRequestBehavior,
           'X-HTTP-Method': 'MERGE',
           'If-Match': options.eTag
         },
@@ -390,8 +390,8 @@ ShareCoffee (c) 2014 Thorsten Hans
         url: options.getUrl(),
         method: this.method,
         headers: {
-          'Accept': ShareCoffee.REST.applicationType,
-          'Content-Type': ShareCoffee.REST.applicationType,
+          'Accept': ShareCoffee.jsonRequestBehavior,
+          'Content-Type': ShareCoffee.REST.contentType,
           'X-HTTP-Method': 'MERGE',
           'If-Match': options.eTag
         },
@@ -430,9 +430,9 @@ ShareCoffee (c) 2014 Thorsten Hans
           url: options.getUrl(),
           type: 'json',
           method: this.method.toLowerCase(),
-          contentType: ShareCoffee.REST.applicationType,
+          contentType: ShareCoffee.REST.contentType,
           headers: {
-            'Accept': ShareCoffee.REST.applicationType,
+            'Accept': ShareCoffee.jsonRequestBehavior,
             'If-Match': options.eTag,
             'X-HTTP-Method': 'MERGE'
           },
@@ -474,7 +474,7 @@ ShareCoffee (c) 2014 Thorsten Hans
   root.ShareCoffee.REST = (function() {
     function _Class() {}
 
-    _Class.applicationType = "application/json;odata=verbose";
+    _Class.contentType = "application/json";
 
     _Class.build = {
       create: {

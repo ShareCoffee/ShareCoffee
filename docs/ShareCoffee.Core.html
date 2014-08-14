@@ -80,15 +80,33 @@
         <p>ensure the core namespace</p>
 
         
-          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}
+          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}</pre></div>
+        
+      
+        
+        <h2 id="jsonrequestbehaviors">JsonRequestBehaviors</h2>
+<p>Offering three different modes for REST responses
+verbose - will set Accept heraders to <code>application/json;odata=verbose</code>
+default - will set Accept heraders to <code>application/json;odata=verbose</code>
+minimal - will set Accept heraders to <code>application/json;odata=minimalmetadata</code>
+nometadata - will set Accept heraders to <code>application/json;odata=nometadata</code></p>
 
-root.ShareCoffee.JsonRequestBehaviors =
+        
+          <div class='highlight'><pre>root.ShareCoffee.JsonRequestBehaviors =
   <span class="hljs-attribute">default</span>: <span class="hljs-string">'application/json;odata=verbose'</span>
   <span class="hljs-attribute">verbose</span>: <span class="hljs-string">'application/json;odata=verbose'</span>
   <span class="hljs-attribute">minimal</span>: <span class="hljs-string">'application/json;odata=minimalmetadata'</span>
-  <span class="hljs-attribute">nometadata</span>: <span class="hljs-string">'application/json;odata=nometadata'</span>
+  <span class="hljs-attribute">nometadata</span>: <span class="hljs-string">'application/json;odata=nometadata'</span></pre></div>
+        
+      
+        
+        <h2 id="sharecoffee-jsonrequestbehavior">ShareCoffee.jsonRequestBehavior</h2>
+<p>use this global setting to use either verbose|minimalmetadata|nometadata mode for REST requests (JSONLight support)
+See <strong>ShareCoffee.JsonRequestBehaviors</strong> object for more info
+[default] verbose</p>
 
-root.ShareCoffee.jsonRequestBehavior = <span class="hljs-string">"application/json;odata=verbose"</span></pre></div>
+        
+          <div class='highlight'><pre>root.ShareCoffee.jsonRequestBehavior = <span class="hljs-string">"application/json;odata=verbose"</span></pre></div>
         
       
         

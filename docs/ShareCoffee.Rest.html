@@ -104,9 +104,9 @@
     result =
       <span class="hljs-attribute">url</span>: options.getUrl()
       <span class="hljs-attribute">type</span>: <span class="hljs-property">@method</span>
-      <span class="hljs-attribute">contentType</span>: ShareCoffee.REST.applicationType
+      <span class="hljs-attribute">contentType</span>: ShareCoffee.REST.contentType
       <span class="hljs-attribute">headers</span>:
-        <span class="hljs-string">'Accept'</span> : ShareCoffee.REST.applicationType
+        <span class="hljs-string">'Accept'</span> : ShareCoffee.jsonRequestBehavior
         <span class="hljs-string">'X-HTTP-Method'</span> : <span class="hljs-string">'MERGE'</span>
         <span class="hljs-string">'If-Match'</span> : options.eTag
       <span class="hljs-attribute">data</span>: <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> options.payload <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span> options.payload <span class="hljs-keyword">else</span> JSON.stringify(options.payload)
@@ -138,8 +138,8 @@
       <span class="hljs-attribute">url</span>: options.getUrl()
       <span class="hljs-attribute">method</span>: <span class="hljs-property">@method</span>
       <span class="hljs-attribute">headers</span>:
-        <span class="hljs-string">'Accept'</span> : ShareCoffee.REST.applicationType
-        <span class="hljs-string">'Content-Type'</span>: ShareCoffee.REST.applicationType
+        <span class="hljs-string">'Accept'</span> : ShareCoffee.jsonRequestBehavior
+        <span class="hljs-string">'Content-Type'</span>: ShareCoffee.REST.contentType
         <span class="hljs-string">'X-HTTP-Method'</span> : <span class="hljs-string">'MERGE'</span>
         <span class="hljs-string">'If-Match'</span> : options.eTag
       <span class="hljs-attribute">data</span>: <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> options.payload <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span> options.payload <span class="hljs-keyword">else</span> stringify(options.payload)
@@ -168,9 +168,9 @@
         <span class="hljs-attribute">url</span>: options.getUrl()
         <span class="hljs-attribute">type</span>: <span class="hljs-string">'json'</span>
         <span class="hljs-attribute">method</span>: <span class="hljs-property">@method</span>.toLowerCase()
-        <span class="hljs-attribute">contentType</span>: ShareCoffee.REST.applicationType
+        <span class="hljs-attribute">contentType</span>: ShareCoffee.REST.contentType
         <span class="hljs-attribute">headers</span>:
-          <span class="hljs-string">'Accept'</span> : ShareCoffee.REST.applicationType
+          <span class="hljs-string">'Accept'</span> : ShareCoffee.jsonRequestBehavior
           <span class="hljs-string">'If-Match'</span> : options.eTag
           <span class="hljs-string">'X-HTTP-Method'</span> : <span class="hljs-string">'MERGE'</span>
         <span class="hljs-attribute">data</span>: <span class="hljs-keyword">if</span> options.payload? <span class="hljs-keyword">and</span> <span class="hljs-keyword">typeof</span> options.payload <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">then</span> options.payload <span class="hljs-keyword">else</span> JSON.stringify(options.payload)
@@ -201,7 +201,7 @@
         
           <div class='highlight'><pre>root.ShareCoffee.REST = <span class="hljs-class"><span class="hljs-keyword">class</span></span>
 
-  <span class="hljs-property">@applicationType</span> = <span class="hljs-string">"application/json;odata=verbose"</span></pre></div>
+  <span class="hljs-property">@contentType</span> = <span class="hljs-string">"application/json"</span></pre></div>
         
       
         

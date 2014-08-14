@@ -1,7 +1,7 @@
 chai = require 'chai'
 sinon = require 'sinon'
 chai.should()
-
+require '../src/ShareCoffee.Core'
 require '../src/ShareCoffee.CrossDomain'
 
 root = global ? window
@@ -168,24 +168,24 @@ describe 'ShareCoffee.CrossDomain', ->
       actual.should.have.property 'headers'
       actual.headers.should.be.an 'object'
     
-    it 'should provide a Accept property within headers object containing current applicationType as string value', ->
+    it 'should provide a Accept property within headers object containing current jsonRequestBehavior as string value', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
       actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.have.property 'Accept'
       actual.headers.Accept.should.be.an 'string'
-      actual.headers.Accept.should.equal ShareCoffee.REST.applicationType
+      actual.headers.Accept.should.equal ShareCoffee.jsonRequestBehavior
 
     it 'should not provide a headers.X-RequestDigest proeprty if method is GET', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
       actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.not.have.property 'X-RequestDigest'
 
-    it 'should provide a Content-Type property within headers object containing current applicationType if method is not GET', ->
+    it 'should provide a Content-Type property within headers object containing current contentType if method is not GET', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'POST'
       actual = sut.SPCrossDomainLib {url: 'foo'}
       actual.headers.should.have.property 'Content-Type'
       actual.headers['Content-Type'].should.be.an 'string'
-      actual.headers['Content-Type'].should.equal ShareCoffee.REST.applicationType
+      actual.headers['Content-Type'].should.equal ShareCoffee.REST.contentType
 
     it 'should not provide a Content-Type property within headers if method is GET', ->
       sut = new ShareCoffee.CrossDomainRESTFactory 'GET'
@@ -251,6 +251,33 @@ describe 'ShareCoffee.CrossDomain', ->
       expected = JSON.stringify payload
       actual = sut.SPCrossDomainLib { url: 'foo', payload: payload}
       actual.body.should.equal expected
+
+  describe 'JsonRequestBehavior should be used', ->
+    beforeEach () ->
+      ShareCoffee.jsonRequestBehavior = ShareCoffee.JsonRequestBehaviors.default
+      
+    it 'should default to verbose', ->
+      sut = ShareCoffee.CrossDomain.build.read.for.SPCrossDomainLib()
+      sut.should.have.property 'headers'
+      headers = sut.headers
+      headers.should.have.property 'Accept'
+      headers.Accept.should.equal 'application/json;odata=verbose'
+
+    it 'should use minimal if globally set', ->
+      ShareCoffee.jsonRequestBehavior = ShareCoffee.JsonRequestBehaviors.minimal
+      sut = ShareCoffee.CrossDomain.build.read.for.SPCrossDomainLib()
+      sut.should.have.property 'headers'
+      headers = sut.headers
+      headers.should.have.property 'Accept'
+      headers.Accept.should.equal 'application/json;odata=minimalmetadata'
+
+    it 'should use nometadata if globally set', ->
+      ShareCoffee.jsonRequestBehavior = ShareCoffee.JsonRequestBehaviors.nometadata
+      sut = ShareCoffee.CrossDomain.build.read.for.SPCrossDomainLib()
+      sut.should.have.property 'headers'
+      headers = sut.headers
+      headers.should.have.property 'Accept'
+      headers.Accept.should.equal 'application/json;odata=nometadata'
 
   describe 'loadCrossDomainLibrary', ->
 

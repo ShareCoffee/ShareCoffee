@@ -22,9 +22,9 @@ root.ShareCoffee.RESTFactory = class
     result =
       url: options.getUrl()
       type: @method
-      contentType: ShareCoffee.REST.applicationType
+      contentType: ShareCoffee.REST.contentType
       headers:
-        'Accept' : ShareCoffee.REST.applicationType
+        'Accept' : ShareCoffee.jsonRequestBehavior
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
       data: if typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
@@ -56,8 +56,8 @@ root.ShareCoffee.RESTFactory = class
       url: options.getUrl()
       method: @method
       headers:
-        'Accept' : ShareCoffee.REST.applicationType
-        'Content-Type': ShareCoffee.REST.applicationType
+        'Accept' : ShareCoffee.jsonRequestBehavior
+        'Content-Type': ShareCoffee.REST.contentType
         'X-HTTP-Method' : 'MERGE'
         'If-Match' : options.eTag
       data: if typeof options.payload is 'string' then options.payload else stringify(options.payload)
@@ -86,9 +86,9 @@ root.ShareCoffee.RESTFactory = class
         url: options.getUrl()
         type: 'json'
         method: @method.toLowerCase()
-        contentType: ShareCoffee.REST.applicationType
+        contentType: ShareCoffee.REST.contentType
         headers:
-          'Accept' : ShareCoffee.REST.applicationType
+          'Accept' : ShareCoffee.jsonRequestBehavior
           'If-Match' : options.eTag
           'X-HTTP-Method' : 'MERGE'
         data: if options.payload? and typeof options.payload is 'string' then options.payload else JSON.stringify(options.payload)
@@ -115,7 +115,7 @@ root.ShareCoffee.RESTFactory = class
 # This namespace is responsible for exposing REST functionality for SharePoint-Hosted Apps
 root.ShareCoffee.REST = class
 
-  @applicationType = "application/json;odata=verbose"
+  @contentType = "application/json"
   # ##build
   # Build offers CRUD API for REST queries. Available methods are create, update, read, delete
   @build =
