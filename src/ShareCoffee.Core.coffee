@@ -4,6 +4,14 @@ root = global ? window
 # ensure the core namespace
 root.ShareCoffee or = {}
 
+root.ShareCoffee.JsonRequestBehaviors =
+  default: 'application/json;odata=verbose'
+  verbose: 'application/json;odata=verbose'
+  minimal: 'application/json;odata=minimalmetadata'
+  nometadata: 'application/json;odata=nometadata'
+
+root.ShareCoffee.jsonRequestBehavior = "application/json;odata=verbose"
+
 # ##ShareCoffee.Core
 # This class is used internally because these methods are used more frequently within the entire project
 root.ShareCoffee.Core = class
@@ -20,6 +28,8 @@ root.ShareCoffee.Core = class
       console.error errorMessage if console and console.error
       throw errorMessage
 
+
+  
   # ##loadScript
   # loadScript loads JavaScript resources from any url and adds it to the current <head> tag.
   #

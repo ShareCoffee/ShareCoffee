@@ -123,6 +123,15 @@ ShareCoffee (c) 2014 Thorsten Hans
 
   root.ShareCoffee || (root.ShareCoffee = {});
 
+  root.ShareCoffee.JsonRequestBehaviors = {
+    "default": 'application/json;odata=verbose',
+    verbose: 'application/json;odata=verbose',
+    minimal: 'application/json;odata=minimalmetadata',
+    nometadata: 'application/json;odata=nometadata'
+  };
+
+  root.ShareCoffee.jsonRequestBehavior = "application/json;odata=verbose";
+
   root.ShareCoffee.Core = (function() {
     function _Class() {}
 

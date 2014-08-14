@@ -80,7 +80,15 @@
         <p>ensure the core namespace</p>
 
         
-          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}</pre></div>
+          <div class='highlight'><pre>root.ShareCoffee <span class="hljs-keyword">or</span> = {}
+
+root.ShareCoffee.JsonRequestBehaviors =
+  <span class="hljs-attribute">default</span>: <span class="hljs-string">'application/json;odata=verbose'</span>
+  <span class="hljs-attribute">verbose</span>: <span class="hljs-string">'application/json;odata=verbose'</span>
+  <span class="hljs-attribute">minimal</span>: <span class="hljs-string">'application/json;odata=minimalmetadata'</span>
+  <span class="hljs-attribute">nometadata</span>: <span class="hljs-string">'application/json;odata=nometadata'</span>
+
+root.ShareCoffee.jsonRequestBehavior = <span class="hljs-string">"application/json;odata=verbose"</span></pre></div>
         
       
         
