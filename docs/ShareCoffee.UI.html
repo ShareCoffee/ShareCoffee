@@ -96,7 +96,7 @@
 <p>Returns a configured instance of ShareCoffee.SettingsLink</p>
 
         
-          <div class='highlight'><pre>root.ShareCoffee.<span class="hljs-function"><span class="hljs-title">SettingsLink</span> = <span class="hljs-params">(url, title, appendQueryStringToUrl = <span class="hljs-literal">false</span>)</span> -&gt;</span>
+          <div class='highlight'><pre>root.ShareCoffee.S<span class="hljs-function"><span class="hljs-title">ettingsLink</span> = <span class="hljs-params">(url, title, appendQueryStringToUrl = <span class="hljs-literal">false</span>)</span> -&gt;</span>
   <span class="hljs-attribute">linkUrl</span>: <span class="hljs-keyword">if</span> appendQueryStringToUrl <span class="hljs-keyword">then</span> <span class="hljs-string">"<span class="hljs-subst">#{url}</span>?<span class="hljs-subst">#{ShareCoffee.Commons.getQueryString()}</span>"</span> <span class="hljs-keyword">else</span> url
   <span class="hljs-attribute">displayName</span>: title</pre></div>
         
@@ -113,7 +113,7 @@
 </ul>
 
         
-          <div class='highlight'><pre>root.ShareCoffee.<span class="hljs-function"><span class="hljs-title">ChromeSettings</span> = <span class="hljs-params">(iconUrl, title,helpPageUrl, settingsLinkSplat...)</span> -&gt;</span>
+          <div class='highlight'><pre>root.ShareCoffee.C<span class="hljs-function"><span class="hljs-title">hromeSettings</span> = <span class="hljs-params">(iconUrl, title,helpPageUrl, settingsLinkSplat...)</span> -&gt;</span>
   <span class="hljs-attribute">appIconUrl</span>: iconUrl
   <span class="hljs-attribute">appTitle</span>: title
   <span class="hljs-attribute">appHelpPageUrl</span>: helpPageUrl
@@ -142,7 +142,7 @@ showNotification checks if all required objects are available. If not, an error 
 
         
           <div class='highlight'><pre>  <span class="hljs-property">@showNotification</span> = <span class="hljs-function"><span class="hljs-params">(message, isSticky = <span class="hljs-literal">false</span>)</span> -&gt;</span>
-    <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
+<span class="hljs-function">    <span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Notify? <span class="hljs-keyword">and</span> SP.UI.Notify.addNotification?
     
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)"</span>, condition
@@ -160,7 +160,7 @@ showNotification checks if all required objects are available. If not, an error 
         
           <div class='highlight'><pre>  <span class="hljs-property">@removeNotification</span> = <span class="hljs-function"><span class="hljs-params">(notificationId)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> notificationId?
-    <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
+<span class="hljs-function">    <span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Notify? <span class="hljs-keyword">and</span> SP.UI.Notify.removeNotification?
 
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Notify is not defined (check if core.js is loaded)"</span>, condition
@@ -182,7 +182,7 @@ showNotification checks if all required objects are available. If not, an error 
 
         
           <div class='highlight'><pre>  <span class="hljs-property">@showStatus</span> = <span class="hljs-function"><span class="hljs-params">(title, contentAsHtml, showOnTop = <span class="hljs-literal">false</span>, color = <span class="hljs-string">'blue'</span>)</span> -&gt;</span>
-    <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
+<span class="hljs-function">    <span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Status? <span class="hljs-keyword">and</span> SP.UI.Status.addStatus? <span class="hljs-keyword">and</span> SP.UI.Status.setStatusPriColor?
     
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)"</span>, condition
@@ -202,7 +202,7 @@ showNotification checks if all required objects are available. If not, an error 
         
           <div class='highlight'><pre>  <span class="hljs-property">@removeStatus</span> = <span class="hljs-function"><span class="hljs-params">(statusId)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> statusId?
-    <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
+<span class="hljs-function">    <span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Status? <span class="hljs-keyword">and</span> SP.UI.Status.removeStatus? 
     
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)"</span>, condition
@@ -215,7 +215,7 @@ showNotification checks if all required objects are available. If not, an error 
 
         
           <div class='highlight'><pre>  <span class="hljs-property">@removeAllStatus</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
-    <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
+<span class="hljs-function">    <span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Status? <span class="hljs-keyword">and</span> SP.UI.Status.removeAllStatus? 
 
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)"</span>, condition
@@ -234,7 +234,7 @@ showNotification checks if all required objects are available. If not, an error 
         
           <div class='highlight'><pre>  <span class="hljs-property">@setStatusColor</span> = <span class="hljs-function"><span class="hljs-params">(statusId, color=<span class="hljs-string">'blue'</span>)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> statusId?
-    <span class="hljs-function"><span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
+<span class="hljs-function">    <span class="hljs-title">condition</span> = <span class="hljs-params">()</span> -&gt;</span>
       SP? <span class="hljs-keyword">and</span> SP.UI? <span class="hljs-keyword">and</span> SP.UI.Status? <span class="hljs-keyword">and</span> SP.UI.Status.setStatusPriColor? 
 
     ShareCoffee.Core.checkConditions <span class="hljs-string">"SP, SP.UI or SP.UI.Status is not defined! (check if core.js is loaded)"</span>, condition
@@ -262,8 +262,8 @@ If you’re developing Cloud-Hosted Apps for SharePoint you should consider incl
     <span class="hljs-keyword">if</span> onAppChromeLoaded?
       ShareCoffee.UI.onChromeLoadedCallback = onAppChromeLoaded
       chromeSettings.onCssLoaded = <span class="hljs-string">"ShareCoffee.UI.onChromeLoadedCallback()"</span>
-
-    <span class="hljs-function"><span class="hljs-title">onScriptLoaded</span> = <span class="hljs-params">()</span> =&gt;</span>
+<span class="hljs-function">
+    <span class="hljs-title">onScriptLoaded</span> = <span class="hljs-params">()</span> =&gt;</span>
       chrome = <span class="hljs-keyword">new</span> SP.UI.Controls.Navigation placeHolderId, chromeSettings
       chrome.setVisible <span class="hljs-literal">true</span>
 

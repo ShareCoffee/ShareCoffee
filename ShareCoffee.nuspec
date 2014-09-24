@@ -9,6 +9,6 @@
   </metadata>
   <files>
     <file src="readme.txt" target="" />
-    <file src="dist\**.*" target="content\Scripts\ShareCoffee" />
+    <file src="dist/**.*" target="content/Scripts/ShareCoffee" />
   </files>
 </package>

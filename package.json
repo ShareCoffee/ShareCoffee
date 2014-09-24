@@ -24,16 +24,16 @@
     "url": "https://github.com/ThorstenHans/ShareCoffee/issues"
   },
   "devDependencies": {
-    "mocha": "~1.13.0",
-    "chai": "~1.8.1",
-    "sinon": "~1.7.3",
+    "chai": "^1.8.1",
     "grunt": "~0.4.1",
-    "grunt-contrib-coffee": "~0.7.0",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-simple-mocha": "~0.4.0",
-    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-coffee": "^0.7.0",
+    "grunt-contrib-copy": "^0.4.1",
+    "grunt-contrib-uglify": "^0.2.7",
+    "grunt-docco": "~0.3.1",
     "grunt-nuget": "~0.1.1",
-    "grunt-docco": "~0.3.1"
+    "grunt-simple-mocha": "~0.4.0",
+    "mocha": "^1.13.0",
+    "sinon": "^1.7.3"
   }
 }
