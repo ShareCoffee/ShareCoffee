@@ -128,6 +128,38 @@ root.ShareCoffee.Commons = class
 
   @formDigestValue = null
 
+  
+  @infect = () ->
+    hostUrl = ShareCoffee.Commons.getQueryStringParameter "SPHostUrl"
+    links = document.getElementsByTagName "a"
+    forms = document.getElementsByTagName "form"
+    ShareCoffee.Commons._infectElements links, "href", hostUrl
+    ShareCoffee.Commons._infectElements forms, "action", hostUrl
+
+  @_getAuthorityFromUrl = (url)->
+    if url?
+      match = /^(?:https:\/\/|http:\/\/|\/\/)([^\/\?#]+)(?:\/|#|$|\?)/i.exec url
+      if match
+        return match[1]
+    null
+
+  @_infectElements = (elements, attribute, hostUrl) ->
+    currentAuthority = ShareCoffee.Commons._getAuthorityFromUrl window.location.href
+    for e in elements
+      do (e)->
+          #check if element has attrib
+          if e[attribute]?
+            elAuthority = ShareCoffee.Commons._getAuthorityFromUrl e[attribute]
+            # is authority valid
+            if elAuthority and /^#|:/.test(e[attribute]) and (elAuthority.toUpperCase() is currentAuthority.toUpperCase())
+              # check if attrib already contains sphosturl
+              if /sphosturl/i.test(e[attribute]) is off
+                if e[attribute].indexOf("?") > -1
+                  e[attribute] = "#{e[attribute]}&SPHostUrl=#{hostUrl}"
+                else
+                  e[attribute] = "#{e[attribute]}?SPHostUrl=#{hostUrl}"
+            
+
 # Node.JS doesn't offer window...
 root = global ? window
 

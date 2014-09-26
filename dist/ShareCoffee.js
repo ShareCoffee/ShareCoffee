@@ -115,6 +115,51 @@ ShareCoffee (c) 2014 Thorsten Hans
 
     _Class.formDigestValue = null;
 
+    _Class.infect = function() {
+      var forms, hostUrl, links;
+      hostUrl = ShareCoffee.Commons.getQueryStringParameter("SPHostUrl");
+      links = document.getElementsByTagName("a");
+      forms = document.getElementsByTagName("form");
+      ShareCoffee.Commons._infectElements(links, "href", hostUrl);
+      return ShareCoffee.Commons._infectElements(forms, "action", hostUrl);
+    };
+
+    _Class._getAuthorityFromUrl = function(url) {
+      var match;
+      if (url != null) {
+        match = /^(?:https:\/\/|http:\/\/|\/\/)([^\/\?#]+)(?:\/|#|$|\?)/i.exec(url);
+        if (match) {
+          return match[1];
+        }
+      }
+      return null;
+    };
+
+    _Class._infectElements = function(elements, attribute, hostUrl) {
+      var currentAuthority, e, _i, _len, _results;
+      currentAuthority = ShareCoffee.Commons._getAuthorityFromUrl(window.location.href);
+      _results = [];
+      for (_i = 0, _len = elements.length; _i < _len; _i++) {
+        e = elements[_i];
+        _results.push((function(e) {
+          var elAuthority;
+          if (e[attribute] != null) {
+            elAuthority = ShareCoffee.Commons._getAuthorityFromUrl(e[attribute]);
+            if (elAuthority && /^#|:/.test(e[attribute]) && (elAuthority.toUpperCase() === currentAuthority.toUpperCase())) {
+              if (/sphosturl/i.test(e[attribute]) === false) {
+                if (e[attribute].indexOf("?") > -1) {
+                  return e[attribute] = "" + e[attribute] + "&SPHostUrl=" + hostUrl;
+                } else {
+                  return e[attribute] = "" + e[attribute] + "?SPHostUrl=" + hostUrl;
+                }
+              }
+            }
+          }
+        })(e));
+      }
+      return _results;
+    };
+
     return _Class;
 
   })();

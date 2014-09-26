@@ -152,3 +152,30 @@ describe 'ShareCoffee.Commons', ->
       ShareCoffee.Commons.formDigestValue = null
       actual = ShareCoffee.Commons.getFormDigest()
       chai.assert.isUndefined actual
+
+  describe 'infect', ->
+
+      beforeEach () ->
+          root.ShareCoffee.Commons.getQueryStringParameter =  (name)->
+              "foo"
+          root.document = 
+            getElementsByTagName : (selector)->
+
+      it 'should provide an infect method', ->
+        ShareCoffee.Commons.should.have.property 'infect'
+        ShareCoffee.Commons.infect.should.be.an 'function'
+      
+      it 'should load all a and form tags from the current doc', ->
+        spy = sinon.spy root.document, 'getElementsByTagName'
+        ShareCoffee.Commons.infect()
+        spy.calledTwice.should.be.true
+        spy.calledWith("a").should.be.true
+        spy.calledWith("form").should.be.true
+        root.document.getElementsByTagName.restore()
+
+      it 'should extract the HostWebUrl from the current document', ->
+        spy = sinon.spy ShareCoffee.Commons, 'getQueryStringParameter'
+        ShareCoffee.Commons.infect()
+        spy.calledOnce.should.be.true
+        spy.calledWith("SPHostUrl").should.be.true
+        ShareCoffee.Commons.getQueryStringParameter.restore()
