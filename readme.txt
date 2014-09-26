@@ -1,4 +1,4 @@
-﻿ShareCoffee 0.1.1
+﻿ShareCoffee 0.1.2
 
 now with travis ci integration
 See detailed tutorials on https://github.com/ThorstenHans/ShareCoffee
