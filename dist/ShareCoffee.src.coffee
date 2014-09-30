@@ -129,10 +129,11 @@ root.ShareCoffee.Commons = class
   @formDigestValue = null
 
   
-  @infect = () ->
+  @infect = (element) ->
+    _root = element || document
     hostUrl = ShareCoffee.Commons.getQueryStringParameter "SPHostUrl"
-    links = document.getElementsByTagName "a"
-    forms = document.getElementsByTagName "form"
+    links = element.getElementsByTagName "a"
+    forms = element.getElementsByTagName "form"
     ShareCoffee.Commons._infectElements links, "href", hostUrl
     ShareCoffee.Commons._infectElements forms, "action", hostUrl
 

@@ -115,11 +115,12 @@ ShareCoffee (c) 2014 Thorsten Hans
 
     _Class.formDigestValue = null;
 
-    _Class.infect = function() {
-      var forms, hostUrl, links;
+    _Class.infect = function(element) {
+      var forms, hostUrl, links, _root;
+      _root = element || document;
       hostUrl = ShareCoffee.Commons.getQueryStringParameter("SPHostUrl");
-      links = document.getElementsByTagName("a");
-      forms = document.getElementsByTagName("form");
+      links = element.getElementsByTagName("a");
+      forms = element.getElementsByTagName("form");
       ShareCoffee.Commons._infectElements(links, "href", hostUrl);
       return ShareCoffee.Commons._infectElements(forms, "action", hostUrl);
     };

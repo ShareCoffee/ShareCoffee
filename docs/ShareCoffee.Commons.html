@@ -200,10 +200,11 @@ in all other cases getHostWebUrl looks inside of the QueryString for SPHostUrl p
   <span class="hljs-property">@formDigestValue</span> = <span class="hljs-literal">null</span>
 
   
-  <span class="hljs-property">@infect</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+  <span class="hljs-property">@infect</span> = <span class="hljs-function"><span class="hljs-params">(element)</span> -&gt;</span>
+    _root = element || <span class="hljs-built_in">document</span>
     hostUrl = ShareCoffee.Commons.getQueryStringParameter <span class="hljs-string">"SPHostUrl"</span>
-    links = <span class="hljs-built_in">document</span>.getElementsByTagName <span class="hljs-string">"a"</span>
-    forms = <span class="hljs-built_in">document</span>.getElementsByTagName <span class="hljs-string">"form"</span>
+    links = element.getElementsByTagName <span class="hljs-string">"a"</span>
+    forms = element.getElementsByTagName <span class="hljs-string">"form"</span>
     ShareCoffee.Commons._infectElements links, <span class="hljs-string">"href"</span>, hostUrl
     ShareCoffee.Commons._infectElements forms, <span class="hljs-string">"action"</span>, hostUrl
 
