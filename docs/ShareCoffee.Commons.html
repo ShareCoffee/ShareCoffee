@@ -203,8 +203,8 @@ in all other cases getHostWebUrl looks inside of the QueryString for SPHostUrl p
   <span class="hljs-property">@infect</span> = <span class="hljs-function"><span class="hljs-params">(element)</span> -&gt;</span>
     _root = element || <span class="hljs-built_in">document</span>
     hostUrl = ShareCoffee.Commons.getQueryStringParameter <span class="hljs-string">"SPHostUrl"</span>
-    links = element.getElementsByTagName <span class="hljs-string">"a"</span>
-    forms = element.getElementsByTagName <span class="hljs-string">"form"</span>
+    links = _root.getElementsByTagName <span class="hljs-string">"a"</span>
+    forms = _root.getElementsByTagName <span class="hljs-string">"form"</span>
     ShareCoffee.Commons._infectElements links, <span class="hljs-string">"href"</span>, hostUrl
     ShareCoffee.Commons._infectElements forms, <span class="hljs-string">"action"</span>, hostUrl
 
@@ -216,35 +216,36 @@ in all other cases getHostWebUrl looks inside of the QueryString for SPHostUrl p
     <span class="hljs-literal">null</span>
 
   <span class="hljs-property">@_infectElements</span> = <span class="hljs-function"><span class="hljs-params">(elements, attribute, hostUrl)</span> -&gt;</span>
-    currentAuthority = ShareCoffee.Commons._getAuthorityFromUrl <span class="hljs-built_in">window</span>.location.href
-    <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> elements
-      <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span></pre></div>
+    currentAuthority = ShareCoffee.Commons._getAuthorityFromUrl root.location.href
+    <span class="hljs-keyword">if</span> element?
+      <span class="hljs-keyword">for</span> e <span class="hljs-keyword">in</span> elements
+        <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span></pre></div>
         
       
         
         <p>check if element has attrib</p>
 
         
-          <div class='highlight'><pre>          <span class="hljs-keyword">if</span> e[attribute]?
-            elAuthority = ShareCoffee.Commons._getAuthorityFromUrl e[attribute]</pre></div>
+          <div class='highlight'><pre>            <span class="hljs-keyword">if</span> e[attribute]?
+              elAuthority = ShareCoffee.Commons._getAuthorityFromUrl e[attribute]</pre></div>
         
       
         
         <p>is authority valid</p>
 
         
-          <div class='highlight'><pre>            <span class="hljs-keyword">if</span> elAuthority <span class="hljs-keyword">and</span> <span class="hljs-regexp">/^#|:/</span>.test(e[attribute]) <span class="hljs-keyword">and</span> (elAuthority.toUpperCase() <span class="hljs-keyword">is</span> currentAuthority.toUpperCase())</pre></div>
+          <div class='highlight'><pre>              <span class="hljs-keyword">if</span> elAuthority <span class="hljs-keyword">and</span> <span class="hljs-regexp">/^#|:/</span>.test(e[attribute]) <span class="hljs-keyword">and</span> (elAuthority.toUpperCase() <span class="hljs-keyword">is</span> currentAuthority.toUpperCase())</pre></div>
         
       
         
         <p>check if attrib already contains sphosturl</p>
 
         
-          <div class='highlight'><pre>              <span class="hljs-keyword">if</span> <span class="hljs-regexp">/sphosturl/i</span>.test(e[attribute]) <span class="hljs-keyword">is</span> <span class="hljs-literal">off</span>
-                <span class="hljs-keyword">if</span> e[attribute].indexOf(<span class="hljs-string">"?"</span>) &gt; -<span class="hljs-number">1</span>
-                  e[attribute] = <span class="hljs-string">"<span class="hljs-subst">#{e[attribute]}</span>&amp;SPHostUrl=<span class="hljs-subst">#{hostUrl}</span>"</span>
-                <span class="hljs-keyword">else</span>
-                  e[attribute] = <span class="hljs-string">"<span class="hljs-subst">#{e[attribute]}</span>?SPHostUrl=<span class="hljs-subst">#{hostUrl}</span>"</span></pre></div>
+          <div class='highlight'><pre>                <span class="hljs-keyword">if</span> <span class="hljs-regexp">/sphosturl/i</span>.test(e[attribute]) <span class="hljs-keyword">is</span> <span class="hljs-literal">off</span>
+                  <span class="hljs-keyword">if</span> e[attribute].indexOf(<span class="hljs-string">"?"</span>) &gt; -<span class="hljs-number">1</span>
+                    e[attribute] = <span class="hljs-string">"<span class="hljs-subst">#{e[attribute]}</span>&amp;SPHostUrl=<span class="hljs-subst">#{hostUrl}</span>"</span>
+                  <span class="hljs-keyword">else</span>
+                    e[attribute] = <span class="hljs-string">"<span class="hljs-subst">#{e[attribute]}</span>?SPHostUrl=<span class="hljs-subst">#{hostUrl}</span>"</span></pre></div>
         
       
       <div class="fleur">h</div>

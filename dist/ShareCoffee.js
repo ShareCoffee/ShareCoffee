@@ -119,8 +119,8 @@ ShareCoffee (c) 2014 Thorsten Hans
       var forms, hostUrl, links, _root;
       _root = element || document;
       hostUrl = ShareCoffee.Commons.getQueryStringParameter("SPHostUrl");
-      links = element.getElementsByTagName("a");
-      forms = element.getElementsByTagName("form");
+      links = _root.getElementsByTagName("a");
+      forms = _root.getElementsByTagName("form");
       ShareCoffee.Commons._infectElements(links, "href", hostUrl);
       return ShareCoffee.Commons._infectElements(forms, "action", hostUrl);
     };
@@ -138,27 +138,29 @@ ShareCoffee (c) 2014 Thorsten Hans
 
     _Class._infectElements = function(elements, attribute, hostUrl) {
       var currentAuthority, e, _i, _len, _results;
-      currentAuthority = ShareCoffee.Commons._getAuthorityFromUrl(window.location.href);
-      _results = [];
-      for (_i = 0, _len = elements.length; _i < _len; _i++) {
-        e = elements[_i];
-        _results.push((function(e) {
-          var elAuthority;
-          if (e[attribute] != null) {
-            elAuthority = ShareCoffee.Commons._getAuthorityFromUrl(e[attribute]);
-            if (elAuthority && /^#|:/.test(e[attribute]) && (elAuthority.toUpperCase() === currentAuthority.toUpperCase())) {
-              if (/sphosturl/i.test(e[attribute]) === false) {
-                if (e[attribute].indexOf("?") > -1) {
-                  return e[attribute] = "" + e[attribute] + "&SPHostUrl=" + hostUrl;
-                } else {
-                  return e[attribute] = "" + e[attribute] + "?SPHostUrl=" + hostUrl;
+      currentAuthority = ShareCoffee.Commons._getAuthorityFromUrl(root.location.href);
+      if (typeof element !== "undefined" && element !== null) {
+        _results = [];
+        for (_i = 0, _len = elements.length; _i < _len; _i++) {
+          e = elements[_i];
+          _results.push((function(e) {
+            var elAuthority;
+            if (e[attribute] != null) {
+              elAuthority = ShareCoffee.Commons._getAuthorityFromUrl(e[attribute]);
+              if (elAuthority && /^#|:/.test(e[attribute]) && (elAuthority.toUpperCase() === currentAuthority.toUpperCase())) {
+                if (/sphosturl/i.test(e[attribute]) === false) {
+                  if (e[attribute].indexOf("?") > -1) {
+                    return e[attribute] = "" + e[attribute] + "&SPHostUrl=" + hostUrl;
+                  } else {
+                    return e[attribute] = "" + e[attribute] + "?SPHostUrl=" + hostUrl;
+                  }
                 }
               }
             }
-          }
-        })(e));
+          })(e));
+        }
+        return _results;
       }
-      return _results;
     };
 
     return _Class;

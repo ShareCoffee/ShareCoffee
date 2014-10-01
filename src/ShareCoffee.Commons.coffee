@@ -102,8 +102,8 @@ root.ShareCoffee.Commons = class
   @infect = (element) ->
     _root = element || document
     hostUrl = ShareCoffee.Commons.getQueryStringParameter "SPHostUrl"
-    links = element.getElementsByTagName "a"
-    forms = element.getElementsByTagName "form"
+    links = _root.getElementsByTagName "a"
+    forms = _root.getElementsByTagName "form"
     ShareCoffee.Commons._infectElements links, "href", hostUrl
     ShareCoffee.Commons._infectElements forms, "action", hostUrl
 
@@ -115,18 +115,19 @@ root.ShareCoffee.Commons = class
     null
 
   @_infectElements = (elements, attribute, hostUrl) ->
-    currentAuthority = ShareCoffee.Commons._getAuthorityFromUrl window.location.href
-    for e in elements
-      do (e)->
-          #check if element has attrib
-          if e[attribute]?
-            elAuthority = ShareCoffee.Commons._getAuthorityFromUrl e[attribute]
-            # is authority valid
-            if elAuthority and /^#|:/.test(e[attribute]) and (elAuthority.toUpperCase() is currentAuthority.toUpperCase())
-              # check if attrib already contains sphosturl
-              if /sphosturl/i.test(e[attribute]) is off
-                if e[attribute].indexOf("?") > -1
-                  e[attribute] = "#{e[attribute]}&SPHostUrl=#{hostUrl}"
-                else
-                  e[attribute] = "#{e[attribute]}?SPHostUrl=#{hostUrl}"
+    currentAuthority = ShareCoffee.Commons._getAuthorityFromUrl root.location.href
+    if element?
+      for e in elements
+        do (e)->
+            #check if element has attrib
+            if e[attribute]?
+              elAuthority = ShareCoffee.Commons._getAuthorityFromUrl e[attribute]
+              # is authority valid
+              if elAuthority and /^#|:/.test(e[attribute]) and (elAuthority.toUpperCase() is currentAuthority.toUpperCase())
+                # check if attrib already contains sphosturl
+                if /sphosturl/i.test(e[attribute]) is off
+                  if e[attribute].indexOf("?") > -1
+                    e[attribute] = "#{e[attribute]}&SPHostUrl=#{hostUrl}"
+                  else
+                    e[attribute] = "#{e[attribute]}?SPHostUrl=#{hostUrl}"
             

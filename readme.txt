@@ -1,4 +1,4 @@
-﻿ShareCoffee 0.1.2
+﻿ShareCoffee 0.1.3
 
 now with travis ci integration
 See detailed tutorials on https://github.com/ThorstenHans/ShareCoffee
@@ -7,7 +7,10 @@ See also available addons
   - ShareCoffee.Search
   - ShareCoffee.UserProfiles
 
-Release Notes
+###Release Notes
+
+  - 0.1.3 - ShareCoffee.Commons.infect() now accepts an optional parameter see (https://github.com/ShareCoffee/ShareCoffee/issues/48)
+  - 0.1.2 - Added ShareCoffee.Commons.inject() which is a tiny replacement for spcontext.js
   - 0.1.1 - Added JSONLight Support see my post on http://www.dotnet-rocks.com for more information
   - 0.1.0  - IE8 fixes for REST and CrossDomain. IE8 doesn't allow to call a method named 'for' there is now an alternative method called 'f'. use it like the following ShareCoffee.REST.build.create.f.angularJS()
   - 0.0.13 - Fixed broken NuGet Package

@@ -158,6 +158,8 @@ describe 'ShareCoffee.Commons', ->
       beforeEach () ->
           root.ShareCoffee.Commons.getQueryStringParameter =  (name)->
               "foo"
+          root.location =
+            href = "foo.bar"
           root.document = 
             getElementsByTagName : (selector)->
 
