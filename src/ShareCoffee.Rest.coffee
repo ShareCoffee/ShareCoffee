@@ -131,6 +131,9 @@ root.ShareCoffee.REST = class
     delete:
       for: new ShareCoffee.RESTFactory 'DELETE'
       f: new ShareCoffee.RESTFactory 'DELETE'
+    del:
+      for: new ShareCoffee.RESTFactory 'DELETE'
+      f: new ShareCoffee.RESTFactory 'DELETE'
 # ##ShareCoffee.REST.RequestProperties
 # Use this class to configure your REST requests. If you prefer plain JSON objects, you can also provide the configuration as plain JSON object
 #

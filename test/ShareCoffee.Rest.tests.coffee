@@ -29,22 +29,25 @@ describe 'ShareCoffee.REST', ->
     it 'should provide build as an object',->
       ShareCoffee.REST.build.should.be.an 'object'
 
-    it 'should provide build.read, build.update, build.delete, build.create as objects', ->
+    it 'should provide build.read, build.update, build.delete, build.create and build.del as objects', ->
       ShareCoffee.REST.build.create.should.be.an 'object'
       ShareCoffee.REST.build.read.should.be.an 'object'
       ShareCoffee.REST.build.update.should.be.an 'object'
       ShareCoffee.REST.build.delete.should.be.an 'object'
+      ShareCoffee.REST.build.del.should.be.an 'object'
 
     it 'should provide a "for" object for all CRUD ops as object (IE8 fixes)', ->
       forCreate = ShareCoffee.REST.build.create.f
       forRead = ShareCoffee.REST.build.read.f
       forUpdate = ShareCoffee.REST.build.update.f
       forDelete = ShareCoffee.REST.build.delete.f
+      forDel = ShareCoffee.REST.build.del.f
 
       forCreate.should.be.an 'object'
       forRead.should.be.an 'object'
       forUpdate.should.be.an 'object'
       forDelete.should.be.an 'object'
+      forDel.should.be.an 'object'
 
       forCreate.should.have.property('method')
       forCreate.method.should.equal 'POST'
@@ -55,17 +58,21 @@ describe 'ShareCoffee.REST', ->
       forUpdate.updateQuery.should.be.true
       forDelete.should.have.property('method')
       forDelete.method.should.equal 'DELETE'
+      forDel.should.have.property('method')
+      forDel.method.should.equal 'DELETE'
 
     it 'should provide a "for" object for all CRUD ops as object', ->
       forCreate = ShareCoffee.REST.build.create.for
       forRead = ShareCoffee.REST.build.read.for
       forUpdate = ShareCoffee.REST.build.update.for
       forDelete = ShareCoffee.REST.build.delete.for
+      forDel = ShareCoffee.REST.build.del.for
 
       forCreate.should.be.an 'object'
       forRead.should.be.an 'object'
       forUpdate.should.be.an 'object'
       forDelete.should.be.an 'object'
+      forDel.should.be.an 'object'
 
       forCreate.should.have.property('method')
       forCreate.method.should.equal 'POST'
@@ -76,6 +83,8 @@ describe 'ShareCoffee.REST', ->
       forUpdate.updateQuery.should.be.true
       forDelete.should.have.property('method')
       forDelete.method.should.equal 'DELETE'
+      forDel.should.have.property('method')
+      forDel.method.should.equal 'DELETE'
 
     it 'should provide various options in order to create request property objects for different frameworks', ->
       ShareCoffee.REST.build.create.for.jQuery.should.be.an 'function'

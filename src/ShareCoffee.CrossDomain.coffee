@@ -103,6 +103,9 @@ root.ShareCoffee.CrossDomain = class
     delete:
       for: new ShareCoffee.CrossDomainRESTFactory 'DELETE'
       f: new ShareCoffee.CrossDomainRESTFactory 'DELETE'
+    del:
+      for: new ShareCoffee.CrossDomainRESTFactory 'DELETE'
+      f: new ShareCoffee.CrossDomainRESTFactory 'DELETE'
 
   # ##getClientContext
   # It checks if all required cross domain libraries are loaded for using CSOM from a Cloud-Hosted App, if so, it will return the preconfigured SP.ClientContext instance

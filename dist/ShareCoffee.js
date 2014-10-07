@@ -338,6 +338,10 @@ ShareCoffee (c) 2014 Thorsten Hans
       "delete": {
         "for": new ShareCoffee.CrossDomainRESTFactory('DELETE'),
         f: new ShareCoffee.CrossDomainRESTFactory('DELETE')
+      },
+      del: {
+        "for": new ShareCoffee.CrossDomainRESTFactory('DELETE'),
+        f: new ShareCoffee.CrossDomainRESTFactory('DELETE')
       }
     };
 
@@ -538,6 +542,10 @@ ShareCoffee (c) 2014 Thorsten Hans
         f: new ShareCoffee.RESTFactory('POST', true)
       },
       "delete": {
+        "for": new ShareCoffee.RESTFactory('DELETE'),
+        f: new ShareCoffee.RESTFactory('DELETE')
+      },
+      del: {
         "for": new ShareCoffee.RESTFactory('DELETE'),
         f: new ShareCoffee.RESTFactory('DELETE')
       }

@@ -1,4 +1,4 @@
-﻿ShareCoffee 0.1.3
+﻿ShareCoffee 0.1.4
 
 now with travis ci integration
 See detailed tutorials on https://github.com/ThorstenHans/ShareCoffee
@@ -8,7 +8,7 @@ See also available addons
   - ShareCoffee.UserProfiles
 
 ###Release Notes
-
+  - 0.1.4 - Because of some issues with our fav browser (IE) again a quick release which adds `del` as alias for `delete`
   - 0.1.3 - ShareCoffee.Commons.infect() now accepts an optional parameter see (https://github.com/ShareCoffee/ShareCoffee/issues/48)
   - 0.1.2 - Added ShareCoffee.Commons.inject() which is a tiny replacement for spcontext.js
   - 0.1.1 - Added JSONLight Support see my post on http://www.dotnet-rocks.com for more information

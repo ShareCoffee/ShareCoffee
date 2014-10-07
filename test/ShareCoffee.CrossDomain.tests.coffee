@@ -40,22 +40,25 @@ describe 'ShareCoffee.CrossDomain', ->
     it 'should be available as object', ->
       ShareCoffee.CrossDomain.build.should.be.an 'object'
 
-    it 'should provide build.read, build.update, build.delete, build.create as functions', ->
+    it 'should provide build.read, build.update, build.delete, build.create and build.del as functions', ->
       ShareCoffee.CrossDomain.build.create.should.be.an 'object'
       ShareCoffee.CrossDomain.build.read.should.be.an 'object'
       ShareCoffee.CrossDomain.build.update.should.be.an 'object'
       ShareCoffee.CrossDomain.build.delete.should.be.an 'object'
+      ShareCoffee.CrossDomain.build.del.should.be.an 'object'
 
     it 'should provide a configured object for all CRUD ops as object (IE8 fixes)', ->
       forCreate = ShareCoffee.CrossDomain.build.create.f
       forRead = ShareCoffee.CrossDomain.build.read.f
       forUpdate = ShareCoffee.CrossDomain.build.update.f
       forDelete = ShareCoffee.CrossDomain.build.delete.f
+      forDel = ShareCoffee.CrossDomain.build.del.f
 
       forCreate.should.be.an 'object'
       forRead.should.be.an 'object'
       forUpdate.should.be.an 'object'
       forDelete.should.be.an 'object'
+      forDel.should.be.an 'object'
 
       forCreate.should.have.property('method')
       forCreate.method.should.equal 'POST'
@@ -66,17 +69,21 @@ describe 'ShareCoffee.CrossDomain', ->
       forUpdate.updateQuery.should.be.true
       forDelete.should.have.property('method')
       forDelete.method.should.equal 'DELETE'
+      forDel.should.have.property('method')
+      forDel.method.should.equal 'DELETE'
 
     it 'should provide a configured object for all CRUD ops as object', ->
       forCreate = ShareCoffee.CrossDomain.build.create.for
       forRead = ShareCoffee.CrossDomain.build.read.for
       forUpdate = ShareCoffee.CrossDomain.build.update.for
       forDelete = ShareCoffee.CrossDomain.build.delete.for
+      forDel = ShareCoffee.CrossDomain.build.del.for
 
       forCreate.should.be.an 'object'
       forRead.should.be.an 'object'
       forUpdate.should.be.an 'object'
       forDelete.should.be.an 'object'
+      forDel.should.be.an 'object'
 
       forCreate.should.have.property('method')
       forCreate.method.should.equal 'POST'
@@ -87,6 +94,8 @@ describe 'ShareCoffee.CrossDomain', ->
       forUpdate.updateQuery.should.be.true
       forDelete.should.have.property('method')
       forDelete.method.should.equal 'DELETE'
+      forDel.should.have.property('method')
+      forDel.method.should.equal 'DELETE'
 
   it 'should provide SPCrossDomainLib as single choice', ->
 
