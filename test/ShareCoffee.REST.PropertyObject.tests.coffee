@@ -2,7 +2,7 @@ chai = require 'chai'
 sinon = require 'sinon'
 chai.should()
 
-require '../src/ShareCoffee.REST'
+require '../src/ShareCoffee.Rest'
 
 root = global ? window
 
