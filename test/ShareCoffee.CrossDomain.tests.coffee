@@ -298,8 +298,9 @@ describe 'ShareCoffee.CrossDomain', ->
     afterEach () ->
       delete root.ShareCoffee.Core
 
-    it 'should call loadScript on ShareCoffee.Core thrice ', ->
+    it 'should call loadScript on ShareCoffee.Core once for REST ', ->
       spy = sinon.spy ShareCoffee.Core, 'loadScript'
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false 
       ShareCoffee.CrossDomain.loadCrossDomainLibrary null, null
       spy.calledOnce.should.be.ok
       spy.restore()
@@ -308,6 +309,7 @@ describe 'ShareCoffee.CrossDomain', ->
       loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
         s() if s
       onSuccess = sinon.spy()
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false 
       ShareCoffee.CrossDomain.loadCrossDomainLibrary onSuccess, null
       onSuccess.calledOnce.should.be.true
       loadScriptStub.restore()
@@ -316,6 +318,7 @@ describe 'ShareCoffee.CrossDomain', ->
       loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
         e() if e
       onError = sinon.spy()
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false
       ShareCoffee.CrossDomain.loadCrossDomainLibrary null, onError
       onError.calledOnce.should.be.true
       loadScriptStub.restore()
@@ -324,6 +327,7 @@ describe 'ShareCoffee.CrossDomain', ->
       loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
         s() if s
       onSuccess = sinon.spy()
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false 
       ShareCoffee.CrossDomain.loadCrossDomainLibrary onSuccess, null
       onSuccess.calledOnce.should.be.true
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded.should.be.true
@@ -333,6 +337,7 @@ describe 'ShareCoffee.CrossDomain', ->
       loadScriptStub = sinon.stub ShareCoffee.Core, 'loadScript', (url, s,e) ->
         e() if e
       onError = sinon.spy()
+      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = false 
       ShareCoffee.CrossDomain.loadCrossDomainLibrary null, onError
       onError.calledOnce.should.be.true
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded.should.be.false
@@ -344,19 +349,19 @@ describe 'ShareCoffee.CrossDomain', ->
       ShareCoffee.CrossDomain.getClientContext.should.be.an 'function'
 
     it 'should return an object if libraries loaded', ->
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = true
       actual = ShareCoffee.CrossDomain.getClientContext()
       actual.should.be.an 'object'
 
     it 'should throw an error if cross-domain-scripts are not loaded', ->
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded=false
-      (->ShareCoffee.CrossDomain.getClientContext()).should.throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext'
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = false
+      (->ShareCoffee.CrossDomain.getClientContext()).should.throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCSOMCrossDomainLibraries() before acting with the ClientCotext'
 
     it 'should call getAppWebUrl in order to determine the correct AppWebUrl', ->
       getAppWebUrlStub = sinon.stub ShareCoffee.Commons, 'getAppWebUrl', () ->
         return 'https://appweburl'
 
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = true
       ShareCoffee.CrossDomain.getClientContext()
       getAppWebUrlStub.calledOnce.should.be.true
       getAppWebUrlStub.restore()
@@ -364,7 +369,7 @@ describe 'ShareCoffee.CrossDomain', ->
     it 'should call SP.ClientContext constructor and pass AppWebUrl', ->
       
       spy = sinon.spy SP, 'ClientContext'
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = true
       ShareCoffee.CrossDomain.getClientContext()
       spy.calledWithExactly('https://foo.sharepoint.com/').should.be.true
       spy.restore()
@@ -372,7 +377,7 @@ describe 'ShareCoffee.CrossDomain', ->
     it 'should call ProxyWebRequestExecutorFactory constructor and pass AppWebUrl', ->
 
       spy = sinon.spy SP, 'ProxyWebRequestExecutorFactory'
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = true
       ShareCoffee.CrossDomain.getClientContext()
       spy.calledWithExactly('https://foo.sharepoint.com/').should.be.true
       spy.restore()
@@ -389,7 +394,7 @@ describe 'ShareCoffee.CrossDomain', ->
         return { set_webRequestExecutorFactory: (factory) =>
           actualFactory = factory}
   
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = true
       ShareCoffee.CrossDomain.getClientContext()
       actualFactory.should.equal expected
 
@@ -399,16 +404,16 @@ describe 'ShareCoffee.CrossDomain', ->
       ShareCoffee.CrossDomain.getHostWeb.should.be.an 'function'
   
     it 'should return an object if libraries loaded', ->
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = true
       ctx = new SP.ClientContext ""
       actual = ShareCoffee.CrossDomain.getHostWeb ctx
       actual.should.be.an 'object'
     
     it 'should throw an error if passed context is null', ->
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = true
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = true
       (->actual = ShareCoffee.CrossDomain.getHostWeb(null)).should.throw 'ClientContext cant be null, call ShareCoffee.CrossDomain.getClientContext() first'
 
     it 'should throw an error if cross-domain-scripts are not loaded', ->
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded=false
-      (->ShareCoffee.CrossDomain.getHostWeb("")).should.throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext'
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = false
+      (->ShareCoffee.CrossDomain.getHostWeb("")).should.throw 'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCSOMCrossDomainLibraries() before acting with the ClientCotext'
 

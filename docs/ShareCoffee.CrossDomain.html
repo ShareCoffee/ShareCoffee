@@ -138,7 +138,8 @@
 <p>flag which determines if CrossDomain libraries are loaded or not.</p>
 
         
-          <div class='highlight'><pre>  <span class="hljs-property">@crossDomainLibrariesLoaded</span> = <span class="hljs-literal">false</span></pre></div>
+          <div class='highlight'><pre>  <span class="hljs-property">@crossDomainLibrariesLoaded</span> = <span class="hljs-literal">false</span>
+  <span class="hljs-property">@csomCrossDomainLibrariesLoaded</span> = <span class="hljs-literal">false</span></pre></div>
         
       
         
@@ -153,8 +154,11 @@
         
           <div class='highlight'><pre>  <span class="hljs-property">@loadCSOMCrossDomainLibraries</span> = <span class="hljs-function"><span class="hljs-params">(onSuccess, onError)</span> -&gt;</span>
 <span class="hljs-function">    <span class="hljs-title">onAnyError</span> = <span class="hljs-params">()</span> =&gt;</span>
-      ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = <span class="hljs-literal">false</span>
+      ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = <span class="hljs-literal">false</span>
       onError() <span class="hljs-keyword">if</span> onError
+    <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">on</span>
+      onSuccess() <span class="hljs-keyword">if</span> onSuccess
+      <span class="hljs-keyword">return</span>
     runtimeScriptUrl = <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getHostWebUrl()}</span>/_layouts/15/SP.Runtime.js"</span>
     spScriptUrl = <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getHostWebUrl()}</span>/_layouts/15/SP.js"</span>
     requestExecutorScriptUrl = <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getHostWebUrl()}</span>/_layouts/15/SP.RequestExecutor.js"</span>
@@ -162,7 +166,7 @@
     ShareCoffee.Core.loadScript runtimeScriptUrl, <span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>
       ShareCoffee.Core.loadScript spScriptUrl, <span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>
         ShareCoffee.Core.loadScript requestExecutorScriptUrl, <span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>
-          ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = <span class="hljs-literal">true</span>
+          ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded = <span class="hljs-literal">true</span>
           onSuccess() <span class="hljs-keyword">if</span> onSuccess
         , onAnyError
       , onAnyError
@@ -183,6 +187,9 @@
 <span class="hljs-function">    <span class="hljs-title">onAnyError</span> = <span class="hljs-params">()</span> =&gt;</span>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = <span class="hljs-literal">false</span>
       onError() <span class="hljs-keyword">if</span> onError
+    <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.crossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">on</span>
+      onSuccess() <span class="hljs-keyword">if</span> onSuccess
+      <span class="hljs-keyword">return</span> 
     requestExecutorScriptUrl = <span class="hljs-string">"<span class="hljs-subst">#{ShareCoffee.Commons.getHostWebUrl()}</span>/_layouts/15/SP.RequestExecutor.js"</span>
     ShareCoffee.Core.loadScript requestExecutorScriptUrl, <span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>
       ShareCoffee.CrossDomain.crossDomainLibrariesLoaded = <span class="hljs-literal">true</span>
@@ -222,7 +229,7 @@ there is a ‘f’ clone right now which will work with IE8 which doesnt allow a
 
         
           <div class='highlight'><pre>  <span class="hljs-property">@getClientContext</span> = <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
-    <span class="hljs-keyword">throw</span> <span class="hljs-string">'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext'</span> <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.crossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">false</span>
+    <span class="hljs-keyword">throw</span> <span class="hljs-string">'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCSOMCrossDomainLibraries() before acting with the ClientCotext'</span> <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">false</span>
     appWebUrl = ShareCoffee.Commons.getAppWebUrl()
     ctx = <span class="hljs-keyword">new</span> SP.ClientContext appWebUrl
     factory = <span class="hljs-keyword">new</span> SP.ProxyWebRequestExecutorFactory appWebUrl
@@ -243,7 +250,7 @@ there is a ‘f’ clone right now which will work with IE8 which doesnt allow a
 
         
           <div class='highlight'><pre>  <span class="hljs-property">@getHostWeb</span> = <span class="hljs-function"><span class="hljs-params">(ctx, hostWebUrl = ShareCoffee.Commons.getHostWebUrl())</span> -&gt;</span>
-    <span class="hljs-keyword">throw</span> <span class="hljs-string">'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCrossDomainLibrary() before acting with the ClientCotext'</span> <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.crossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">false</span>
+    <span class="hljs-keyword">throw</span> <span class="hljs-string">'Cross Domain Libraries not loaded, call ShareCoffee.CrossDomain.loadCSOMCrossDomainLibraries() before acting with the ClientCotext'</span> <span class="hljs-keyword">if</span> ShareCoffee.CrossDomain.csomCrossDomainLibrariesLoaded <span class="hljs-keyword">is</span> <span class="hljs-literal">false</span>
     <span class="hljs-keyword">throw</span> <span class="hljs-string">'ClientContext cant be null, call ShareCoffee.CrossDomain.getClientContext() first'</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> ctx?
     appContextSite = <span class="hljs-keyword">new</span> SP.AppContextSite ctx, hostWebUrl
     appContextSite.get_web()</pre></div>
