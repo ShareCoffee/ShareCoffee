@@ -2,6 +2,10 @@
 
 ShareCoffee is a lightweight library for creating SharePoint Apps. It’s fully written in CoffeeScript by using Mocha, Chai and SinonJS.
 
+### Gitter
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/ShareCoffee/ShareCoffee?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+### Travis CI
 [![Build Status](https://travis-ci.org/ShareCoffee/ShareCoffee.svg?branch=master)](https://travis-ci.org/ShareCoffee/ShareCoffee)
 
 ### Installation
