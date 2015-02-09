@@ -116,7 +116,7 @@ root.ShareCoffee.Commons = class
 
   @_infectElements = (elements, attribute, hostUrl) ->
     currentAuthority = ShareCoffee.Commons._getAuthorityFromUrl root.location.href
-    if element?
+    if elements?
       for e in elements
         do (e)->
             #check if element has attrib
